@@ -38,6 +38,7 @@ class OobleckMasterDaemon:
         self._job_arguments: dict[int, OobleckArguments] = {}
         self._server: asyncio.Server | None = None
         self._port: int | None = None
+        # 记录与agent的网络连接
         self._agent_connections: dict[
             str, tuple[asyncio.StreamReader, asyncio.StreamWriter]
         ] = {}
@@ -99,6 +100,7 @@ class OobleckMasterDaemon:
         """
         Temporary request handler without maintaining the connection.
         Store job information and launch agents.
+        收到消息类型为LAUNCH_JOB时被调用
         """
         result: message_util.Response
 
@@ -156,6 +158,9 @@ class OobleckMasterDaemon:
     async def register_agent_handler(
         self, job_id: int, r: asyncio.StreamReader, w: asyncio.StreamWriter
     ):
+        '''
+        收到消息类型为REGISTER_AGENT时被调用
+        '''
         if job_id not in self._job_arguments:
             logger.warning(f"Agent {client_ip_port} sent a wrong job id")
             return await message_util.send_response(

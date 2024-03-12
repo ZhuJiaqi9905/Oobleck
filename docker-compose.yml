@@ -1,0 +1,74 @@
+version: '3'
+
+services:
+  oob-1:
+    image: oobleck:v4
+    command: sleep infinity
+    runtime: nvidia
+    privileged: true
+    devices:
+      - /dev/infiniband/rdma_cm
+      - /dev/infiniband/uverbs0
+    ipc: host
+    volumes:
+      - ~/code/python/:/workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu] 
+
+  oob-2:
+    image: oobleck:v4
+    command: sleep infinity
+    runtime: nvidia
+    privileged: true
+    devices:
+      - /dev/infiniband/rdma_cm
+      - /dev/infiniband/uverbs0
+    ipc: host
+    volumes:
+      - ~/code/python/:/workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu] 
+
+  oob-3:
+    image: oobleck:v4
+    command: sleep infinity
+    runtime: nvidia
+    privileged: true
+    devices:
+      - /dev/infiniband/rdma_cm
+      - /dev/infiniband/uverbs0
+    ipc: host
+    volumes:
+      - ~/code/python/:/workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu] 
+
+  oob-4:
+    image: oobleck:v4
+    command: sleep infinity
+    runtime: nvidia
+    privileged: true
+    devices:
+      - /dev/infiniband/rdma_cm
+      - /dev/infiniband/uverbs0
+    ipc: host
+    volumes:
+      - ~/code/python/:/workspace
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              capabilities: [gpu] 

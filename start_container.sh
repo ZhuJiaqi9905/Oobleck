@@ -1,0 +1,2 @@
+#!/bin/bash
+docker run --gpus all -d  -v ~/code/python/:/workspace --net=host --ipc=host --device=/dev/infiniband/rdma_cm --device=/dev/infiniband/uverbs0  -m unlimited --privileged --name oob oobleck:v5  sleep infinity
