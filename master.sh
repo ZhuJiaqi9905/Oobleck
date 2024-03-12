@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m oobleck.elastic.master  --ip 172.18.0.42 --port 60000
+python -m oobleck.elastic.master  --ip 10.20.23.42 --port 60000

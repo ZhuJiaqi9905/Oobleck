@@ -1,2 +1,2 @@
 #!/bin/bash
-python -m oobleck.run --config_path ./examples/gpt2.yaml --node_ips 172.18.0.42 172.18.0.46 --master_ip 172.18.0.42 --master_port 60000
+python -m oobleck.run --config_path ./examples/gpt2.yaml --node_ips 10.20.23.42 10.20.23.46 --node_port 2222 --master_ip 10.20.23.42 --master_port 60000

@@ -262,6 +262,7 @@ def profile(
     dataset = OobleckDataset(
         args.model.model_name, args.model.dataset_path, args.model.dataset_name
     )
+    logger.info("Dataset loaded")
     model = OobleckModel(
         args.model.model_name,
         dataset.sample,
@@ -269,6 +270,7 @@ def profile(
         args.model.model_tag,
         args.model.model_args,
     )
+    logger.info("model loaded")
     device = torch.device("cuda")
     for layer in model.layers:
         init_tensors(layer, device)

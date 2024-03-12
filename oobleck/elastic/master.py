@@ -85,7 +85,7 @@ class OobleckMasterDaemon:
                 term_type="xterm",
             ) as process:
                 logger.info(
-                    f"Agent {node_ip} output will be written at {log_file_path}."
+                    f"Agent {node_ip} output will be written at {log_file_path}"
                 )
                 async for data in process.stdout:
                     await log_file.write(data)
