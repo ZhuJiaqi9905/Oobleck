@@ -257,7 +257,7 @@ def profile(
     directory = get_profile_path(args.model.model_name, args.model.model_tag)
     directory.mkdir(parents=True, exist_ok=True)
 
-    logger.info("Profiling model %s", args.model.model_name)
+    logger.info("Profiling model %s. rank %d, world_size %d, num_workers_per_node %d", args.model.model_name, rank, world_size, num_workers_per_node)
 
     dataset = OobleckDataset(
         args.model.model_name, args.model.dataset_path, args.model.dataset_name

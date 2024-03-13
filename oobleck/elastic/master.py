@@ -112,7 +112,7 @@ class OobleckMasterDaemon:
             log_path.mkdir(parents=True, exist_ok=False)
 
             self._job_arguments[self._next_job_id] = args
-
+            # 每个node的agent_index都是从0开始
             loop = self._server.get_loop()
             for node_index in range(len(args.dist.node_ips)):
                 for agent_index in range(args.dist.num_agents_per_node):

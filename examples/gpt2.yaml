@@ -1,7 +1,9 @@
 # python -m oobleck.run --config_path examples/gpt2.yaml --node_ips [agent_ips] --master_ip ip --master_port port
-
+dist:
+  num_agents_per_node: 1
+  num_workers: 4
 job:
-  fault_threshold: 3
+  fault_threshold: 1
   microbatch_size: 8
   global_microbatch_size: 128
   steps: 30

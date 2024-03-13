@@ -86,12 +86,14 @@ class OobleckAgent:
         profiler_processes: list[multiprocessing.Process] = []
 
         for index in range(args.dist.num_workers):
+            # use CUDA_VISIBLE_DEVICES environment variable 
             os.environ["CUDA_VISIBLE_DEVICES"] = str(index)
             my_ip = socket.gethostbyname(socket.gethostname())
             master_ip = args.dist.node_ips[0]
             master_port = 23456
             world_size = len(args.dist.node_ips) * args.dist.num_workers
             rank = args.dist.node_ips.index(my_ip) * args.dist.num_workers + index
+            # each worker run profile() in a new process
             process = ctx.Process(
                 target=profile,
                 args=(
@@ -111,6 +113,7 @@ class OobleckAgent:
 
     async def _launch_workers(self, args: OobleckArguments):
         # Test if profile data exists
+        # 如果有profile数据就读出来
         try:
             get_profile_results(
                 args.model.model_name,
@@ -139,6 +142,8 @@ class OobleckAgent:
         )
 
         ctx = multiprocessing.get_context("spawn")
+        #每个node可以启动多个agent。他们的agent_index是0, 1, 2...
+        # 一个worker对应一个gpu
 
         gpu_indices = range(
             self._agent_index * args.dist.num_workers,
@@ -151,7 +156,7 @@ class OobleckAgent:
             # via command line arguments.
             pipe, child_pipe = ctx.Pipe()
             os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_index)
-
+            # each worker run worker_main() in a new process
             process = ctx.Process(
                 target=worker_main,
                 args=(
