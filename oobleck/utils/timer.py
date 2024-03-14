@@ -19,3 +19,18 @@ def measure_time(timer_name: str):
         return wrapper
 
     return inner
+
+
+
+
+if __name__ == "__main__":
+    
+    @measure_time("test")
+    def test_timer(s):
+        sum = 0
+        for i in range(0, 10000000):
+            sum += i
+
+    for i in range(0, 10):
+        test_timer(1)
+        sync_timer.log(["test"])

@@ -127,11 +127,11 @@ def shard_model(
     Returns:
         List[torch.fx.GraphModule]: The list of sharded :class:`torch.fx.GraphModule`s.
     """
-    module_list: List[torch.fx.GraphModule] = []
+    module_list: List[torch.fx.GraphModule] = [] # 存储分片后的子图列表
 
     traced = symbolic_trace(model, input_names=concrete_args)
     split_points = [p.replace(".", "_") for p in split_points]
-
+    # 使用分割点将图分片
     node_name_to_shard_id, extra_outputs = _split_nodes(traced, split_points)
 
     prev_shard_id = 1000
@@ -140,7 +140,7 @@ def shard_model(
     env: Dict[str, Node] = {}
     prev_node: Optional[Node] = None
 
-    new_graph = torch.fx.Graph()
+    new_graph = torch.fx.Graph() # 创建一个新图用于存储分片后的子图
     # Iterate all nodes
     for node in traced.graph.nodes:
         if node.name in node_name_to_shard_id:
@@ -150,7 +150,8 @@ def shard_model(
 
                 # If the current node is in the next shard, we insert an output node.
                 # A new graph is created an a placeholder is added for the next shard.
-
+                # 如果当前节点在下一个分片中，则插入一个输出节点
+                # 创建一个新图，并为下一个分片添加一个占位符
                 with new_graph.inserting_after(prev_node):
                     if prev_shard_id in extra_outputs:
                         outputs = extra_outputs[prev_shard_id]

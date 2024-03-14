@@ -39,6 +39,9 @@ class Profiler:
         self.world_size = world_size
 
     def profile_execution_layers(self, batch_size: int) -> list[dict[str, float]]:
+        '''
+        batch_size is micro_batch_size
+        '''
         assert dist.is_initialized()
         import copy
 
@@ -69,8 +72,9 @@ class Profiler:
                     gpu_layer = copy.deepcopy(layer).to("cuda")
                     torch.cuda.synchronize()
                     end_mem = torch.cuda.memory_allocated()
+                    # the memory of layer
                     model_mem = end_mem - start_mem
-
+                    # forward time 
                     start = time.time_ns()
                     with torch.no_grad():
                         output = gpu_layer(*input)
@@ -106,7 +110,7 @@ class Profiler:
                     results[idx][3] = activation_mem
 
         dist.barrier()
-
+        # broadcast results to other nodes
         # 2d tensor, for each layer, multiple allreduce with different number of nodes
         results: torch.Tensor = torch.tensor(
             results, dtype=torch.float32, device="cuda", requires_grad=False
@@ -155,6 +159,7 @@ class Profiler:
         ranks = list(range(0, dist.get_world_size()))
 
         process_groups: list[tuple(bool, dist.ProcessGroup)] = []
+        # each node use one gpu to allreduce. for example 2 node, 4 GPU per node: process groups are [[0, 4], [1, 5], [2, 6], [3, 7]]
         for i in range(0, len(ranks), self.num_workers_per_node):
             pg_ranks = ranks[i : i + self.num_workers_per_node]
             process_groups.append(
@@ -172,7 +177,7 @@ class Profiler:
                     )
 
         dist.barrier()
-
+        # broadcast results to other nodes
         # 2d tensor, for each layer, multiple allreduce with different number of nodes
         results: torch.Tensor = torch.tensor(
             results, dtype=torch.float32, device="cuda", requires_grad=False
@@ -199,10 +204,11 @@ class Profiler:
         """
         assert dist.is_initialized()
         logger.info(f"Profile allreduce within a node latency")
-
+        # assume 4 gpus per node, then ranks is [0, 1, 2, 3], num_gpus_list is [1, 2, 4] 
         num_gpus_list = [2**i for i in range(int(math.log2(num_gpus_per_node)) + 1)]
         ranks = list(range(num_gpus_per_node))
-
+        
+        # process_groups are [(bool, [0]), (bool, [0, 1]), (bool, [0, 1, 2, 3])]
         process_groups: list[tuple(bool, dist.ProcessGroup)] = []
         for i in range(len(num_gpus_list)):
             pg_ranks = ranks[: num_gpus_list[i]]
@@ -213,6 +219,7 @@ class Profiler:
         results: list[list[int]] = [
             [0] * len(process_groups) for _ in range(len(self.model.layers))
         ]
+        # profile each layer with each process group
         for layer_index, layer in enumerate(self.model.layers):
             for pg_index, (should_run, pg) in enumerate(process_groups):
                 if should_run:
@@ -221,7 +228,7 @@ class Profiler:
                     )
 
         dist.barrier()
-
+        # broadcast results to other nodes
         # 2d tensor, for each layer, multiple allreduce with different number of nodes
         results: torch.Tensor = torch.tensor(
             results, dtype=torch.float32, device="cuda", requires_grad=False
@@ -285,6 +292,7 @@ def profile(
         is_master=bool(rank == 0),
         wait_for_workers=False,
     )
+    # 把rank中的所有GPU组成一个process group
     dist.init_process_group(
         backend="nccl", store=store, rank=rank, world_size=world_size
     )
