@@ -113,6 +113,7 @@ class OobleckAgent:
                         my_ip = ip
                         rank = args.dist.node_ips.index(my_ip) * args.dist.num_workers + index
                         break 
+            logger.info(f"my_ip: {my_ip}")
             # each worker run profile() in a new process
             process = ctx.Process(
                 target=profile,

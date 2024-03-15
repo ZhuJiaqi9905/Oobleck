@@ -285,6 +285,7 @@ def profile(
     profiler = Profiler(model, num_workers_per_node, world_size)
 
     assert not dist.is_initialized(), "Distributed is already initialized."
+    logger.info(f"init pg. master_addr: {master_addr}, master_port: {master_port}")
     store = dist.TCPStore(
         host_name=master_addr,
         port=master_port,
