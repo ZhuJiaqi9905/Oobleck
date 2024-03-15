@@ -14,7 +14,7 @@ from oobleck.execution.dataset import OobleckDataset
 from oobleck.execution.layer import init_tensors
 from oobleck.module.model import OobleckModel
 
-PROFILE_CACHE = "/tmp/oobleck/profiles"
+PROFILE_CACHE = "/workspace/Oobleck/tmp/profiles"
 num_warmup = 2
 num_iteration = 3
 
@@ -259,7 +259,7 @@ def profile(
     and allreduce across nodes.
 
     Result is stored in cache for future use.
-    Path: /tmp/oobleck/profiles/{model_name}-{tag}/{layers|allreduce_in_node|allreduce_across_nodes}
+    Path: /workspace/Oobleck/tmp/profiles/{model_name}-{tag}/{layers|allreduce_in_node|allreduce_across_nodes}
     """
     directory = get_profile_path(args.model.model_name, args.model.model_tag)
     directory.mkdir(parents=True, exist_ok=True)

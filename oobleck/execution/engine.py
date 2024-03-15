@@ -428,7 +428,7 @@ class OobleckEngine:
         self._agent_pipe: connection.Connection = pipe
         self._args: OobleckArguments = args
         training_args = {
-            "output_dir": f"/tmp/oobleck/output/{args.model.model_name}-{args.model.model_tag}",
+            "output_dir": f"/workspace/Oobleck/tmp/output/{args.model.model_name}-{args.model.model_tag}",
             "per_device_train_batch_size": args.job.microbatch_size,
             "no_cuda": True,  # don't use cuda in HFTrainingArguments
             "log_level": "error",  # omit warning messages from HFTrainingArguments

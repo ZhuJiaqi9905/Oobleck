@@ -17,6 +17,6 @@ model:
   dataset_name: wikitext-2-raw-v1
   model_args:
     n_positions: 1024
-    num_hidden_layers: 12
+    num_hidden_layers: 48
     n_embd: 1600
     n_head: 25

@@ -7,7 +7,7 @@ dist/
 __pycache__/
 *.so
 *~
-
+tmp/
 # filesystem
 **/.vscode
 .idea

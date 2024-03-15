@@ -123,7 +123,7 @@ class TestProfiler(OobleckSingleProcessTestCase):
         exist = True
         while exist:
             random_tag = "".join(random.choices(string.ascii_letters, k=8))
-            path = Path(f"/tmp/oobleck/profiles/{model.model_name}-{random_tag}")
+            path = Path(f"/workspace/Oobleck/tmp/profiles/{model.model_name}-{random_tag}")
             exist = path.exists()
         path.mkdir(parents=True, exist_ok=False)
         yield random_tag
@@ -153,7 +153,7 @@ class TestProfiler(OobleckSingleProcessTestCase):
         if process.exitcode != 0:
             pytest.fail("Profiler failed. Run skipped tests to debug.")
 
-        directory = Path(f"/tmp/oobleck/profiles/{model.model_name}-{random_tag}")
+        directory = Path(f"/workspace/Oobleck/tmp/profiles/{model.model_name}-{random_tag}")
         assert directory.is_dir()
 
         for filename in [
@@ -195,7 +195,7 @@ class TestProfiler(OobleckSingleProcessTestCase):
         if process.exitcode != 0:
             pytest.fail("Profiler failed. Run skipped tests to debug.")
 
-        directory = Path(f"/tmp/oobleck/profiles/{model.model_name}-{random_tag}")
+        directory = Path(f"/workspace/Oobleck/tmp/profiles/{model.model_name}-{random_tag}")
         assert directory.is_dir()
 
         for filename in [

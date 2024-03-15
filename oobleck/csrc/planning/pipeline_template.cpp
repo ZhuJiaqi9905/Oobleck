@@ -41,7 +41,7 @@ std::shared_ptr<LayerExecutionResults> get_profile_results(
   };
 
   std::string profile_path =
-      "/tmp/oobleck/profiles/" + model_name + "-" + model_tag;
+      "/workspace/Oobleck/tmp/profiles/" + model_name + "-" + model_tag;
   auto mb = get_cache(profile_path + "/mb" + std::to_string(microbatch_size) +
                       ".json");
   auto allreduce_in_node = get_cache(profile_path + "/allreduce_in_node.json");
