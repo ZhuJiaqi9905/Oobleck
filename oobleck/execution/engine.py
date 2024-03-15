@@ -419,13 +419,15 @@ class OobleckEngine:
         num_nodes: int,
         num_gpus_per_node: int,
         pipe: connection.Connection,
+        my_ip: str,
         args: OobleckArguments,
     ):
         assert (
             not dist.is_initialized()
         ), "torch.distributed must not be initialized when initializing OobleckEngine."
-
+        
         self._agent_pipe: connection.Connection = pipe
+        self._my_ip = my_ip
         self._args: OobleckArguments = args
         training_args = {
             "output_dir": f"/workspace/Oobleck/tmp/output/{args.model.model_name}-{args.model.model_tag}",
@@ -551,18 +553,18 @@ class OobleckEngine:
             }
         dist_info = self._dist_info
 
-        my_ip: str = socket.gethostbyname(socket.gethostname())
+        # my_ip: str = socket.gethostbyname(socket.gethostname())
         assert (
-            my_ip in dist_info.agent_ips
-        ), f"My IP {my_ip} is not in dist info {dist_info.agent_ips}."
+            self._my_ip in dist_info.agent_ips
+        ), f"My IP {self._my_ip} is not in dist info {dist_info.agent_ips}."
 
         self._num_nodes = len(dist_info.agent_ips)
         self._world_size = dist_info.world_size
-        self._rank = self._rank_map[my_ip][self._local_rank]
+        self._rank = self._rank_map[self._my_ip][self._local_rank]
 
-        if next(iter(self._rank_map)) == my_ip and self._local_rank == 0:
+        if next(iter(self._rank_map)) == self._my_ip and self._local_rank == 0:
             store = torch.distributed.TCPStore(
-                host_name=my_ip,
+                host_name=self._my_ip,
                 port=0,
                 world_size=dist_info.world_size,
                 is_master=True,

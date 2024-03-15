@@ -170,7 +170,14 @@ class OobleckAgent:
             self._agent_index * args.dist.num_workers,
             (self._agent_index + 1) * args.dist.num_workers,
         )
-
+        # If a worker has rank 0, it should forward its port to the master
+        my_ip: str = socket.gethostbyname(socket.gethostname())
+        if args.dist.node_ips.count(my_ip) == 0:
+            ip_address = get_all_ip_addresses()
+            for ip in ip_address:
+                if args.dist.node_ips.count(ip) > 0:
+                    my_ip = ip
+                break 
         for gpu_index in gpu_indices:
             logger.info(f"Launching worker {gpu_index}...")
             # TODO: add all arguments. Arguments should be passed from the master
@@ -185,6 +192,7 @@ class OobleckAgent:
                     len(args.dist.node_ips),
                     args.dist.num_workers,
                     child_pipe,
+                    my_ip,
                     args,
                 ),
                 daemon=True,
@@ -199,10 +207,10 @@ class OobleckAgent:
             # if a worker fails.
         os.environ.pop("CUDA_VISIBLE_DEVICES")
 
-        # If a worker has rank 0, it should forward its port to the master
-        my_ip: str = socket.gethostbyname(socket.gethostname())
+
         if my_ip == args.dist.node_ips[0]:
             await self.forward_worker_port(self._workers[0].pipe)
+        
 
     async def forward_worker_port(self, pipe: connection.Connection):
         _, w = self._conn

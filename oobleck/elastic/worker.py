@@ -15,12 +15,13 @@ def worker_main(
     num_nodes: int,
     num_gpus_per_node: int,
     pipe: connection.Connection,
+    my_ip: str,
     args: OobleckArguments,
 ):
     assert torch.cuda.device_count() == 1 and torch.cuda.current_device() == 0
 
     logger.info("Initializing Oobleck Engine...")
-    engine = OobleckEngine(local_rank, num_nodes, num_gpus_per_node, pipe, args)
+    engine = OobleckEngine(local_rank, num_nodes, num_gpus_per_node, pipe, my_ip, args)
     logger.info("Initializing torch.distributed...")
     engine.initialize_distributed()
 
