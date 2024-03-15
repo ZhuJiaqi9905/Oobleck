@@ -172,10 +172,12 @@ class OobleckAgent:
         )
         # If a worker has rank 0, it should forward its port to the master
         my_ip: str = socket.gethostbyname(socket.gethostname())
-        if args.dist.node_ips.count(my_ip) == 0:
+        if args.dist.node_ips.count(my_ip) <= 0:
             ip_address = get_all_ip_addresses()
+            logger.info(f"all ip {ip_address}")
             for ip in ip_address:
                 if args.dist.node_ips.count(ip) > 0:
+                    logger.info("in here")
                     my_ip = ip
                 break 
         logger.info(f"in agent. my_ip {my_ip}, node_ips {args.dist.node_ips}")
