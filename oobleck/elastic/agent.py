@@ -3,6 +3,7 @@ import multiprocessing
 import os
 import socket
 import sys
+import netifaces
 from dataclasses import dataclass
 from multiprocessing import connection
 
@@ -17,6 +18,17 @@ from oobleck.planning.profiler import profile, validate_model_args
 
 logger = LoggerFactory.create_logger("oobleck_agent")
 
+
+
+def get_all_ip_addresses():
+    ip_addresses = []
+    interfaces = netifaces.interfaces()
+    for interface in interfaces:
+        addrs = netifaces.ifaddresses(interface)
+        for family in (netifaces.AF_INET, netifaces.AF_INET6):
+            if family in addrs:
+                ip_addresses.extend(addr['addr'] for addr in addrs[family])
+    return ip_addresses
 
 @dataclass
 class Worker:
@@ -92,7 +104,15 @@ class OobleckAgent:
             master_ip = args.dist.node_ips[0]
             master_port = 23456
             world_size = len(args.dist.node_ips) * args.dist.num_workers
-            rank = args.dist.node_ips.index(my_ip) * args.dist.num_workers + index
+            if args.dist.node_ips.count(my_ip) > 0:
+                rank = args.dist.node_ips.index(my_ip) * args.dist.num_workers + index
+            else:
+                ip_address = get_all_ip_addresses()
+                for ip in ip_address:
+                    if args.dist.node_ips.count(ip) > 0:
+                        my_ip = ip
+                        rank = args.dist.node_ips.index(my_ip) * args.dist.num_workers + index
+                        break 
             # each worker run profile() in a new process
             process = ctx.Process(
                 target=profile,
