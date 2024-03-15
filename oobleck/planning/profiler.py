@@ -286,16 +286,16 @@ def profile(
 
     assert not dist.is_initialized(), "Distributed is already initialized."
     logger.info(f"init pg. master_addr: {master_addr}, master_port: {master_port}")
-    store = dist.TCPStore(
-        host_name=master_addr,
-        port=master_port,
-        world_size=world_size,
-        is_master=bool(rank == 0),
-        wait_for_workers=False,
-    )
+    # store = dist.TCPStore(
+    #     host_name=master_addr,
+    #     port=master_port,
+    #     world_size=world_size,
+    #     is_master=bool(rank == 0),
+    #     wait_for_workers=False,
+    # )
     # 把rank中的所有GPU组成一个process group
     dist.init_process_group(
-        backend="nccl", store=store, rank=rank, world_size=world_size
+        backend="nccl", store=None, rank=rank, world_size=world_size, init_method=f"tcp://{master_addr}:{master_port}"
     )
 
     path = directory / f"mb{args.job.microbatch_size}.json"
