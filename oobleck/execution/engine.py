@@ -12,6 +12,7 @@ from multiprocessing import connection
 import deepspeed.comm as dist
 import torch.distributed
 from deepspeed.utils.logging import LoggerFactory, log_dist
+from deepspeed.utils.logging import logging
 from deepspeed.utils.timer import SynchronizedWallClockTimer
 from transformers.training_args import TrainingArguments as HFTrainingArguments
 
@@ -33,7 +34,7 @@ from oobleck.planning.instantiator import (
 )
 from oobleck.utils.timer import measure_time, sync_timer
 
-logger = LoggerFactory.create_logger("oobleck_engine")
+logger = LoggerFactory.create_logger("oobleck_engine", logging.DEBUG)
 
 
 class ReconfigurationEngine:
@@ -57,6 +58,7 @@ class ReconfigurationEngine:
         return self._engine()
 
     def _reconfiguration_listener_fn(self):
+        logger.info("ReconfigureEngine: start reconfigure listening")
         while True:
             self._on_receive_reconfiguration_notification()
 
@@ -69,12 +71,17 @@ class ReconfigurationEngine:
         2. reconfigure the pipeline with lost rank information
         """
         try:
+            logger.info("start reconfigure")
             engine = self.engine
+            # is an ip address
             lost_node: str = engine._agent_pipe.recv()
+            logger.info(f"ReconfigureEngine: lost node {lost_node}")
+            # the ranks corresponding to the node
             lost_ranks = self.remove_lost_node_from_dist_info(lost_node)
 
             engine.initialize_distributed()
             self.on_reconfigure(lost_ranks)
+            logger.info("end reconfigure")
         except (EOFError, ValueError):
             # Connection closed. Exit.
             pass
@@ -440,7 +447,6 @@ class OobleckEngine:
         self._hf_training_args: HFTrainingArguments = HFTrainingArguments(
             **training_args
         )
-
         self._local_rank: int = local_rank
         self._num_nodes: int = num_nodes
         self._num_gpus_per_node: int = num_gpus_per_node
@@ -551,6 +557,7 @@ class OobleckEngine:
                 )
                 for i, ip in enumerate(self._dist_info.agent_ips)
             }
+            logger.debug(f"regenerate rank_map {self._rank_map}")
         dist_info = self._dist_info
 
         # my_ip: str = socket.gethostbyname(socket.gethostname())
@@ -561,7 +568,7 @@ class OobleckEngine:
         self._num_nodes = len(dist_info.agent_ips)
         self._world_size = dist_info.world_size
         self._rank = self._rank_map[self._my_ip][self._local_rank]
-
+        logger.info(f"init pg: rank {self._rank}, world_size: {self._world_size}, rank_map: {self._rank_map}")
         if next(iter(self._rank_map)) == self._my_ip and self._local_rank == 0:
             store = torch.distributed.TCPStore(
                 host_name=self._my_ip,
@@ -650,6 +657,16 @@ class OobleckEngine:
         self._dp_engine.do_allreduce()
         self._pipeline.execution.optimizer_step()
 
+    def fake_stop_and_reconfigure(self, lost_ip: str):
+        dist.barrier()
+        torch.cuda.synchronize()
+        torch.distributed.destroy_process_group(torch.distributed.group.WORLD)
+        dist.cdb = None 
+        #杀死自己的agent, 触发reconfigure
+        if lost_ip == self._my_ip:
+            logger.info(f"{self._my_ip} kill myself")
+        
+    
     def train(self):
         assert self._hf_training_args.max_steps > 0
 
@@ -659,6 +676,10 @@ class OobleckEngine:
                 sync_timer.log(["step"])
                 if step % 10 == 0:
                     log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
+                if step == 50:
+                    # self.stop_and_reconfigure()
+                    pass
+
             except StopIteration:
                 step_timer: SynchronizedWallClockTimer.Timer = sync_timer("step")
                 step_timer.reset()

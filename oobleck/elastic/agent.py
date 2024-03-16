@@ -9,6 +9,7 @@ from multiprocessing import connection
 
 import simple_parsing as sp
 from deepspeed.utils.logging import LoggerFactory
+from deepspeed.utils.logging import logging
 from oobleck.elastic.worker import worker_main
 
 import oobleck.elastic.message_util as message_util
@@ -16,7 +17,7 @@ from oobleck.csrc.planning.pipeline_template import get_profile_results
 from oobleck.elastic.training_util import OobleckArguments
 from oobleck.planning.profiler import profile, validate_model_args
 
-logger = LoggerFactory.create_logger("oobleck_agent")
+logger = LoggerFactory.create_logger("oobleck_agent", logging.DEBUG)
 
 
 

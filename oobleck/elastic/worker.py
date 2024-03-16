@@ -3,11 +3,11 @@ from multiprocessing import connection
 
 import torch
 from deepspeed.utils.logging import LoggerFactory
-
+from deepspeed.utils.logging import logging
 from oobleck.elastic.training_util import OobleckArguments
 from oobleck.execution.engine import OobleckEngine
 
-logger = LoggerFactory.create_logger("oobleck_worker")
+logger = LoggerFactory.create_logger("oobleck_worker", logging.DEBUG)
 
 
 def worker_main(

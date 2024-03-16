@@ -10,11 +10,12 @@ import aiofiles
 import asyncssh
 import simple_parsing
 from deepspeed.utils.logging import LoggerFactory
-
+from deepspeed.utils.logging import logging
 import oobleck.elastic.message_util as message_util
 from oobleck.elastic.training_util import OobleckArguments
 
-logger = LoggerFactory.create_logger("oobleck_master")
+
+logger = LoggerFactory.create_logger("oobleck_master", logging.DEBUG)
 
 max_num_nodes: int = 32
 
@@ -217,6 +218,9 @@ class OobleckMasterDaemon:
         )
 
     async def agent_handler(self, agent_info: tuple[str, int]):
+        '''
+        agent_info: (ip, port)
+        '''
         loop = self._server.get_loop()
         r, w = self._agent_connections[agent_info]
         try:
@@ -233,6 +237,7 @@ class OobleckMasterDaemon:
                     continue
         except (asyncio.IncompleteReadError, ConnectionResetError):
             logger.warning(f"Agent {agent_info} disconnected")
+            # node挂掉的时候会调用
             await self.close_agent(agent_info)
 
     async def on_connected(self, r: asyncio.StreamReader, w: asyncio.StreamWriter):
@@ -275,5 +280,4 @@ if __name__ == "__main__":
     args = parser.parse_args()
     if not args.ip:
         args.ip = "127.0.0.1"
-
     asyncio.run(main(args.ip, args.port))
