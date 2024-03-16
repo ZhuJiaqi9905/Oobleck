@@ -8,7 +8,8 @@ import weakref
 from collections import defaultdict
 from dataclasses import asdict
 from multiprocessing import connection
-
+import psutil
+import time
 import deepspeed.comm as dist
 import torch.distributed
 from deepspeed.utils.logging import LoggerFactory, log_dist
@@ -665,6 +666,19 @@ class OobleckEngine:
         #杀死自己的agent, 触发reconfigure
         if lost_ip == self._my_ip:
             logger.info(f"{self._my_ip} kill myself")
+            pids = []
+            for proc in psutil.process_iter(['pid', 'name']):
+                if 'oobleck' in proc.info['name']:
+                    pids.append(proc.info['pid'])
+            for pid in pids:
+                try:
+                    process = psutil.Process(pid)
+                    process.terminate()  # 终止进程
+                except psutil.NoSuchProcess:
+                    pass
+        else:
+            logger.info("wait 1s for other node kill")
+            time.sleep(1)
         
     
     def train(self):
@@ -677,7 +691,7 @@ class OobleckEngine:
                 if step % 10 == 0:
                     log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
                 if step == 50:
-                    # self.stop_and_reconfigure()
+                    self.fake_stop_and_reconfigure("10.20.23.47")
                     pass
 
             except StopIteration:
