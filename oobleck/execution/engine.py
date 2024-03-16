@@ -678,7 +678,9 @@ class OobleckEngine:
                     pass
         else:
             logger.info("wait 1s for other node kill")
-            time.sleep(1)
+        # loop forever
+        while True:
+            pass
         
     
     def train(self):
@@ -690,9 +692,9 @@ class OobleckEngine:
                 sync_timer.log(["step"])
                 if step % 10 == 0:
                     log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
-                if step == 50:
+                if step == 20:
                     self.fake_stop_and_reconfigure("10.20.23.47")
-                    pass
+                    
 
             except StopIteration:
                 step_timer: SynchronizedWallClockTimer.Timer = sync_timer("step")
