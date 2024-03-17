@@ -72,10 +72,10 @@ class ReconfigurationEngine:
         2. reconfigure the pipeline with lost rank information
         """
         try:
-            logger.info("start reconfigure")
             engine = self.engine
             # is an ip address
             lost_node: str = engine._agent_pipe.recv()
+            logger.info("start reconfigure")
             logger.info(f"ReconfigureEngine: lost node {lost_node}")
             # the ranks corresponding to the node
             lost_ranks = self.remove_lost_node_from_dist_info(lost_node)
@@ -663,6 +663,7 @@ class OobleckEngine:
         torch.cuda.synchronize()
         torch.distributed.destroy_process_group(torch.distributed.group.WORLD)
         dist.cdb = None 
+        logger.info("destroy pg")
         #杀死自己的agent, 触发reconfigure
         if lost_ip == self._my_ip:
             logger.info(f"{self._my_ip} kill myself")
@@ -670,6 +671,7 @@ class OobleckEngine:
             for proc in psutil.process_iter(['pid', 'name']):
                 if 'oobleck' in proc.info['name']:
                     pids.append(proc.info['pid'])
+            logger.info(f"pids: {pids}")
             for pid in pids:
                 try:
                     process = psutil.Process(pid)
