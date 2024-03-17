@@ -259,7 +259,7 @@ class OobleckAgent:
             )
 
     async def on_receive_reconfiguration(self, lost_node_ip: str):
-        logger.debug(f"reconfiguration request received due to node failure: {str}")
+        logger.debug(f"reconfiguration request received due to node failure: {lost_node_ip}")
 
         # This is for emulating a lost node by sending a command from the master.
         # Won't happen in normal case.
@@ -274,6 +274,9 @@ class OobleckAgent:
             # Send notification to workers
             for worker in self._workers:
                 worker.pipe.send(lost_node_ip)
+            if self.my_ip == self._args.dist.node_ips[0]:
+                await self.forward_worker_port(self._workers[0].pipe)
+            
 
     async def on_receive_response(self):
         r, w = self._conn

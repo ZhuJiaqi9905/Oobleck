@@ -668,10 +668,10 @@ class OobleckEngine:
         if lost_ip == self._my_ip:
             logger.info(f"{self._my_ip} kill myself")
             pids = []
-            for proc in psutil.process_iter(['pid', 'name']):
-                if 'oobleck' in proc.info['name']:
+            for proc in psutil.process_iter(['pid', 'cmdline']):
+                if proc.info['cmdline'] and 'oobleck' in ' '.join(proc.info['cmdline']):
                     pids.append(proc.info['pid'])
-            logger.info(f"pids: {pids}")
+                logger.info(f"pids: {pids}")
             for pid in pids:
                 try:
                     process = psutil.Process(pid)
@@ -695,7 +695,7 @@ class OobleckEngine:
                 if step % 10 == 0:
                     log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
                 if step == 20:
-                    self.fake_stop_and_reconfigure("10.20.23.47")
+                    self.fake_stop_and_reconfigure("10.20.23.90")
                     
 
             except StopIteration:
