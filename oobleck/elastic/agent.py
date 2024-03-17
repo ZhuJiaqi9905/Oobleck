@@ -215,15 +215,23 @@ class OobleckAgent:
         
 
     async def forward_worker_port(self, pipe: connection.Connection):
+        ''' 
+        get the TCP Store port from worker and send it to master.
+        '''
         _, w = self._conn
         port: int = pipe.recv()
-        logger.info(f"Received worker port: {port}. Forwarding it to master...")
+        logger.info(f"Received worker port: {port} from worker. Forwarding it to master...")
         await message_util.send_request_type(
             w, message_util.RequestType.FORWARD_RANK0_PORT
         )
         await message_util.send(w, port, need_pickle=True, drain=True, close=False)
 
     async def on_receive_worker_port(self, port: int):
+        '''
+        The master send the TCP Store port to all agents.
+        Each agent sned the port to its workers.
+        '''
+        logger.debug(f"agent recv TCP Store port {port} from master")
         r, w = self._conn
 
         for worker in self._workers:

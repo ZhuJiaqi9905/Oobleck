@@ -677,7 +677,7 @@ class OobleckEngine:
                 except psutil.NoSuchProcess:
                     pass
         else:
-            logger.info("wait 1s for other node kill")
+            logger.info("wait for other node kill")
         # loop forever
         while True:
             pass

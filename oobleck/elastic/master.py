@@ -140,7 +140,7 @@ class OobleckMasterDaemon:
     async def forward_rank0_port_handler(
         self, port: int, r: asyncio.StreamReader, w: asyncio.StreamWriter
     ):
-        logger.debug(f"Received rank0 port: {port}")
+        logger.debug(f"master Received rank0 port: {port}")
 
         for _, writer in self._agent_connections.values():
             await message_util.send_response(
