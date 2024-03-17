@@ -671,7 +671,7 @@ class OobleckEngine:
             for proc in psutil.process_iter(['pid', 'cmdline']):
                 if proc.info['cmdline'] and 'oobleck' in ' '.join(proc.info['cmdline']):
                     pids.append(proc.info['pid'])
-                logger.info(f"pids: {pids}")
+            logger.info(f"pids: {pids}")
             for pid in pids:
                 try:
                     process = psutil.Process(pid)

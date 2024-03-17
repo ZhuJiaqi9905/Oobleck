@@ -63,6 +63,7 @@ class OobleckAgent:
         self._workers: list[Worker] = []
         self._response_callbacks: dict[message_util.RequestType, callable] = {}
         self._job_done: bool = False
+        self._my_ip = ""
 
     async def run(self):
         await self._connect_to_master(self._master_ip, self._master_port)
@@ -179,6 +180,7 @@ class OobleckAgent:
                 if args.dist.node_ips.count(ip) > 0:
                     my_ip = ip
                     break 
+        self._my_ip = my_ip
         logger.info(f"in agent. my_ip {my_ip}, node_ips {args.dist.node_ips}")
         for gpu_index in gpu_indices:
             logger.info(f"Launching worker {gpu_index}...")
@@ -274,7 +276,7 @@ class OobleckAgent:
             # Send notification to workers
             for worker in self._workers:
                 worker.pipe.send(lost_node_ip)
-            if self.my_ip == self._args.dist.node_ips[0]:
+            if self._my_ip == self._args.dist.node_ips[0]:
                 await self.forward_worker_port(self._workers[0].pipe)
             
 
