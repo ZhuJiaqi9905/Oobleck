@@ -16,7 +16,7 @@ from deepspeed.utils.logging import LoggerFactory, log_dist
 from deepspeed.utils.logging import logging
 from deepspeed.utils.timer import SynchronizedWallClockTimer
 from transformers.training_args import TrainingArguments as HFTrainingArguments
-
+import pdb
 from oobleck.csrc.planning.pipeline_template import (
     LayerExecutionResults,
     PipelineTemplate,
@@ -687,7 +687,7 @@ class OobleckEngine:
     
     def train(self):
         assert self._hf_training_args.max_steps > 0
-
+        pdb.set_trace()
         for step in range(self._hf_training_args.max_steps):
             try:
                 self._train_step()
