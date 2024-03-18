@@ -73,7 +73,7 @@ class OobleckMasterDaemon:
             node_ip, args.dist.node_port, username=args.dist.username
         ) as conn:
             cmd = '/bin/bash -ic "conda run --no-capture-output -n oobleck '
-            cmd += "python -m pdb oobleck.elastic.agent "
+            cmd += "python -m oobleck.elastic.agent "
             cmd += f"--master_ip {args.dist.master_ip} --master_port {args.dist.master_port} "
             cmd += f'--job_id {job_id} --agent_index {agent_index}"'
             logger.info(f"Launching an agent on {node_ip}: {cmd}")
