@@ -108,9 +108,10 @@ class ReconfigurationEngine:
                 ),
                 None,
             )
-        rpdb.set_trace()
+        
         # Copy existing ranks list to use it for data copy
         # layer index -> list of ranks
+        # old_rank_grids [{0: [0], 1: [0], 2: [0], 3: [0], 4: [0], 5: [0], 6: [0], 7: [0], 8: [0], 9: [0], 10: [0], 11: [0], 12: [0], 13: [0]}, {0: [1], 1: [1], 2: [1], 3: [1], 4: [1], 5: [1], 6: [1], 7: [1], 8: [1], 9: [1], 10: [1], 11: [1], 12: [1], 13: [1]}, {0: [2], 1: [2], 2: [2], 3: [2], 4: [2], 5: [2], 6: [2], 7: [2], 8: [2], 9: [2], 10: [2], 11: [2], 12: [2], 13: [2]}, {0: [3], 1: [3], 2: [3], 3: [3], 4: [3], 5: [3], 6: [3], 7: [3], 8: [3], 9: [3], 10: [3], 11: [3], 12: [3], 13: [3]}]
         old_rank_grids: list[dict[int, list[int]]] = [
             copy.deepcopy(pipeline.rank_grid) for pipeline in self._pipelines
         ]
@@ -153,7 +154,7 @@ class ReconfigurationEngine:
 
             new_ranks_list.append(ranks)
 
-        # Merge pipelines if needed
+        # Merge pipelines if needed new_ranks_list: [[0], [1], [2]]
         if need_merge:
             new_ranks_list = self._merge_pipelines(new_ranks_list)
 
@@ -169,8 +170,9 @@ class ReconfigurationEngine:
         new_num_instances_set: dict[PipelineTemplate, int] = defaultdict(int)
         for ranks in new_ranks_list:
             template = get_pipeline_template(ranks, self.engine._pipeline_templates)
-            new_num_instances_set[template] += 1
-
+            if template != None:
+                new_num_instances_set[template] += 1
+        rpdb.set_trace()
         new_pipeline = self._reinstantiate(new_num_instances_set, new_ranks_list)
 
         # Copy model states here
