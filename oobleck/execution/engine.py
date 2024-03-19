@@ -172,7 +172,7 @@ class ReconfigurationEngine:
             template = get_pipeline_template(ranks, self.engine._pipeline_templates)
             if template != None:
                 new_num_instances_set[template] += 1
-        rpdb.set_trace()
+        # rpdb.set_trace()
         new_pipeline = self._reinstantiate(new_num_instances_set, new_ranks_list)
 
         # Copy model states here

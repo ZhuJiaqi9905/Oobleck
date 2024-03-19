@@ -205,6 +205,7 @@ class PipelineInstantiator:
         allreduce_across_nodes: list[dict[int, float]],
         global_num_microbatch: int,
     ) -> HeterogeneousPipelinesExecutionPlan:
+        # it is None
         num_microbatches_set: dict[PipelineTemplate, int] = self._distribute_batch(
             global_num_microbatch, new_num_instances_set
         )
@@ -317,7 +318,9 @@ class PipelineInstantiator:
         )
 
         # check for all i model.nb[i].value is integer, otherwise return None
+        # 这里返回了None
         if not all(model.nb[i].value for i in model.I):
+            logger.info("Batch distribution find no results. return None")
             return None
 
         nb_optimal = {
