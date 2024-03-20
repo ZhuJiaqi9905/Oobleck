@@ -68,6 +68,11 @@ class Layer(torch.nn.Module):
             self._param_handle.flat_param.grad.data = torch.tensor([])
         self._param_handle.flat_param.data = torch.tensor([])
 
+    def to_cuda(self):
+        if self._param_handle.flat_param.grad is not None:
+            self._param_handle.flat_param.grad.cuda(torch.cuda.current_device())
+        self._param_handle.flat_param.data.cuda(torch.cuda.current_device())
+        
     def __init__(
         self,
         layer_id: int,
