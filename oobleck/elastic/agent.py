@@ -101,7 +101,7 @@ class OobleckAgent:
 
         for index in range(args.dist.num_workers):
             # use CUDA_VISIBLE_DEVICES environment variable 
-            os.environ["CUDA_VISIBLE_DEVICES"] = str(index)
+            os.environ["CUDA_VISIBLE_DEVICES"] = str(index + 1)
             my_ip = socket.gethostbyname(socket.gethostname())
             master_ip = args.dist.node_ips[0]
             master_port = 23456
@@ -187,7 +187,7 @@ class OobleckAgent:
             # TODO: add all arguments. Arguments should be passed from the master
             # via command line arguments.
             pipe, child_pipe = ctx.Pipe()
-            os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_index)
+            os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_index + 1)
             # each worker run worker_main() in a new process
             process = ctx.Process(
                 target=worker_main,
