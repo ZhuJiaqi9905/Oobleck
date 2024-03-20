@@ -70,7 +70,7 @@ class Layer(torch.nn.Module):
 
     def to_cuda(self):
         if self._param_handle.flat_param.grad is not None:
-            self._param_handle.flat_param.grad.cuda(torch.cuda.current_device())
+            self._param_handle.flat_param.grad.data.cuda(torch.cuda.current_device())
         self._param_handle.flat_param.data.cuda(torch.cuda.current_device())
         
     def __init__(
