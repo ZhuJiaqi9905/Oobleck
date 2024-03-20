@@ -42,6 +42,7 @@ class ReconfigurationEngine:
     def __init__(self, engine: OobleckEngine, pipelines: list[OobleckPipeline]):
         self._engine = weakref.ref(engine)
         self._pipelines = pipelines
+
         self._num_instances_set: dict[PipelineTemplate, int] = defaultdict(int)
         for pipeline in self._pipelines:
             self._num_instances_set[pipeline._template] += 1
@@ -53,6 +54,7 @@ class ReconfigurationEngine:
             target=self._reconfiguration_listener_fn, daemon=True
         )
         self._reconfiguration_listener.start()
+
 
     @property
     def engine(self):
@@ -83,6 +85,11 @@ class ReconfigurationEngine:
             engine.initialize_distributed()
             self.on_reconfigure(lost_ranks)
             logger.info("end reconfigure")
+            
+            with self.engine._lock:
+                engine._reconfigure_finish = True
+                self.engine._cond.notify()
+            
         except (EOFError, ValueError):
             # Connection closed. Exit.
             pass
@@ -465,6 +472,12 @@ class OobleckEngine:
             self._pipeline_templates,
         ) = self._initialize_engine(self._num_nodes, self._num_gpus_per_node)
 
+        # synchronize when reconfigure
+        self._lock = threading.Lock()
+        self._cond = threading.Condition(self._lock)
+        self._reconfigure_finish = False
+
+
     def _initialize_engine(
         self, num_nodes: int, num_gpus_per_node: int
     ) -> tuple[
@@ -682,9 +695,13 @@ class OobleckEngine:
                     pass
         else:
             logger.info("wait for other node kill")
+
         # loop forever
-        while True:
-            pass
+        with self._lock:
+            while not self._reconfigure_finish:
+                self._cond.wait()
+        self._reconfigure_finish = True
+        logger.info("reconfigure finish, continue training")
         
     
     def train(self):

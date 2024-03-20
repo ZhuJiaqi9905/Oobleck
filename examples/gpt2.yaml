@@ -4,8 +4,8 @@ dist:
   num_workers: 1
 job:
   fault_threshold: 1
-  microbatch_size: 8
-  global_microbatch_size: 64
+  microbatch_size: 2
+  global_microbatch_size: 24
   steps: 100
 
 model:
