@@ -195,6 +195,8 @@ class ReconfigurationEngine:
             layer.remove_tensors()
 
         self.engine._pipeline = new_pipeline
+        for layer in self.engine._pipeline.execution._layers:
+            layer.cuda(torch.cuda.current_device())
 
     def _reinstantiate(
         self,
@@ -696,7 +698,7 @@ class OobleckEngine:
         else:
             logger.info("wait for other node kill")
 
-        # loop forever
+        # wait for reconfigure finish 
         with self._lock:
             while not self._reconfigure_finish:
                 self._cond.wait()
