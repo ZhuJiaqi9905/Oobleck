@@ -4,8 +4,8 @@ dist:
   num_workers: 1
 job:
   fault_threshold: 1
-  microbatch_size: 2
-  global_microbatch_size: 24
+  microbatch_size: 8
+  global_microbatch_size: 96
   steps: 100
 
 model:
@@ -13,3 +13,6 @@ model:
   model_tag: medium
   dataset_path: wikitext
   dataset_name: wikitext-2-raw-v1
+  model_args:
+    num_hidden_layers: 60
+    n_head: 48

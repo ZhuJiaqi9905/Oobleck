@@ -19,6 +19,7 @@ class TestOobleckPipelineTemplate(OobleckSingleProcessTestCase):
             (1, 1),  # num nodes range
             1,
         )
+        print(pipeline_templates)
         assert len(pipeline_templates) == 1
         assert pipeline_templates[0]._num_nodes == 1
         assert pipeline_templates[0]._num_gpus_per_node == 1
