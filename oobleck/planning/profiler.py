@@ -106,8 +106,8 @@ class Profiler:
 
                     results[idx][0] = forward
                     results[idx][1] = forward * 3
-                    results[idx][2] = model_mem
-                    results[idx][3] = activation_mem
+                    results[idx][2] = model_mem * 2
+                    results[idx][3] = activation_mem * 2
 
         dist.barrier()
         # broadcast results to other nodes
