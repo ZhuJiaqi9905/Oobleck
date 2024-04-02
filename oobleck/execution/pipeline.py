@@ -171,7 +171,7 @@ class PipelineExecution:
             buffer_id
         ]
         zero_grads(ori_inputs)
-        print(f"buffer id: {buffer_id}. is_last_stage: {self.pipeline.is_last_stage}")
+        print(f"buffer id: {buffer_id}. is_last_stage: {self.pipeline.is_last_stage()}")
         # XXX Hack
         # Some tensor might be converted from torch.Size().
         # Convert it to torch.Size so that forward can be executed
@@ -189,7 +189,9 @@ class PipelineExecution:
         for input in ori_inputs:
             if input.dim() == 1:
                 print(f"data {input.data[0]}, batch_size {self._training_args.per_device_train_batch_size}. id {i}")
-            if input.dim() == 1 and input.data[0] == self._training_args.per_device_train_batch_size :
+            
+            # hack "-1"  
+            if input.dim() == 1 and (input.data[0] == self._training_args.per_device_train_batch_size or input.data[0] == -1):
                 inputs.append(torch.Size(input.tolist()))
                 print(f"tuple input {input}")
             else:
