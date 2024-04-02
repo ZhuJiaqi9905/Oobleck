@@ -171,7 +171,7 @@ class PipelineExecution:
             buffer_id
         ]
         zero_grads(ori_inputs)
-        print(f"buffer id: {buffer_id}. is_last_stage: {self.pipeline.is_last_stage()}")
+        # print(f"buffer id: {buffer_id}. is_last_stage: {self.pipeline.is_last_stage()}")
         # XXX Hack
         # Some tensor might be converted from torch.Size().
         # Convert it to torch.Size so that forward can be executed
@@ -187,13 +187,13 @@ class PipelineExecution:
         inputs: list[torch.Size | torch.Tensor] = []
         i = 0
         for input in ori_inputs:
-            if input.dim() == 1:
-                print(f"data {input.data[0]}, batch_size {self._training_args.per_device_train_batch_size}. id {i}")
+            # if input.dim() == 1:
+                # print(f"data {input.data[0]}, batch_size {self._training_args.per_device_train_batch_size}. id {i}")
             
             # hack "-1"  
             if input.dim() == 1 and (input.data[0] == self._training_args.per_device_train_batch_size or input.data[0] == -1):
                 inputs.append(torch.Size(input.tolist()))
-                print(f"tuple input {input}")
+                # print(f"tuple input {input}")
             else:
                 inputs.append(input)
             i += 1
@@ -229,12 +229,12 @@ class PipelineExecution:
             trans_outputs: list[torch.Tensor] = []
             i = 0
             for output in outputs:
-                print(f"type of output: {type(output)}") 
+                # print(f"type of output: {type(output)}") 
                 if torch.is_tensor(output):
                     trans_outputs.append(output)
                 else:
                     # 这里把一个非tensor类型转换为tensor了
-                    print(f"output is not tensor: {output}. id = {i}, type {type(output)}.")
+                    # print(f"output is not tensor: {output}. id = {i}, type {type(output)}.")
                     trans_outputs.append(torch.LongTensor(data=output).to(self.pipeline.device))
                 i += 1
             outputs = tuple(trans_outputs)
