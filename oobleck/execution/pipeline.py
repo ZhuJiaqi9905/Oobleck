@@ -167,28 +167,38 @@ class PipelineExecution:
             )
 
     def forward_pass(self, buffer_id: int):
-        inputs: tuple[torch.Tensor, ...] = self.pipeline.pipe_buffers["inputs"][
+        ori_inputs: tuple[torch.Tensor, ...] = self.pipeline.pipe_buffers["inputs"][
             buffer_id
         ]
-        zero_grads(inputs)
-
+        zero_grads(ori_inputs)
+        print(f"buffer id: {buffer_id}. is_last_stage: {self.pipeline.is_last_stage}")
         # XXX Hack
         # Some tensor might be converted from torch.Size().
         # Convert it to torch.Size so that forward can be executed
-        inputs: tuple[torch.Size | torch.Tensor] = tuple(
-            [
-                torch.Size(input.tolist())
-                if input.dim() == 1
-                and input.data[0] == self._training_args.per_device_train_batch_size
-                else input
-                for input in inputs
-            ]
-        )
+        # inputs: tuple[torch.Size | torch.Tensor] = tuple(
+        #     [
+        #         torch.Size(input.tolist())
+        #         if input.dim() == 1
+        #         and input.data[0] == self._training_args.per_device_train_batch_size
+        #         else input
+        #         for input in ori_inputs
+        #     ]
+        # )
+        inputs: list[torch.Size | torch.Tensor] = []
+        for input in ori_inputs:
+            if input.dim() == 1:
+                print(f"data {input.data[0]}, batch_size {self._training_args.per_device_train_batch_size}")
+            if input.dim() == 1 and input.data[0] == self._training_args.per_device_train_batch_size :
+                inputs.append(torch.Size(input.tolist()))
+                print(f"tuple input {input}")
+            else:
+                inputs.append(input)
+        inputs: tuple[torch.Size | torch.Tensor] = tuple(inputs)
 
+        # print(f"converted inputs: {inputs}")
         # Execute forward
         for layer in self._layers:
             inputs = layer(inputs)
-
         outputs = inputs
 
         # Optionally compute loss on the last stage
@@ -204,14 +214,25 @@ class PipelineExecution:
             # XXX Hack
             # It might includes torch.Size() in outputs.
             # Convert it to torch.Tensor so that it can be transferred
-            outputs: tuple[torch.Tensor] = tuple(
-                [
-                    output
-                    if torch.is_tensor(output)
-                    else torch.LongTensor(data=output).to(self.pipeline.device)
-                    for output in outputs
-                ]
-            )
+            # outputs: tuple[torch.Tensor] = tuple(
+            #     [
+            #         output
+            #         if torch.is_tensor(output)
+            #         else torch.LongTensor(data=output).to(self.pipeline.device)
+            #         for output in outputs
+            #     ]
+            # )
+            trans_outputs: list[torch.Tensor] = []
+            for output in outputs:
+                print(f"type of output: {output.type()}, {type(output)}") 
+                if torch.is_tensor(output):
+                    trans_outputs.append(output)
+                else:
+                    # 这里把一个非tensor类型转换为tensor了
+                    print(f"output is not tensor: {output}. type {type(output)}")
+                    trans_outputs.append(torch.LongTensor(data=output).to(self.pipeline.device))
+            outputs = tuple(trans_outputs)
+
 
             self.pipeline.pipe_buffers["outputs"][buffer_id] = outputs
 
