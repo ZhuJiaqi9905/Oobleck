@@ -716,7 +716,7 @@ class OobleckEngine:
                 sync_timer.log(["step"])    
                 log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
                 if step == 15:
-                    self.fake_stop_and_reconfigure("10.20.23.91")
+                    self.fake_stop_and_reconfigure("172.21.0.91")
                     
 
             except StopIteration:
