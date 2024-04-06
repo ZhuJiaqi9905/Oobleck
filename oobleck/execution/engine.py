@@ -122,7 +122,7 @@ class ReconfigurationEngine:
         old_rank_grids: list[dict[int, list[int]]] = [
             copy.deepcopy(pipeline.rank_grid) for pipeline in self._pipelines
         ]
-
+        logger.info(f"old_rank_grids: {old_rank_grids}")
         # Update ranks first
         for pipeline in self._pipelines:
             pipeline._ranks = [
@@ -160,7 +160,7 @@ class ReconfigurationEngine:
                     ranks.append(biggest_pipeline._ranks.pop())
 
             new_ranks_list.append(ranks)
-
+        logger.info(f"need_merge: {need_merge}, new_ranks_list: {new_ranks_list}")
         # Merge pipelines if needed new_ranks_list: [[0], [1], [2]]
         if need_merge:
             new_ranks_list = self._merge_pipelines(new_ranks_list)
@@ -173,6 +173,7 @@ class ReconfigurationEngine:
         # For pipelines with the same number of ranks, a pipeline with smaller rank id comes first.
         new_ranks_list.sort(key=lambda ranks: (len(ranks), ranks[0]))
 
+        logger.info(f"new_ranks_list: {new_ranks_list}")
         # Creae new instances set
         new_num_instances_set: dict[PipelineTemplate, int] = defaultdict(int)
         for ranks in new_ranks_list:
