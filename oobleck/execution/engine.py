@@ -713,9 +713,8 @@ class OobleckEngine:
         for step in range(self._hf_training_args.max_steps):
             try:
                 self._train_step()
-                sync_timer.log(["step"])
-                if step % 10 == 0:
-                    log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
+                sync_timer.log(["step"])    
+                log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
                 if step == 15:
                     self.fake_stop_and_reconfigure("10.20.23.91")
                     
