@@ -265,7 +265,7 @@ class ReconfigurationEngine:
         Copy missing model states in the GPU due to reconfiguration into self.engine._model.
         Then remove unused tensors from the GPU.
         """
-
+        print(f"old_rank_grids:{old_rank_grids}, new_rank_grids: {new_rank_grids}")
         # Iterate all layers to copy model states
         for layer_index in range(len(old_rank_grids[0])):
             old_ranks: list[list[int]] = [
@@ -274,11 +274,11 @@ class ReconfigurationEngine:
             new_ranks: list[list[int]] = [
                 ranks[layer_index] for ranks in new_rank_grids
             ]
-
+            print(f"layer_index: {layer_index}, old_ranks: {old_ranks}, new_ranks: {new_ranks}")
             # Check if it is not necessary to copy data.
             if all(rank in old_ranks for rank in new_ranks):
                 continue
-
+            
             # One of the following sets of ranks will send data.
             alive_ranks_in_layer: list[list[int]] = [
                 ranks for ranks in old_ranks if ranks in new_ranks
