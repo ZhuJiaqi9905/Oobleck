@@ -594,30 +594,35 @@ class OobleckEngine:
         self._world_size = dist_info.world_size
         self._rank = self._rank_map[self._my_ip][self._local_rank]
         logger.info(f"init pg: rank {self._rank}, world_size: {self._world_size}, rank_map: {self._rank_map}")
+        store_port = 60005
         if next(iter(self._rank_map)) == self._my_ip and self._local_rank == 0:
+
             store = torch.distributed.TCPStore(
                 host_name=self._my_ip,
-                port=0,
+                port=store_port,
                 world_size=dist_info.world_size,
                 is_master=True,
                 wait_for_workers=True,
             )
             logger.info(f"Creating a TCP store on port: {store.port}")
+            assert(store_port == store.port)
             self._agent_pipe.send(store.port)
             # Agent will send back this information. Discard it
             self._agent_pipe.recv()
         else:
             logger.info("Waiting for a port information...")
             # wait for rank 0's port information
-            port: int = self._agent_pipe.recv()
-            logger.info(f"Received torch master: {dist_info.agent_ips[0]}.{port}")
+            
             store = torch.distributed.TCPStore(
                 host_name=dist_info.agent_ips[0],
-                port=port,
+                port=store_port,
                 world_size=dist_info.world_size,
                 is_master=False,
                 wait_for_workers=True,
             )
+            port: int = self._agent_pipe.recv()
+            logger.info(f"Received torch master: {dist_info.agent_ips[0]}.{port}")
+            assert(port == store_port)
         torch.distributed.init_process_group(
             backend="nccl",
             store=store,
