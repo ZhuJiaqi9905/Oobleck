@@ -419,7 +419,7 @@ class DataParallelEngine:
 
                 if my_rank in ranks:
                     fsdp_indices[layer_index].append(fsdp_index)
-
+        print(f"ranks_grid: {ranks_grid}")
         self._dp_process_groups = dp_process_groups
         self._fsdp_indices = fsdp_indices
 
@@ -428,6 +428,7 @@ class DataParallelEngine:
         return self._engine()
 
     def do_allreduce(self):
+        
         for layer in self.engine._pipeline.execution._layers:
             process_groups = {
                 fsdp_index: pg
@@ -435,6 +436,8 @@ class DataParallelEngine:
                 if torch.distributed.get_rank(pg) >= 0
             }
             if process_groups:
+                
+                print(f"layer {layer.layer_id} reduce_gradients")
                 layer.reduce_gradients(process_groups)
 
 
