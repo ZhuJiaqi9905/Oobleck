@@ -294,6 +294,6 @@ class Layer(torch.nn.Module):
 
         for grad, (fsdp_index, process_group) in zip(grads, process_groups.items()):
             
-            print(f"shape: {grad.shape}, dtype: {grad.dtype}. ranks: {torch.distributed.get_rank(process_group)}")
+            print(f"shape: {grad.shape}, dtype: {grad.dtype}. local_rank: {torch.distributed.get_rank(process_group)}, all_ranks: {torch.distributed.get_process_group_ranks(process_group)}")
             torch.distributed.all_reduce(tensor=grad, group=process_group)
 
