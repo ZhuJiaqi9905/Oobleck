@@ -600,7 +600,7 @@ class OobleckEngine:
                 port=0,
                 world_size=dist_info.world_size,
                 is_master=True,
-                wait_for_workers=False,
+                wait_for_workers=True,
             )
             logger.info(f"Creating a TCP store on port: {store.port}")
             self._agent_pipe.send(store.port)
@@ -616,7 +616,7 @@ class OobleckEngine:
                 port=port,
                 world_size=dist_info.world_size,
                 is_master=False,
-                wait_for_workers=False,
+                wait_for_workers=True,
             )
         torch.distributed.init_process_group(
             backend="nccl",
@@ -721,7 +721,7 @@ class OobleckEngine:
                 sync_timer.log(["step"])    
                 log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
                 if step == 5:
-                    self.fake_stop_and_reconfigure("172.21.0.92")
+                    self.fake_stop_and_reconfigure("172.21.0.91")
                     
 
             except StopIteration:

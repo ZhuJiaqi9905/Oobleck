@@ -291,7 +291,7 @@ def profile(
         port=master_port,
         world_size=world_size,
         is_master=bool(rank == 0),
-        wait_for_workers=False,
+        wait_for_workers=True,
     )
     # 把rank中的所有GPU组成一个process group
     dist.init_process_group(
