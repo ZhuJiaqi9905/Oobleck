@@ -293,4 +293,7 @@ class Layer(torch.nn.Module):
             grads = [self._param_handle.flat_param.grad]
 
         for grad, (fsdp_index, process_group) in zip(grads, process_groups.items()):
+            
+            print(f"shape: {grad.shape}, dtype: {grad.dtype}. ranks: {torch.distributed.get_rank(process_group)}")
             torch.distributed.all_reduce(tensor=grad, group=process_group)
+
