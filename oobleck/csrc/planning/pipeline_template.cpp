@@ -86,6 +86,7 @@ std::vector<PipelineTemplate> PipelineTemplateGenerator::create_pipeline_templat
     std::shared_ptr<LayerExecutionResults> layer_execution_results,
     const std::tuple<int, int>& num_nodes,
     const int num_gpus_per_node) {
+  std::cout << "Create pipeline template serial" << std::endl;
   int min_num_nodes = std::get<0>(num_nodes);
   int max_num_nodes = std::get<1>(num_nodes);
 #ifdef PYBIND11_MODULE
@@ -154,6 +155,7 @@ PipelineTemplateGenerator::create_pipeline_templates(
     std::shared_ptr<LayerExecutionResults> layer_execution_results,
     const std::tuple<int, int>& num_nodes,
     const int num_gpus_per_node) {
+  std::cout << "Create pipeline templates" << std::endl;
   int min_num_nodes = std::get<0>(num_nodes);
   int max_num_nodes = std::get<1>(num_nodes);
 #ifdef PYBIND11_MODULE
