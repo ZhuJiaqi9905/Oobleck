@@ -535,7 +535,7 @@ class OobleckEngine:
             self._args.model.model_tag,
             self._hf_training_args.per_device_train_batch_size,
         )
-        print(f"profile results: size {profile_results.sizez()}")
+        print(f"profile results: size {profile_results.size()}")
         layer_exe_results = profile_results.get()
         for layer_result in layer_exe_results:
             print(f"layer idx: {layer_result._index}, allreduce_across_nodes: {layer_result._allreduce_across_nodes}, allreduce_in_node: {layer_result._allreduce_in_node}, forward: {layer_result._forward}, backward: {layer_result._backward}, mem: {layer_result._mem_required}")
