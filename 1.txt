@@ -1,0 +1,3 @@
+mb size: 62, ar across: 62, ar in: 62
+Loading done. creating layer execution results...
+Returning from get_profiler_results

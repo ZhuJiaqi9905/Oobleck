@@ -16,7 +16,7 @@ model_tag = "medium"
 batch_size = 8
 profile_results: LayerExecutionResults = get_profile_results(model_name, model_tag, batch_size)
 
-print(f"profile results: size {profile_results.size()}")
+print(f"profile results: size {profile_results.size}")
 layer_exe_results = profile_results.get()
 for layer_result in layer_exe_results:
     print(f"layer idx: {layer_result._index}, allreduce_across_nodes: {layer_result._allreduce_across_nodes}, allreduce_in_node: {layer_result._allreduce_in_node}, forward: {layer_result._forward}, backward: {layer_result._backward}, mem: {layer_result._mem_required}")
