@@ -10,6 +10,7 @@
 #include <optional>
 #include <ranges>
 #include <string>
+#include <cstdint>
 
 #ifdef PYBIND11_MODULE
 #include <pybind11/pybind11.h>
@@ -70,7 +71,7 @@ std::shared_ptr<LayerExecutionResults> get_profile_results(
     layer_execution_results.emplace_back(LayerExecutionResult(
         i, mb[i]["forward"].get<double>(), mb[i]["backward"].get<double>(),
         allreduce_in_node_map, allreduce_across_nodes_map,
-        mb[i]["mem_required"].get<std::tuple<int, int>>()));
+        mb[i]["mem_required"].get<std::tuple<int64_t, int64_t>>()));
   }
 
   std::cout << "Returning from get_profiler_results" << std::endl;

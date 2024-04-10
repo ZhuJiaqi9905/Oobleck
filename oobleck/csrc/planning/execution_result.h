@@ -1,12 +1,13 @@
 #ifndef _OOBLECK_PLANNING_EXECUTION_RESULT_H_
 #define _OOBLECK_PLANNING_EXECUTION_RESULT_H_
 
+
 #include <oneapi/tbb/concurrent_unordered_map.h>
 #include <map>
 #include <memory>
 #include <tuple>
 #include <vector>
-
+#include <cstdint>
 namespace oobleck {
 
 class PipelineTemplate;
@@ -21,7 +22,7 @@ class LayerExecutionResult {
                        const double backward,
                        const std::map<int, double>& allreduce_in_node,
                        const std::map<int, double>& allreduce_across_nodes,
-                       const std::tuple<int, int>& mem_required)
+                       const std::tuple<int64_t, int64_t>& mem_required)
       : layer_index_(layer_index),
         forward_(forward),
         backward_(backward),
@@ -34,7 +35,7 @@ class LayerExecutionResult {
   double backward_;
   std::map<int, double> allreduce_in_node_;
   std::map<int, double> allreduce_across_nodes_;
-  std::tuple<int, int> mem_required_;
+  std::tuple<int64_t, int64_t> mem_required_;
 };
 
 class LayerExecutionResults
@@ -108,7 +109,7 @@ class StageExecutionResult
   double forward_;
   double backward_;
   std::map<int, double> allreduce_across_nodes_;
-  int mem_required_;
+  int64_t mem_required_;
 };
 
 class DCExecutionResult {
