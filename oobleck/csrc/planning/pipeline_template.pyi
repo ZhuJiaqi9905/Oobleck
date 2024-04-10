@@ -60,3 +60,9 @@ class PipelineTemplateGenerator:
         num_nodes: tuple[int, int],
         num_gpus_per_node: int,
     ) -> list[PipelineTemplate]: ...
+    def create_pipeline_templates_serial(
+        self,
+        layer_execution_results: LayerExecutionResults,
+        num_nodes: tuple[int, int],
+        num_gpus_per_node: int,
+    ) -> list[PipelineTemplate]: ...    

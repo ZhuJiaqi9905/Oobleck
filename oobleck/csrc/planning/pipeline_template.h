@@ -105,6 +105,11 @@ class PipelineTemplateGenerator {
       const std::tuple<int, int>& num_nodes,
       const int num_gpus_per_node);
 
+  std::vector<PipelineTemplate> create_pipeline_templates_serial(
+    std::shared_ptr<LayerExecutionResults> layer_execution_results,
+    const std::tuple<int, int>& num_nodes,
+    const int num_gpus_per_node);
+
  private:
   cppcoro::task<std::shared_ptr<DCExecutionResult>> divide_and_conquer(
       std::shared_ptr<LayerExecutionResults> layer_execution_results,
@@ -112,6 +117,15 @@ class PipelineTemplateGenerator {
       const int num_stages,
       const int num_nodes,
       const int num_gpus_per_node);
+    
+  std::shared_ptr<DCExecutionResult>
+    divide_and_conquer_serial(
+    std::shared_ptr<LayerExecutionResults> layer_execution_results,
+    const std::tuple<int, int> layer_indices,
+    const int num_stages,
+    const int num_nodes,
+    const int num_gpus_per_node);
+
 
   std::atomic<unsigned long> cache_hit_;
   std::atomic<unsigned long> cache_miss_;
