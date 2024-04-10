@@ -484,6 +484,7 @@ class OobleckPipeline:
         # layer index -> list of ranks
         # First dimension is for layer index, second dimension is for rank.
         self.rank_grid: dict[int, list[int]] = pipeline_template.get_rank_grid(ranks)
+        
 
     def train(self):
         # A map of PipeInstruction types to methods. Each method will be executed with the

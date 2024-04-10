@@ -20,7 +20,7 @@ def worker_main(
     args: OobleckArguments,
 ):
     assert torch.cuda.device_count() == 1 and torch.cuda.current_device() == 0
-    os.environ["NCCL_DEBUG"] = "TRACE"
+    # os.environ["NCCL_DEBUG"] = "TRACE"
     # os.environ["NCCL_SOCKET_IFNAME"] = "enp"
     logger.info("Initializing Oobleck Engine...")
     logger.info(f"in worker main: my_ip {my_ip}")

@@ -17,6 +17,7 @@ from deepspeed.utils.logging import logging
 from deepspeed.utils.timer import SynchronizedWallClockTimer
 from transformers.training_args import TrainingArguments as HFTrainingArguments
 import rpdb
+import sys
 from oobleck.csrc.planning.pipeline_template import (
     LayerExecutionResults,
     PipelineTemplate,
@@ -484,6 +485,17 @@ class OobleckEngine:
             self._pipeline_templates,
         ) = self._initialize_engine(self._num_nodes, self._num_gpus_per_node)
 
+        pipeline_id = 0
+        print("init Oobleck engine")
+        for pipeline in self._pipeline_templates:
+            print(f"pl {pipeline_id}: rank_grid: {pipeline.get_rank_grid(list(range(self._num_nodes)))}, num_nodes: {pipeline._num_nodes}, num_gpu_per_node: {pipeline._num_gpus_per_node}, iter: {pipeline._iteration_time}")
+            stage_id = 0
+            for stage in pipeline.get_stages():
+                print(f"stage {stage_id}: layer_indices {stage._layer_indices}, mem: {stage._mem_required}, num_gpus: {stage._num_gpus}, size: {stage._size}")
+                stage_id += 1
+            pipeline_id += 1
+
+        
         # synchronize when reconfigure
         self._lock = threading.Lock()
         self._cond = threading.Condition(self._lock)
@@ -636,6 +648,17 @@ class OobleckEngine:
         # TODO: create pipeline and continue training
 
     def instantiate_pipelines(self, global_num_microbatch: int):
+        # 这里获取最佳的pipeline
+        print("before instantiate pipelines")
+        pipeline_id = 0
+        for pipeline in self._pipeline_templates:
+            print(f"pl {pipeline_id}: rank_grid: {pipeline.get_rank_grid(list(range(self._num_nodes)))}, num_nodes: {pipeline._num_nodes}, num_gpu_per_node: {pipeline._num_gpus_per_node}, iter: {pipeline._iteration_time}")
+            stage_id = 0
+            for stage in pipeline.get_stages():
+                print(f"stage {stage_id}: layer_indices {stage._layer_indices}, mem: {stage._mem_required}, num_gpus: {stage._num_gpus}, size: {stage._size}")
+                stage_id += 1
+            pipeline_id += 1 
+        print("----")
         instantiator = PipelineInstantiator()
         execution_plan: HeterogeneousPipelinesExecutionPlan = (
             instantiator.get_best_execution_plan(
@@ -668,6 +691,11 @@ class OobleckEngine:
             num_gpus_per_node=self._num_gpus_per_node,
             step=0,
         )
+        print("after instantiate pipelines")
+        print(f"self._pipeline id: {self._pipeline._pipeline_id}, rank_grid: {self._pipeline.rank_grid}")
+        for pipeline in pipelines:
+            print(f"dp id: {pipeline._pipeline_id}, rank_grid: {pipeline.rank_grid}")
+        print("----")
 
         for pipeline in pipelines:
             pipeline.initialize_distributed_fsdp()
@@ -718,6 +746,9 @@ class OobleckEngine:
         
     
     def train(self):
+        
+        sys.exit()
+
         assert self._hf_training_args.max_steps > 0
         for step in range(self._hf_training_args.max_steps):
             try:
