@@ -485,6 +485,7 @@ class OobleckEngine:
             self._pipeline_templates,
         ) = self._initialize_engine(self._num_nodes, self._num_gpus_per_node)
 
+
         pipeline_id = 0
         print("init Oobleck engine")
         for pipeline in self._pipeline_templates:
@@ -528,12 +529,16 @@ class OobleckEngine:
             self._args.model.model_tag,
             self._args.model.model_args,
         )
-
+        print(f"to_get_profile_results: name {self._args.model.model_name}, tag {self._args.model.model_tag}, batch_size {self._hf_training_args.per_device_train_batch_size}")
         profile_results: LayerExecutionResults = get_profile_results(
             self._args.model.model_name,
             self._args.model.model_tag,
             self._hf_training_args.per_device_train_batch_size,
         )
+        print("profile results: ")
+        layer_exe_results = profile_results.get()
+        for layer_result in layer_exe_results:
+            print(f"layer idx: {layer_result._index}, allreduce_across_nodes: {layer_result._allreduce_across_nodes}, allreduce_in_node: {layer_result._allreduce_in_node}, forward: {layer_result._forward}, backward: {layer_result._backward}, mem: {layer_result._mem_required}")
 
         # Minimum number of nodes is determined by the memory capacity.
         # TODO: calculate minimum number of nodes more precisely. This is still inaccurate
@@ -562,6 +567,7 @@ class OobleckEngine:
         logger.info(f"Number of nodes range: ({min_num_nodes}, {max_num_nodes})")
 
         # TODO: Calculate num_gpus_range based on profile results
+        print(f"min_nodes: {min_num_nodes}, max_nodes: {max_num_nodes}, gpus: {num_gpus_per_node}, ")
         template_generator = PipelineTemplateGenerator()
         pipeline_templates: list[
             PipelineTemplate
