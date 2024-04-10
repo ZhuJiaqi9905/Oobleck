@@ -655,16 +655,6 @@ class OobleckEngine:
 
     def instantiate_pipelines(self, global_num_microbatch: int):
         # 这里获取最佳的pipeline
-        print("before instantiate pipelines")
-        pipeline_id = 0
-        for pipeline in self._pipeline_templates:
-            print(f"pl {pipeline_id}: rank_grid: {pipeline.get_rank_grid(list(range(self._num_nodes)))}, num_nodes: {pipeline._num_nodes}, num_gpu_per_node: {pipeline._num_gpus_per_node}, iter: {pipeline._iteration_time}")
-            stage_id = 0
-            for stage in pipeline.get_stages():
-                print(f"stage {stage_id}: layer_indices {stage._layer_indices}, mem: {stage._mem_required}, num_gpus: {stage._num_gpus}") 
-                stage_id += 1
-            pipeline_id += 1 
-        print("----")
         instantiator = PipelineInstantiator()
         execution_plan: HeterogeneousPipelinesExecutionPlan = (
             instantiator.get_best_execution_plan(
@@ -697,11 +687,6 @@ class OobleckEngine:
             num_gpus_per_node=self._num_gpus_per_node,
             step=0,
         )
-        print("after instantiate pipelines")
-        print(f"self._pipeline id: {self._pipeline._pipeline_id}, rank_grid: {self._pipeline.rank_grid}")
-        for pipeline in pipelines:
-            print(f"dp id: {pipeline._pipeline_id}, rank_grid: {pipeline.rank_grid}")
-        print("----")
 
         for pipeline in pipelines:
             pipeline.initialize_distributed_fsdp()
