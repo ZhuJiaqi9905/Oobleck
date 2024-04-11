@@ -429,7 +429,7 @@ class DataParallelEngine:
         return self._engine()
 
     def do_allreduce(self):
-        
+        print(f"total_layers: {len(self.engine._pipeline.execution._layers)}")
         for layer in self.engine._pipeline.execution._layers:
             process_groups = {
                 fsdp_index: pg
@@ -440,6 +440,9 @@ class DataParallelEngine:
                 
                 print(f"layer {layer.layer_id} reduce_gradients")
                 layer.reduce_gradients(process_groups)
+            else:
+                print(f"layer {layer.layer_id} not in group")
+            
 
 
 class OobleckEngine:
