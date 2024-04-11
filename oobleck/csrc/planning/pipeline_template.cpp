@@ -244,7 +244,7 @@ PipelineTemplateGenerator::divide_and_conquer_serial(
   int start_layer_index = std::get<0>(layer_indices);
   int end_layer_index = std::get<1>(layer_indices);
 
-  std::cout << "divide_and_conquer serial [" << start_layer_index << ", " << end_layer_index << "]" << std::endl;
+  // std::cout << "divide_and_conquer serial [" << start_layer_index << ", " << end_layer_index << "]" << std::endl;
 
   std::shared_ptr<DCExecutionResult> result(nullptr);
   DCExecutionResult::key key =
