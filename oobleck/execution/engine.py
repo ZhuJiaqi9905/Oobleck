@@ -486,15 +486,15 @@ class OobleckEngine:
         ) = self._initialize_engine(self._num_nodes, self._num_gpus_per_node)
 
 
-        pipeline_id = 0
-        print("init Oobleck engine")
-        for pipeline in self._pipeline_templates:
-            print(f"pl {pipeline_id}: rank_grid: {pipeline.get_rank_grid(list(range(self._num_nodes)))}, num_nodes: {pipeline._num_nodes}, num_gpu_per_node: {pipeline._num_gpus_per_node}, iter: {pipeline._iteration_time}")
-            stage_id = 0
-            for stage in pipeline.get_stages():
-                print(f"stage {stage_id}: layer_indices {stage._layer_indices}, mem: {stage._mem_required}, num_gpus: {stage._num_gpus}")
-                stage_id += 1
-            pipeline_id += 1
+        # pipeline_id = 0
+        # print("init Oobleck engine")
+        # for pipeline in self._pipeline_templates:
+        #     print(f"pl {pipeline_id}: rank_grid: {pipeline.get_rank_grid(list(range(self._num_nodes)))}, num_nodes: {pipeline._num_nodes}, num_gpu_per_node: {pipeline._num_gpus_per_node}, iter: {pipeline._iteration_time}")
+        #     stage_id = 0
+        #     for stage in pipeline.get_stages():
+        #         print(f"stage {stage_id}: layer_indices {stage._layer_indices}, mem: {stage._mem_required}, num_gpus: {stage._num_gpus}")
+        #         stage_id += 1
+        #     pipeline_id += 1
 
         
         # synchronize when reconfigure
@@ -738,7 +738,7 @@ class OobleckEngine:
     
     def train(self):
         
-        sys.exit()
+        # sys.exit()
 
         assert self._hf_training_args.max_steps > 0
         for step in range(self._hf_training_args.max_steps):
