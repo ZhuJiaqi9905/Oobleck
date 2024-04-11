@@ -267,9 +267,9 @@ class PipelineExecution:
 
     def optimizer_step(self, lr_kwargs=None):
         # amp enable check: gradient clipping
-        print("before optimizer step")
+        # print("before optimizer step")
         self._optimizer.step()
-        print("after optimizer step")
+        # print("after optimizer step")
         self._lr_scheduler.step(**(lr_kwargs or {}))
         print("after lr_scheduler step")
 

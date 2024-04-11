@@ -429,19 +429,19 @@ class DataParallelEngine:
         return self._engine()
 
     def do_allreduce(self):
-        print(f"total_layers: {len(self.engine._pipeline.execution._layers)}")
+        # print(f"total_layers: {len(self.engine._pipeline.execution._layers)}")
         for layer in self.engine._pipeline.execution._layers:
             process_groups = {
                 fsdp_index: pg
                 for fsdp_index, pg in self._dp_process_groups[layer.layer_id].items()
                 if torch.distributed.get_rank(pg) >= 0
             }
-            if process_groups:
-                
-                print(f"layer {layer.layer_id} reduce_gradients")
+            if process_groups: 
+                # print(f"layer {layer.layer_id} reduce_gradients")
                 layer.reduce_gradients(process_groups)
             else:
-                print(f"layer {layer.layer_id} not in group")
+                pass
+                # print(f"layer {layer.layer_id} not in group")
             
 
 
@@ -750,7 +750,7 @@ class OobleckEngine:
                 sync_timer.log(["step"])    
                 log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
                 if step == 5:
-                    self.fake_stop_and_reconfigure("172.21.0.91")
+                    self.fake_stop_and_reconfigure("10.20.23.91")
                     
 
             except StopIteration:
