@@ -49,7 +49,7 @@ class LayerExecutionResults
 
  private:
   const std::vector<LayerExecutionResult> data_;
-  const int size_;
+  const int size_{0};
 };
 
 /**
@@ -104,12 +104,12 @@ class StageExecutionResult
            std::to_string(num_gpus_) + " devices";
   }
 
-  int num_gpus_;
+  int num_gpus_{0};
   std::vector<int> layer_indices_;
-  double forward_;
-  double backward_;
+  double forward_{0};
+  double backward_{0};
   std::map<int, double> allreduce_across_nodes_;
-  int64_t mem_required_;
+  int64_t mem_required_{0};
 };
 
 class DCExecutionResult {
@@ -197,10 +197,12 @@ class DCExecutionResult {
   }
 
  private:
-  int kstar_;
-  double t1_, t2_, t3_;
-  int num_nodes_;
-  int num_gpus_per_node_;
+  int kstar_{0};
+  double t1_{0};
+  double t2_{0};
+  double t3_{0};
+  int num_nodes_{0};
+  int num_gpus_per_node_{0};
   std::vector<std::shared_ptr<StageExecutionResult>> stages_;
 };
 

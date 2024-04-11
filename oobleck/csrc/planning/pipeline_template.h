@@ -127,8 +127,8 @@ class PipelineTemplateGenerator {
     const int num_gpus_per_node);
 
 
-  std::atomic<unsigned long> cache_hit_;
-  std::atomic<unsigned long> cache_miss_;
+  std::atomic<unsigned long> cache_hit_{0};
+  std::atomic<unsigned long> cache_miss_{0};
 };
 
 }  // namespace oobleck
