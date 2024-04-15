@@ -38,8 +38,6 @@ class Profiler:
         self.model = model
         self.num_workers_per_node = num_workers_per_node
         self.world_size = world_size
-        os.environ["NCCL_DEBUG"] = "INFO"
-        os.environ["NCCL_SOCKET_IFNAME"] = "enp"
     
     def profile_execution_layers(self, batch_size: int) -> list[dict[str, float]]:
         '''
