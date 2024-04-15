@@ -711,8 +711,11 @@ class OobleckEngine:
         self._pipeline.execution.optimizer_step()
 
     def fake_stop_and_reconfigure(self, lost_ip: str):
+        logger.info("in fake_stop_and_reconfigure")
         dist.barrier()
+        logger.info("after barrier")
         torch.cuda.synchronize()
+        logger.info("after cuda synchronize")
         torch.distributed.destroy_process_group(torch.distributed.group.WORLD)
         dist.cdb = None 
         logger.info("destroy pg")
@@ -749,12 +752,11 @@ class OobleckEngine:
         for step in range(self._hf_training_args.max_steps):
             try:
                 self._train_step()
+                print(f"training step: {step} done")
                 sync_timer.log(["step"])    
                 log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
                 if step == 5:
                     self.fake_stop_and_reconfigure("10.20.23.91")
-                    
-
             except StopIteration:
                 step_timer: SynchronizedWallClockTimer.Timer = sync_timer("step")
                 step_timer.reset()

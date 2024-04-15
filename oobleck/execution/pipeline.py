@@ -271,7 +271,7 @@ class PipelineExecution:
         self._optimizer.step()
         # print("after optimizer step")
         self._lr_scheduler.step(**(lr_kwargs or {}))
-        print("after lr_scheduler step")
+        # print("after lr_scheduler step")
 
 
 class PipelineCommunication:

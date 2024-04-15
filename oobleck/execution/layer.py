@@ -291,11 +291,8 @@ class Layer(torch.nn.Module):
             )
         else:
             grads = [self._param_handle.flat_param.grad]
-        print("in all reduce")
-        for grad, (fsdp_index, process_group) in zip(grads, process_groups.items()):
-            
-            print(f"shape: {grad.shape}, dtype: {grad.dtype}. local_rank: {torch.distributed.get_rank(process_group)}, all_ranks: {torch.distributed.get_process_group_ranks(process_group)}")
+        # print("in all reduce")
+        for grad, (fsdp_index, process_group) in zip(grads, process_groups.items()):            
+            # print(f"shape: {grad.shape}, dtype: {grad.dtype}. local_rank: {torch.distributed.get_rank(process_group)}, all_ranks: {torch.distributed.get_process_group_ranks(process_group)}")
             torch.distributed.all_reduce(tensor=grad, group=process_group)
-            # torch.cuda.synchronize()
-        print("out all reduce")
-        # torch.distributed.barrier()
+        # print("out all reduce")
