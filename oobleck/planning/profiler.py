@@ -3,7 +3,7 @@ import json
 import math
 import time
 from pathlib import Path
-import os
+
 import torch
 import torch.distributed as dist
 import torch.fx
@@ -37,7 +37,6 @@ class Profiler:
         self.model = model
         self.num_workers_per_node = num_workers_per_node
         self.world_size = world_size
-        os.environ["NCCL_DEBUG"] = "TRACE"
 
     def profile_execution_layers(self, batch_size: int) -> list[dict[str, float]]:
         '''
@@ -109,14 +108,17 @@ class Profiler:
                     results[idx][1] = forward * 3
                     results[idx][2] = model_mem * 2
                     results[idx][3] = activation_mem * 2
-
+        logger.info("before barrier")
         dist.barrier()
+        logger.info("after barrier")
         # broadcast results to other nodes
         # 2d tensor, for each layer, multiple allreduce with different number of nodes
         results: torch.Tensor = torch.tensor(
             results, dtype=torch.float32, device="cuda", requires_grad=False
         )
+        logger.info("before broadcast")
         dist.broadcast(results, 0)
+        logger.info("after broadcast")
         return [
             {
                 "forward": result[0],
