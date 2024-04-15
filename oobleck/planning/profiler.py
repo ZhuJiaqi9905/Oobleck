@@ -3,7 +3,7 @@ import json
 import math
 import time
 from pathlib import Path
-
+import os
 import torch
 import torch.distributed as dist
 import torch.fx
@@ -37,6 +37,7 @@ class Profiler:
         self.model = model
         self.num_workers_per_node = num_workers_per_node
         self.world_size = world_size
+        os.environ["NCCL_DEBUG"] = "TRACE"
 
     def profile_execution_layers(self, batch_size: int) -> list[dict[str, float]]:
         '''
@@ -116,7 +117,6 @@ class Profiler:
             results, dtype=torch.float32, device="cuda", requires_grad=False
         )
         dist.broadcast(results, 0)
-
         return [
             {
                 "forward": result[0],
@@ -291,7 +291,7 @@ def profile(
         port=master_port,
         world_size=world_size,
         is_master=bool(rank == 0),
-        wait_for_workers=True,
+        wait_for_workers=False,
     )
     # 把rank中的所有GPU组成一个process group
     dist.init_process_group(

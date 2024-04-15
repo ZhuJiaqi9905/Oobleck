@@ -595,7 +595,8 @@ class OobleckEngine:
             logger.info("Destroying distributed process group...")
             torch.distributed.destroy_process_group(torch.distributed.group.WORLD)
             dist.cdb = None
-
+        
+        # 检查self是否具有"_dist_info"的属性
         if not (hasattr(self, "_dist_info") and self._dist_info is not None):
             self._dist_info: DistributionInfo = self._agent_pipe.recv()
             self._rank_map: dict[str, list[int]] = {
@@ -690,8 +691,9 @@ class OobleckEngine:
             num_gpus_per_node=self._num_gpus_per_node,
             step=0,
         )
-
+        # print(f"total pipelines: {len(pipelines)}")
         for pipeline in pipelines:
+            # print(f"pipeline id: {pipeline._pipeline_id}, rank grid{pipeline.rank_grid}")
             pipeline.initialize_distributed_fsdp()
             pipeline.initialize_distributed_pipeline()
         self._pipeline.initialize_execution(self._model)

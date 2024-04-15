@@ -283,6 +283,7 @@ class PipelineCommunication:
         next_rank: int | None,
     ):
         self._pipeline = weakref.ref(pipeline)
+        # 一个模型因为pipeline parallel被分到多个node上，这些node组成的process_group
         self._process_group = process_group
         self.prev_rank = prev_rank
         self.next_rank = next_rank
@@ -627,6 +628,7 @@ class OobleckPipeline:
             ]
             # Remove potential duplicates
             pg = dist.new_group(list(set(ranks)))
+            # 记录Dataparallel中一个模型不同layer所在的nodes组成的process group
             self._per_sharded_pp_pgs[shard_id] = pg
 
             if my_rank in ranks:

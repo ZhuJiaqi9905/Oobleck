@@ -147,7 +147,7 @@ class HeterogeneousPipelinesExecutionPlan:
 
                 pipeline_index += 1
                 num_ranks_used += len(pipeline_ranks)
-
+        
         assert my_pipeline is not None
         return my_pipeline, all_pipelines
 
