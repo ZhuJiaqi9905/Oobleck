@@ -133,6 +133,7 @@ class OobleckAgent:
 
         for process in profiler_processes:
             process.join()
+        
 
     async def _launch_workers(self, args: OobleckArguments):
         # Test if profile data exists

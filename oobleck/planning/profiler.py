@@ -4,6 +4,7 @@ import math
 import time
 from pathlib import Path
 
+import os
 import torch
 import torch.distributed as dist
 import torch.fx
@@ -15,7 +16,7 @@ from oobleck.execution.layer import init_tensors
 from oobleck.module.model import OobleckModel
 
 PROFILE_CACHE = "/workspace/Oobleck/tmp/profiles"
-num_warmup = 2
+num_warmup = 1
 num_iteration = 3
 
 logger = LoggerFactory.create_logger("oobleck_profiler")
@@ -37,7 +38,9 @@ class Profiler:
         self.model = model
         self.num_workers_per_node = num_workers_per_node
         self.world_size = world_size
-
+        os.environ["NCCL_DEBUG"] = "INFO"
+        os.environ["NCCL_SOCKET_IFNAME"] = "enp"
+    
     def profile_execution_layers(self, batch_size: int) -> list[dict[str, float]]:
         '''
         batch_size is micro_batch_size
