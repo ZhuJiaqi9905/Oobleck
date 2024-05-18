@@ -37,7 +37,7 @@ class OobleckDataset:
     ):
         # TODO: replace it with evaluate.load("accuracy")
         metric = evaluate.load("accuracy")
-
+        print(f"Dataset: model_name: {model_name}, dataset_path: {dataset_path}, dataset_name: {dataset_name}, max_seq_length: {max_seq_length}")
         if any(lang_model in model_name for lang_model in lang_models):
             self.tokenizer, self.dataset = OobleckDataset.create_language_dataset(
                 model_name, dataset_path, dataset_name, max_seq_length
@@ -155,8 +155,9 @@ class OobleckDataset:
         max_seq_length: Optional[int] = None,
     ) -> Tuple[Type[PreTrainedTokenizerBase], Dataset]:
         tokenizer = AutoTokenizer.from_pretrained(model_name)
-
+        tokenizer.save_pretrained("/workspace/Oobleck/data/tokenizer")
         raw_dataset = load_dataset(dataset_path, dataset_name)
+        
         if "validation" not in raw_dataset.keys():
             raw_dataset["validation"] = load_dataset(
                 dataset_path,
