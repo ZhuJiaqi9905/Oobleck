@@ -347,12 +347,10 @@ if __name__ == "__main__":
 
     os.environ["NCCL_DEBUG"] = "INFO"
     os.environ["NCCL_SOCKET_IFNAME"] = "enp"
-    os.environ["NCCL_DESYNC_DEBUG"] = "1"
-    os.environ["NCCL_ASYNC_ERROR_HANDLING"] = "1"
+    # os.environ["NCCL_DESYNC_DEBUG"] = "1"
+    # os.environ["NCCL_ASYNC_ERROR_HANDLING"] = "1"
     os.environ["TORCH_CPP_LOG_LEVEL"]="INFO"
-    os.environ[
-        "TORCH_DISTRIBUTED_DEBUG"
-    ] = "DETAIL"  # set to DETAIL for runtime logging.
+    os.environ["TORCH_DISTRIBUTED_DEBUG"] = "DETAIL"  # set to DETAIL for runtime logging.
     args = parser.parse_args()
     agent = OobleckAgent(
         args.master_ip, args.master_port, args.job_id, args.agent_index
