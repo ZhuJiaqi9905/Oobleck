@@ -345,7 +345,7 @@ if __name__ == "__main__":
     parser.add_argument("--job_id", type=int)
     parser.add_argument("--agent_index", type=int)
 
-    os.environ["NCCL_DEBUG"] = "INFO"
+    # os.environ["NCCL_DEBUG"] = "INFO"
     os.environ["NCCL_SOCKET_IFNAME"] = "enp"
     os.environ["GLOO_SOCKET_IFNAME"] = "eno1"
     # os.environ["NCCL_DESYNC_DEBUG"] = "1"
