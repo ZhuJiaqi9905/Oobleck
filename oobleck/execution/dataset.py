@@ -158,14 +158,14 @@ class OobleckDataset:
         # tokenizer.save_pretrained("/workspace/Oobleck/data/tokenizer")
         tokenizer = AutoTokenizer.from_pretrained("/workspace/Oobleck/data/tokenizer")
         raw_dataset = load_dataset(dataset_path, dataset_name)
-        
+        raw_dataset.save_to_disk("/workspace/Oobleck/data/dataset") 
         if "validation" not in raw_dataset.keys():
             raw_dataset["validation"] = load_dataset(
                 dataset_path,
                 dataset_name,
                 split=f"train[:5%]",
             )
-
+        raw_dataset.save_to_disk("/workspace/Oobleck/data/dataset")
         column_names = list(raw_dataset["train"].features)
         text_column_name = "text" if "text" in column_names else column_names[0]
 
