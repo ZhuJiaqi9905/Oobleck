@@ -40,7 +40,7 @@ logger = LoggerFactory.create_logger("oobleck_engine", logging.DEBUG)
 
 
 class ReconfigurationEngine:
-    def __init__(self, engine: OobleckEngine, pipelines: list[OobleckPipeline]):
+    def __init__(self, engine: OobleckEngine, pipelines: list[OobleckPipeline], is_simulated = False):
         self._engine = weakref.ref(engine)
         self._pipelines = pipelines
 
@@ -51,10 +51,11 @@ class ReconfigurationEngine:
             engine._pipeline_templates[0]._num_nodes
             * engine._pipeline_templates[0]._num_gpus_per_node
         )
-        self._reconfiguration_listener = threading.Thread(
-            target=self._reconfiguration_listener_fn, daemon=True
-        )
-        self._reconfiguration_listener.start()
+        if not is_simulated:
+            self._reconfiguration_listener = threading.Thread(
+                target=self._reconfiguration_listener_fn, daemon=True
+            )
+            self._reconfiguration_listener.start()
 
 
     @property
@@ -182,8 +183,9 @@ class ReconfigurationEngine:
             template = get_pipeline_template(ranks, self.engine._pipeline_templates)
             if template != None:
                 new_num_instances_set[template] += 1
-        # rpdb.set_trace()
-        new_pipeline = self._reinstantiate(new_num_instances_set, new_ranks_list)
+
+
+        # new_pipeline = self._reinstantiate(new_num_instances_set, new_ranks_list)
 
         # Copy model states here
         new_rank_grids: list[dict[int, list[int]]] = []
@@ -192,13 +194,19 @@ class ReconfigurationEngine:
                 rank_grid = pipeline_template.get_rank_grid(new_ranks_list.pop(0))
                 new_rank_grids.append(rank_grid)
         logger.info("before copy model states")
-        self._copy_model_states(old_rank_grids, new_rank_grids, new_pipeline)
-        logger.info("after copy model states")
+        # 这里不让它执行copy_model_states了。而是直接记录old_rank_grids和new_rank_grids
+        # self._copy_model_states(old_rank_grids, new_rank_grids, new_pipeline)
+        # {layer -> list[global ranks]}
+        self._record_old_rank_grids = old_rank_grids
+        self._record_new_rank_grids = new_rank_grids
+
+
+
         # Before deleting the old pipeline, remove all GPU tensors
         # for layer in self.engine._pipeline.execution._layers:
         #     layer.remove_tensors()
 
-        self.engine._pipeline = new_pipeline
+        # self.engine._pipeline = new_pipeline
         # for layer in self.engine._pipeline.execution._layers:
         #     layer.to_cuda()
         
@@ -402,6 +410,7 @@ class DataParallelEngine:
 
         for pipeline in pipelines:
             for layer_index, ranks in pipeline.rank_grid.items():
+                # 只在一个node的gpu上做fsdp
                 assert (
                     isinstance(ranks, list) and len(ranks) == engine._num_gpus_per_node
                 )
@@ -410,7 +419,9 @@ class DataParallelEngine:
                         ranks_grid[layer_index][fsdp_index] = []
                     ranks_grid[layer_index][fsdp_index].append(rank)
 
+        print(f"layer_index -> dict of (fsdp_index -> list of ranks): {ranks_grid}")
         # Create process groups for data parallelism
+       
         dp_process_groups: dict[int, dict[int, dist.ProcessGroup]] = defaultdict(dict)
         fsdp_indices: list[list[int]] = defaultdict(list)
         my_rank = dist.get_rank()
@@ -421,7 +432,9 @@ class DataParallelEngine:
                 if my_rank in ranks:
                     fsdp_indices[layer_index].append(fsdp_index)
         print(f"ranks_grid: {ranks_grid}")
+         # 每个layer中fsdp_index相同的rank属于一个dp_process_group. layer_index -> dict of (fsdp_index -> list of ranks in  a pg)
         self._dp_process_groups = dp_process_groups
+        # 本rank拥有的layer的fsdp_index。layer_index -> list of fsdp_index。这个变量没被使用
         self._fsdp_indices = fsdp_indices
 
     @property
@@ -429,19 +442,21 @@ class DataParallelEngine:
         return self._engine()
 
     def do_allreduce(self):
-        # print(f"total_layers: {len(self.engine._pipeline.execution._layers)}")
+        print("start do_allreduce")
         for layer in self.engine._pipeline.execution._layers:
             process_groups = {
                 fsdp_index: pg
                 for fsdp_index, pg in self._dp_process_groups[layer.layer_id].items()
                 if torch.distributed.get_rank(pg) >= 0
             }
+            fsdp_indexs = list(process_groups.keys())
+            print(f"layer {layer.layer_id}: fsdp: {fsdp_indexs} reduce_gradients")
+
             if process_groups: 
-                # print(f"layer {layer.layer_id} reduce_gradients")
                 layer.reduce_gradients(process_groups)
             else:
                 pass
-                # print(f"layer {layer.layer_id} not in group")
+        print("end do_allreduce")
             
 
 
@@ -684,6 +699,7 @@ class OobleckEngine:
         )
 
         self._pipeline: OobleckPipeline
+        # pipelines是最佳的所有的pipeline的组合。self._pipeline是本rank所在的pipeline
         self._pipeline, pipelines = execution_plan.instantiate(
             model=self._model,
             dataloader=dataloader,
@@ -691,6 +707,7 @@ class OobleckEngine:
             num_gpus_per_node=self._num_gpus_per_node,
             step=0,
         )
+        
         # print(f"total pipelines: {len(pipelines)}")
         for pipeline in pipelines:
             # print(f"pipeline id: {pipeline._pipeline_id}, rank grid{pipeline.rank_grid}")

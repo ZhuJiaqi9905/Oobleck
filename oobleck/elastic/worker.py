@@ -22,13 +22,14 @@ def worker_main(
     assert torch.cuda.device_count() == 1 and torch.cuda.current_device() == 0
     logger.info("Initializing Oobleck Engine...")
     logger.info(f"in worker main: my_ip {my_ip}")
+    # 每个GPU会启动一个engine。这里面切模型
     engine = OobleckEngine(local_rank, num_nodes, num_gpus_per_node, pipe, my_ip, args)
     logger.info("Initializing torch.distributed...")
     engine.initialize_distributed()
 
     if args.job.global_microbatch_size % args.job.microbatch_size != 0:
         raise ValueError("global_microbatch_size must be divisible by microbatch_size")
-
+    # global_microbatch_size应该就是global size
     global_num_microbatch = args.job.global_microbatch_size // args.job.microbatch_size
     logger.info("Instantiating pipelines...")
     engine.instantiate_pipelines(global_num_microbatch)

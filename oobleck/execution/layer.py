@@ -38,6 +38,9 @@ def init_tensors(layer: torch.fx.GraphModule, device: torch.device):
 
 
 class Layer(torch.nn.Module):
+    '''
+    Layer在一个node的多个GPU上。把这个layer做shard
+    '''
     @classmethod
     def create_layer_from_layer(
         cls,
@@ -48,7 +51,6 @@ class Layer(torch.nn.Module):
 
         layer = cls.__new__(cls)
         super(Layer, cls).__init__(layer)
-
         layer.layer_id = existing_layer.layer_id
         layer._rank_index = torch.distributed.get_rank(process_group)
         layer._group_size = torch.distributed.get_world_size(process_group)
@@ -61,6 +63,7 @@ class Layer(torch.nn.Module):
         layer.register_forward_hook(layer.post_forward_hook)
         layer.register_full_backward_pre_hook(layer.pre_backward_hook)
 
+        print(f"create Layer {layer.layer_id}, rank_index {layer._rank_index}, group size {layer._group_size}")
         return layer
 
     def remove_tensors(self):
@@ -97,7 +100,7 @@ class Layer(torch.nn.Module):
         init_tensors(layer, device)
         if is_checkpointable(layer):
             layer = checkpoint_wrapper(layer)
-
+        # 使用fsdp的flat parameter功能把layer的参数做shard
         self._param_handle = FlatParamHandle(
             params=layer.parameters(),
             fully_sharded_module=layer,
@@ -214,7 +217,7 @@ class Layer(torch.nn.Module):
                     else unsharded_grad
                 )
                 new_sharded_grad = torch.empty_like(chunks[0])  # padded
-
+                # reduce scatter gradients
                 torch.distributed.reduce_scatter_tensor(
                     new_sharded_grad,
                     padded_unsharded_grad,

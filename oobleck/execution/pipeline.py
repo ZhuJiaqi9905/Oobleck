@@ -467,6 +467,7 @@ class OobleckPipeline:
         dataloader: OobleckDataLoader,
         step: int,
         training_args: TrainingArguments,
+        is_simulated = False
     ):
         self._pipeline_id = pipeline_id
         self._template = pipeline_template
@@ -476,16 +477,19 @@ class OobleckPipeline:
         self._training_args = training_args
         self.device = torch.device("cuda")
 
-        assert dist.is_initialized(), "torch.distributed is not intialized."
+        if is_simulated:
+            self.my_pipeline = bool(pipeline_id == 0)
+        else:
+            assert dist.is_initialized(), "torch.distributed is not intialized."
 
-        # This is used to indicate if we use this `OobleckPipeline` for training.
-        self.my_pipeline = bool(dist.get_rank() in ranks)
+            # This is used to indicate if we use this `OobleckPipeline` for training.
+            self.my_pipeline = bool(dist.get_rank() in ranks)
 
         # Construct a 2D rank grid for this pipeline.
         # layer index -> list of ranks
         # First dimension is for layer index, second dimension is for rank.
         self.rank_grid: dict[int, list[int]] = pipeline_template.get_rank_grid(ranks)
-        
+        print(f"this pipeline layer index -> list of ranks:{self.rank_grid}")
 
     def train(self):
         # A map of PipeInstruction types to methods. Each method will be executed with the
@@ -499,7 +503,7 @@ class OobleckPipeline:
             schedule.RecvActivation: self.communication.recv_activations,
             schedule.SendGrad: self.communication.send_gradients,
             schedule.RecvGrad: self.communication.recv_gradients,
-        }
+        }   
 
         for step_cmds in self.train_schedule:
             # For each instruction in the step
@@ -533,6 +537,7 @@ class OobleckPipeline:
         post_stream = torch.cuda.Stream()
         shard_id: int = -1
         for layer_id, pg in self._per_layer_pgs.items():
+            # pg:同一layer_id的不同shard组成的pg
             id = torch.distributed.get_rank(pg)
             if id < 0:
                 continue
@@ -593,7 +598,7 @@ class OobleckPipeline:
             # activations to be sent
             "outputs": [None for _ in range(num_pipe_buffers)],
         }
-
+    
     def initialize_distributed_fsdp(self):
         """Initialize torch.distributed.process_groups per layer.
         Even I am not involved in a group, torch.distributed requires all ranks to call
@@ -601,11 +606,13 @@ class OobleckPipeline:
 
         Plus, if this rank is involved in a group, initialize execution.
         """
+        # 持有同一个layer的不同shard组成的pg
         self._per_layer_pgs: dict[int, ProcessGroup] = {}
         self.execution: PipelineExecution | None = None
 
         for layer_id, ranks in self.rank_grid.items():
             # Remove potential duplicates
+            # 即使本rank并不是new_group中的rank，pytorch也要求它调用new_group函数。并且所有人的创建顺序要相同
             pg = dist.new_group(list(set(ranks)))
             self._per_layer_pgs[layer_id] = pg
 
@@ -628,7 +635,7 @@ class OobleckPipeline:
             ]
             # Remove potential duplicates
             pg = dist.new_group(list(set(ranks)))
-            # 记录Dataparallel中一个模型不同layer所在的nodes组成的process group
+            # 持有同一个shrad_id的不同layer的rank组成的pg
             self._per_sharded_pp_pgs[shard_id] = pg
 
             if my_rank in ranks:

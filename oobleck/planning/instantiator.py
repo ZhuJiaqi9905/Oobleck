@@ -150,7 +150,58 @@ class HeterogeneousPipelinesExecutionPlan:
         
         assert my_pipeline is not None
         return my_pipeline, all_pipelines
+    
+    def instantiate_simulated(
+        self,
+        model: OobleckModel,
+        dataloader: OobleckDataLoader,
+        training_args: TrainingArguments,
+        num_gpus_per_node: int,
+        ranks: list[list[int]] | None = None,
+        step: int = 0,
+        # layer_index -> dict of [fsdp_index -> ProcessGroup]
+    ) -> tuple[OobleckPipeline, list[OobleckPipeline]]:
+        my_pipeline: Optional[OobleckPipeline] = None
+        pipeline_index: int = 0
+        num_ranks_used = 0
 
+        all_pipelines: list[OobleckPipeline] = []
+        for pipeline_template, num_instances in self.num_instances_set.items():
+            for _ in range(num_instances):
+                pipeline_ranks: list[int] = (
+                    list(
+                        range(
+                            num_ranks_used,
+                            num_ranks_used
+                            + pipeline_template._num_nodes * num_gpus_per_node,
+                        )
+                    )
+                    if ranks is None
+                    else ranks[pipeline_index]
+                )
+                assert pipeline_template._num_nodes * num_gpus_per_node == len(
+                    pipeline_ranks
+                )
+
+                pipeline = OobleckPipeline(
+                    pipeline_id=pipeline_index,
+                    pipeline_template=pipeline_template,
+                    ranks=pipeline_ranks,
+                    dataloader=dataloader,
+                    step=step,
+                    training_args=training_args,
+                    is_simulated=True
+                )
+
+                all_pipelines.append(pipeline)
+                if pipeline.my_pipeline:
+                    my_pipeline = pipeline
+
+                pipeline_index += 1
+                num_ranks_used += len(pipeline_ranks)
+        
+        assert my_pipeline is not None
+        return my_pipeline, all_pipelines
 
 class PipelineInstantiator:
     def get_best_execution_plan(
@@ -262,6 +313,8 @@ class PipelineInstantiator:
         1. std(Bi * Ti) is minimized
         2. sum(Bi) = B
         3. Each Bi is divisible by b (training_args.per_device_train_batch_size)
+
+        Bi是第i个pipeline的accumulated micro batch size
 
         Use Pyomo (Python Optimization Modeling Objects).
 
