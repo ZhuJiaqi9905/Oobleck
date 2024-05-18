@@ -154,8 +154,9 @@ class OobleckDataset:
         dataset_name: Optional[str],
         max_seq_length: Optional[int] = None,
     ) -> Tuple[Type[PreTrainedTokenizerBase], Dataset]:
-        tokenizer = AutoTokenizer.from_pretrained(model_name)
-        tokenizer.save_pretrained("/workspace/Oobleck/data/tokenizer")
+        # tokenizer = AutoTokenizer.from_pretrained(model_name)
+        # tokenizer.save_pretrained("/workspace/Oobleck/data/tokenizer")
+        tokenizer = AutoTokenizer.from_pretrained("/workspace/Oobleck/data/tokenizer")
         raw_dataset = load_dataset(dataset_path, dataset_name)
         
         if "validation" not in raw_dataset.keys():
