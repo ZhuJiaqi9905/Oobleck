@@ -64,10 +64,10 @@ class OobleckModel:
         config_args["return_dict"] = False
 
         # Use training_args for fp16/bf16
-        AutoConfig.from_pretrained("/workspace/Oobleck/data/config.json")
-        model_config: PretrainedConfig = AutoConfig.from_pretrained(
-            model_name, **config_args
-        )
+        model_config = AutoConfig.from_pretrained("/workspace/Oobleck/data/config.json")
+        # model_config: PretrainedConfig = AutoConfig.from_pretrained(
+        #     model_name, **config_args
+        # )
         print(f"model_name {model_name}, config_args: {config_args}")
         # model_config.save_pretrained(f"/workspace/Oobleck/data/")
         model: Optional[Type[PreTrainedModel]] = None
