@@ -168,14 +168,14 @@ class OobleckDataset:
             )
         # raw_dataset.save_to_disk("/workspace/Oobleck/data/dataset")
         column_names = list(raw_dataset["train"].features)
-        print(f"column_names{column_names}")
+        # print(f"column_names{column_names}")
         text_column_name = "text" if "text" in column_names else column_names[0]
-        print(f"text_column_name: {text_column_name}, type: {type(text_column_name)}")
+        # print(f"text_column_name: {text_column_name}, type: {type(text_column_name)}")
         if max_seq_length is None:
             max_seq_length = tokenizer.model_max_length
 
         def tokenize_function(examples):
-            print(f"examples: {examples}")
+            # print(f"examples: {examples}")
             return tokenizer(examples[text_column_name])
 
         tokenized_datasets = raw_dataset.map(
