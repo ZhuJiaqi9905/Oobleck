@@ -17,7 +17,7 @@ from torchvision.transforms import (
     Resize,
     ToTensor,
 )
-from datasets import Dataset, load_dataset
+from datasets import Dataset, load_dataset, load_from_disk
 
 from oobleck.module.model import lang_models, image_models
 
@@ -37,6 +37,7 @@ class OobleckDataset:
     ):
         # TODO: replace it with evaluate.load("accuracy")
         metric = evaluate.load("accuracy")
+       
         print(f"Dataset: model_name: {model_name}, dataset_path: {dataset_path}, dataset_name: {dataset_name}, max_seq_length: {max_seq_length}")
         if any(lang_model in model_name for lang_model in lang_models):
             self.tokenizer, self.dataset = OobleckDataset.create_language_dataset(
@@ -158,7 +159,7 @@ class OobleckDataset:
         # tokenizer.save_pretrained("/workspace/Oobleck/data/tokenizer")
         tokenizer = AutoTokenizer.from_pretrained("/workspace/Oobleck/data/tokenizer")
         # raw_dataset = load_dataset(dataset_path, dataset_name)
-        raw_dataset = load_dataset("/workspace/Oobleck/data/dataset")
+        raw_dataset = load_from_disk("/workspace/Oobleck/data/dataset")
         if "validation" not in raw_dataset.keys():
             raw_dataset["validation"] = load_dataset(
                 dataset_path,
@@ -167,12 +168,14 @@ class OobleckDataset:
             )
         # raw_dataset.save_to_disk("/workspace/Oobleck/data/dataset")
         column_names = list(raw_dataset["train"].features)
+        print(f"column_names{column_names}")
         text_column_name = "text" if "text" in column_names else column_names[0]
-
+        print(f"text_column_name: {text_column_name}, type: {type(text_column_name)}")
         if max_seq_length is None:
             max_seq_length = tokenizer.model_max_length
 
         def tokenize_function(examples):
+            print(f"examples: {examples}")
             return tokenizer(examples[text_column_name])
 
         tokenized_datasets = raw_dataset.map(
