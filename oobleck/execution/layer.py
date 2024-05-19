@@ -29,11 +29,11 @@ def init_tensors(layer: torch.fx.GraphModule, device: torch.device):
     TODO: must use checkpointed data
     """
     for param_name, param in layer.named_parameters():
-        set_module_tensor_to_device(layer, param_name, device, torch.rand(param.shape))
+        set_module_tensor_to_device(layer, param_name, device, torch.rand(param.shape), torch.float16)
 
     for buffer_name, buffer in layer.named_buffers():
         set_module_tensor_to_device(
-            layer, buffer_name, device, torch.rand(buffer.shape)
+            layer, buffer_name, device, torch.rand(buffer.shape), torch.float16
         )
 
 
@@ -109,8 +109,8 @@ class Layer(torch.nn.Module):
             if self._group_size > 1
             else HandleShardingStrategy.NO_SHARD,
             offload_params=False,
-            mp_param_dtype=torch.float32,  # TODO: change to bf16
-            mp_reduce_dtype=torch.float32,
+            mp_param_dtype=torch.float16,  # TODO: change to bf16
+            mp_reduce_dtype=torch.float16,
             keep_low_precision_grads=False,
             process_group=process_group,
             use_orig_params=False,
