@@ -30,11 +30,9 @@ def init_tensors(layer: torch.fx.GraphModule, device: torch.device):
     """
     
     for param_name, param in layer.named_parameters():
-        print(f"param_name: {param_name}")
         set_module_tensor_to_device(layer, param_name, device, torch.rand(param.shape))
 
     for buffer_name, buffer in layer.named_buffers():
-        print(f"buffer_name: {param_name}")
         set_module_tensor_to_device(
             layer, buffer_name, device, torch.rand(buffer.shape)
         )

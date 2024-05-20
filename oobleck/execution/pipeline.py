@@ -140,7 +140,7 @@ class PipelineExecution:
         elif isinstance(data, (tuple, list)):
             return type(data)(self._prepare_input(v) for v in data)
         elif isinstance(data, torch.Tensor):
-            print(f"inputs type: {data.dtype}")
+            # print(f"inputs type: {data.dtype}")
             data = data.clone().detach().to(self.pipeline.device)
             data.requires_grad = data.is_floating_point()
             return data
