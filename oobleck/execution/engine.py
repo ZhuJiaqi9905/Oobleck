@@ -419,7 +419,7 @@ class DataParallelEngine:
                         ranks_grid[layer_index][fsdp_index] = []
                     ranks_grid[layer_index][fsdp_index].append(rank)
 
-        print(f"layer_index -> dict of (fsdp_index -> list of ranks): {ranks_grid}")
+        # print(f"layer_index -> dict of (fsdp_index -> list of ranks): {ranks_grid}")
         # Create process groups for data parallelism
        
         dp_process_groups: dict[int, dict[int, dist.ProcessGroup]] = defaultdict(dict)
@@ -431,7 +431,7 @@ class DataParallelEngine:
 
                 if my_rank in ranks:
                     fsdp_indices[layer_index].append(fsdp_index)
-        print(f"ranks_grid: {ranks_grid}")
+        # print(f"ranks_grid: {ranks_grid}")
          # 每个layer中fsdp_index相同的rank属于一个dp_process_group. layer_index -> dict of (fsdp_index -> list of ranks in  a pg)
         self._dp_process_groups = dp_process_groups
         # 本rank拥有的layer的fsdp_index。layer_index -> list of fsdp_index。这个变量没被使用

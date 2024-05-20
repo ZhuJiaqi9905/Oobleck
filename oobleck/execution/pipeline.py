@@ -353,7 +353,7 @@ class PipelineCommunication:
                 self._send(send_dtype, receiver_rank)
                 self._send(send_shape, receiver_rank)
                 self._send(send_req_grad, receiver_rank)
-                print(f"send activation meta: send_dtype: {send_dtype}")
+                # print(f"send activation meta: send_dtype: {send_dtype}")
         outputs: tuple[torch.Tensor] = self.pipeline.pipe_buffers["outputs"][buffer_id]
         if not self.sent_activation_meta:
             _send_activation_meta(outputs, self.next_rank)
@@ -490,7 +490,7 @@ class OobleckPipeline:
         # layer index -> list of ranks
         # First dimension is for layer index, second dimension is for rank.
         self.rank_grid: dict[int, list[int]] = pipeline_template.get_rank_grid(ranks)
-        print(f"this pipeline layer index -> list of ranks:{self.rank_grid}")
+        # print(f"this pipeline layer index -> list of ranks:{self.rank_grid}")
 
     def train(self):
         # A map of PipeInstruction types to methods. Each method will be executed with the
