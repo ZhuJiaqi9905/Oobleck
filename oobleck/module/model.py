@@ -62,21 +62,20 @@ class OobleckModel:
         config_args["remove_unused_columns"] = False
         # necessary to register backward hooks
         config_args["return_dict"] = False
-
         # Use training_args for fp16/bf16
-        model_config = AutoConfig.from_pretrained("/workspace/Oobleck/data/config.json")
-        # model_config: PretrainedConfig = AutoConfig.from_pretrained(
-        #     model_name, **config_args
-        # )
+        # model_config = AutoConfig.from_pretrained("/workspace/Oobleck/data/config.json")
+        model_config: PretrainedConfig = AutoConfig.from_pretrained(
+            model_name, **config_args
+        )
+
         print(f"model_name {model_name}, config_args: {config_args}")
         # model_config.save_pretrained(f"/workspace/Oobleck/data/")
         model: Optional[Type[PreTrainedModel]] = None
         with init_empty_weights():
             for key, automodel in automodel_dict.items():
                 if key in model_name:
-                    model = automodel.from_config(model_config)
+                    model = automodel.from_config(model_config, torch_dtype=torch.float16)
                     break
-
         assert model, f"Given model {model_name} is not supported yet."
         
         self.sample_inputs = sample_inputs
@@ -86,23 +85,23 @@ class OobleckModel:
         self.layers = shard_model(model, self.trace_input_names, split_points)
         self.model_name = model_name
         self.model_tag = model_tag
-        # for i, graph_module in enumerate(self.layers):
-        #     print(f"Graph Module {i+1}:")
-        #     # 获取模型的图表示
-        #     graph = graph_module.graph
+        for i, graph_module in enumerate(self.layers):
+            print(f"Graph Module {i+1}:")
+            # 获取模型的图表示
+            graph = graph_module.graph
             
-        #     # 打印每个节点的详细信息
-        #     for node in graph.nodes:
-        #         print(f"Node name: {node.name}")
-        #         print(f"  Target: {node.target}")
-        #         print(f"  Args: {node.args}")
-        #         print(f" opcode: {node.op}")
+            # 打印每个节点的详细信息
+            for node in graph.nodes:
+                print(f"Node name: {node.name}")
+                print(f"  Target: {node.target}")
+                print(f"  Args: {node.args}")
+                print(f" opcode: {node.op}")
 
-        #     # 可以根据需要打印其他信息，比如参数的尺寸
-        #     for name, param in graph_module.named_parameters():
-        #         print(f"Parameter name: {name}, Size: {param.size()}, ")
-        #     print()
-        #     print(f"code {graph_module.code}")
+            # 可以根据需要打印其他信息，比如参数的尺寸
+            for name, param in graph_module.named_parameters():
+                print(f"Parameter name: {name}, Size: {param.size()}, dtype: {param.dtype}")
+            print()
+            print(f"code {graph_module.code}")
 
         self.total_num_params = sum(
             sum(p.numel() for p in layer.parameters()) for layer in self.layers

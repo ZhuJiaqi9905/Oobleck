@@ -140,6 +140,7 @@ class PipelineExecution:
         elif isinstance(data, (tuple, list)):
             return type(data)(self._prepare_input(v) for v in data)
         elif isinstance(data, torch.Tensor):
+            print(f"inputs type: {data.dtype}")
             data = data.clone().detach().to(self.pipeline.device)
             data.requires_grad = data.is_floating_point()
             return data
@@ -352,7 +353,7 @@ class PipelineCommunication:
                 self._send(send_dtype, receiver_rank)
                 self._send(send_shape, receiver_rank)
                 self._send(send_req_grad, receiver_rank)
-
+                print(f"send activation meta: send_dtype: {send_dtype}")
         outputs: tuple[torch.Tensor] = self.pipeline.pipe_buffers["outputs"][buffer_id]
         if not self.sent_activation_meta:
             _send_activation_meta(outputs, self.next_rank)
@@ -395,7 +396,7 @@ class PipelineCommunication:
                 recv_req_grad = torch.LongTensor(data=[0]).to(self.pipeline.device)
                 self._recv(recv_req_grad, sender_rank)
                 recv_req_grad = True if recv_req_grad.item() == 1 else False
-
+                print(f"recv buffer: recv dtype: {recv_dtype}")
                 buffers.append(
                     torch.zeros(
                         recv_shape,
