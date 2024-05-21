@@ -75,9 +75,10 @@ class SimulatorEngine:
             self._args.model.model_args,
         )
         profile_results: LayerExecutionResults = get_profile_results(
-            self._args.model.model_name,
             self._args.model.model_tag,
             self._hf_training_args.per_device_train_batch_size,
+            self._args.dist.num_agents_per_node * self._args.dist.num_workers,
+            self._args.dist.num_agents_per_node
         )
         total_memory_consumption = 6 * sum(
             [layer_result._mem_required[0] for layer_result in profile_results.get()]

@@ -32,8 +32,9 @@ class StageExecutionResult:
     _size: int
     _mem_required: int
 
+# need refractor
 def get_profile_results(
-    model_name: str, model_tag: str, microbatch_size: int
+    model_tag: str, microbatch_size: int, world_size: int, num_workers_per_node: int
 ) -> LayerExecutionResults: ...
 
 class PipelineTemplate:

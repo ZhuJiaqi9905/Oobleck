@@ -63,13 +63,20 @@ class OobleckModel:
         # necessary to register backward hooks
         config_args["return_dict"] = False
         # Use training_args for fp16/bf16
-        # model_config = AutoConfig.from_pretrained("/workspace/Oobleck/data/config.json")
-        model_config: PretrainedConfig = AutoConfig.from_pretrained(
-            model_name, **config_args
-        )
-
-        print(f"model_name {model_name}, config_args: {config_args}")
-        # model_config.save_pretrained(f"/workspace/Oobleck/data/")
+        if model_tag == "gpt3_2_7B":
+            model_config =  AutoConfig.from_pretrained("/workspace/Oobleck/data/model/gpt3_2_7B/config.json")
+        elif model_tag == "gpt3_1_3B":
+            model_config = AutoConfig.from_pretrained("/workspace/Oobleck/data/model/gpt3_1_3B/config.json")
+        elif model_tag == "gpt3_6_7B":
+            model_config = AutoConfig.from_pretrained("/workspace/Oobleck/data/model/gpt3_6_7B/config.json")
+        elif model_tag == "bert_340M":
+            model_config = AutoConfig.from_pretrained("/workspace/Oobleck/data/model/bert_340M/config.json")
+        else:
+            raise Exception(f"No model config for model: {model_tag}") 
+        # model_config: PretrainedConfig = AutoConfig.from_pretrained(
+        #     model_name, **config_args
+        # )
+        print(f"model_name: {model_name}, model_tag: {model_tag}")
         model: Optional[Type[PreTrainedModel]] = None
         with init_empty_weights():
             for key, automodel in automodel_dict.items():

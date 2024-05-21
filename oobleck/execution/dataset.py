@@ -157,7 +157,12 @@ class OobleckDataset:
     ) -> Tuple[Type[PreTrainedTokenizerBase], Dataset]:
         # tokenizer = AutoTokenizer.from_pretrained(model_name)
         # tokenizer.save_pretrained("/workspace/Oobleck/data/tokenizer")
-        tokenizer = AutoTokenizer.from_pretrained("/workspace/Oobleck/data/tokenizer")
+        if model_name == "gpt2":
+            tokenizer = AutoTokenizer.from_pretrained("/workspace/Oobleck/data/tokenizer/gpt")
+        elif model_name == "bert-base-cased":
+            tokenizer = AutoTokenizer.from_pretrained("/workspace/Oobleck/data/tokenizer/bert")
+        else:
+            raise Exception(f"No tokenizer for model {model_name}")
         # raw_dataset = load_dataset(dataset_path, dataset_name)
         raw_dataset = load_from_disk("/workspace/Oobleck/data/dataset")
         if "validation" not in raw_dataset.keys():

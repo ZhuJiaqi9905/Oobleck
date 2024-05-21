@@ -549,9 +549,10 @@ class OobleckEngine:
         )
         # print(f"to_get_profile_results: name {self._args.model.model_name}, tag {self._args.model.model_tag}, batch_size {self._hf_training_args.per_device_train_batch_size}")
         profile_results: LayerExecutionResults = get_profile_results(
-            self._args.model.model_name,
             self._args.model.model_tag,
             self._hf_training_args.per_device_train_batch_size,
+            num_gpus_per_node * num_nodes,
+            num_gpus_per_node 
         )
         # print(f"profile results: size {profile_results.size}")
         # layer_exe_results = profile_results.get()

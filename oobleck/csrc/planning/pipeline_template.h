@@ -91,9 +91,10 @@ class PipelineTemplate {
 };
 
 std::shared_ptr<LayerExecutionResults> get_profile_results(
-    const std::string& model_name,
     const std::string& model_tag,
-    const int microbatch_size);
+    const int microbatch_size,
+    const int world_size,
+    const int num_workers_per_node);
 
 class PipelineTemplateGenerator {
  public:

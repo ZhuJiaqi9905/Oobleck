@@ -66,6 +66,6 @@ PYBIND11_MODULE(pipeline_template, m) {
            &PipelineTemplateGenerator::create_pipeline_templates)
       .def("create_pipeline_templates_serial",
            &PipelineTemplateGenerator::create_pipeline_templates_serial);
-  m.def("get_profile_results", &get_profile_results, py::arg("model_name"),
-        py::arg("model_tag"), py::arg("microbatch_size"));
+  m.def("get_profile_results", &get_profile_results,
+        py::arg("model_tag"), py::arg("microbatch_size"), py::arg("world_size"), py::arg("num_workers_per_node"));
 }

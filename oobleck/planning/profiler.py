@@ -244,8 +244,8 @@ class Profiler:
         ]
 
 
-def get_profile_path(model_name: str, model_tag: str) -> Path:
-    return Path(PROFILE_CACHE) / f"{model_name}-{model_tag}"
+def get_profile_path(model_tag: str, micro_batch_size: int, world_size: int, num_workers_per_node: int) -> Path:
+    return Path(PROFILE_CACHE) / f"{model_tag}-{micro_batch_size}-{world_size}-{num_workers_per_node}"
 
 
 def profile(
@@ -264,7 +264,7 @@ def profile(
     Result is stored in cache for future use.
     Path: /workspace/Oobleck/tmp/profiles/{model_name}-{tag}/{layers|allreduce_in_node|allreduce_across_nodes}
     """
-    directory = get_profile_path(args.model.model_name, args.model.model_tag)
+    directory = get_profile_path(args.model.model_tag, args.job.microbatch_size, world_size, num_workers_per_node)
     directory.mkdir(parents=True, exist_ok=True)
 
     logger.info("Profiling model %s. rank %d, world_size %d, num_workers_per_node %d", args.model.model_name, rank, world_size, num_workers_per_node)

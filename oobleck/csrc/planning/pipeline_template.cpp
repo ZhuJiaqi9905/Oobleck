@@ -30,9 +30,10 @@ namespace oobleck {
 // cppcoro::static_thread_pool PipelineTemplateGenerator::thread_pool_;
 
 std::shared_ptr<LayerExecutionResults> get_profile_results(
-    const std::string& model_name,
     const std::string& model_tag,
-    const int microbatch_size) {
+    const int microbatch_size,
+    const int world_size,
+    const int num_workers_per_node) {
   auto get_cache = [](const std::string& cache_path) -> nlohmann::json {
     std::ifstream ifs(cache_path);
     assert(ifs.is_open());
@@ -44,7 +45,7 @@ std::shared_ptr<LayerExecutionResults> get_profile_results(
   };
 
   std::string profile_path =
-      "/workspace/Oobleck/tmp/profiles/" + model_name + "-" + model_tag;
+      std::string("/workspace/Oobleck/tmp/profiles/") + model_tag + std::string("-") + std::to_string(microbatch_size) + std::string("-") + std::to_string(world_size) + std::string("-") + std::to_string(num_workers_per_node);
   auto mb = get_cache(profile_path + "/mb" + std::to_string(microbatch_size) +
                       ".json");
   auto allreduce_in_node = get_cache(profile_path + "/allreduce_in_node.json");

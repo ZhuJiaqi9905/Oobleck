@@ -140,9 +140,10 @@ class OobleckAgent:
         # 如果有profile数据就读出来
         try:
             get_profile_results(
-                args.model.model_name,
                 args.model.model_tag,
                 args.job.microbatch_size,
+                args.dist.num_workers * args.dist.num_agents_per_node,
+                args.dist.num_agents_per_node
             )
 
             if not validate_model_args(args):
