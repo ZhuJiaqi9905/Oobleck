@@ -1,0 +1,21 @@
+dist:
+  num_agents_per_node: 1
+  num_workers: 1
+  word_size: 5
+
+job:
+  fault_threshold: 1
+  microbatch_size: 2
+  global_microbatch_size: 128
+  steps: 30
+
+model:
+  model_name: gpt2
+  model_tag: gpt3_1_3B
+  dataset_path: wikitext
+  dataset_name: wikitext-2-raw-v1
+  model_args:
+    n_positions: 1024
+    num_hidden_layers: 24
+    n_embd: 2048
+    n_head: 32

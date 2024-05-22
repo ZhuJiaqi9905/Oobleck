@@ -1,0 +1,21 @@
+dist:
+  num_agents_per_node: 1
+  num_workers: 1
+  word_size: 5
+
+job:
+  fault_threshold: 1
+  microbatch_size: 2
+  global_microbatch_size: 128
+  steps: 30
+
+model:
+  model_name: bert
+  model_tag: bert_340M
+  dataset_path: wikitext
+  dataset_name: wikitext-2-raw-v1
+  model_args:
+    n_positions: 1024
+    hidden_size: 1024
+    num_hidden_layers: 24 
+    num_attention_heads: 16

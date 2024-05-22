@@ -142,8 +142,8 @@ class OobleckAgent:
             get_profile_results(
                 args.model.model_tag,
                 args.job.microbatch_size,
-                args.dist.num_workers * args.dist.num_agents_per_node,
-                args.dist.num_agents_per_node
+                args.dist.world_size,
+                args.dist.num_workers
             )
 
             if not validate_model_args(args):

@@ -109,7 +109,7 @@ class OobleckMasterDaemon:
             current_time = time.localtime(time.time())
             current_time = time.strftime("%m-%d-%Y-%H-%M-%S", current_time)
 
-            log_path = Path(f"/workspace/Oobleck/tmp/logs/{current_time}-{args.model.model_name}")
+            log_path = Path(f"/workspace/Oobleck/tmp/logs/{current_time}-{args.model.model_tag}-{args.job.global_microbatch_size}-{args.job.microbatch_size}-{args.dist.world_size}")
             log_path.mkdir(parents=True, exist_ok=False)
 
             self._job_arguments[self._next_job_id] = args

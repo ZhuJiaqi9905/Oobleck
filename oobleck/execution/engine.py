@@ -633,6 +633,10 @@ class OobleckEngine:
 
         self._num_nodes = len(dist_info.agent_ips)
         self._world_size = dist_info.world_size
+        if self._args.dist.world_size == 0:
+            logger.warn("not set world_size in yaml config")
+        else:
+            assert(self._args.dist.world_size == dist_info.world_size)
         self._rank = self._rank_map[self._my_ip][self._local_rank]
         logger.info(f"init pg: rank {self._rank}, world_size: {self._world_size}, rank_map: {self._rank_map}")
         if next(iter(self._rank_map)) == self._my_ip and self._local_rank == 0:

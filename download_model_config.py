@@ -11,39 +11,39 @@ from transformers import (
 
 
 model_configs = {
-    # "gpt3_1_3B": {
-    #     "model_name": "gpt2", 
-    #     "config_args": {
-    #         "use_cache": False,
-    #         "remove_unused_columns": False,
-    #         "return_dict": False,
-    #         "n_head": 32,
-    #         "num_hidden_layers": 24,
-    #         "n_embd": 2048,
-    #     }
-    # },
-    # "gpt3_2_7B": {
-    #     "model_name": "gpt2", 
-    #     "config_args": {
-    #         "use_cache": False,
-    #         "remove_unused_columns": False,
-    #         "return_dict": False,
-    #         "n_head": 32,
-    #         "num_hidden_layers": 32,
-    #         "n_embd": 2560,
-    #     }
-    # },
-    # "gpt3_6_7B": {
-    #     "model_name": "gpt2", 
-    #     "config_args": {
-    #         "use_cache": False,
-    #         "remove_unused_columns": False,
-    #         "return_dict": False,
-    #         "n_head": 32,
-    #         "num_hidden_layers": 32,
-    #         "n_embd": 4096,
-    #     }
-    # },
+    "gpt3_1_3B": {
+        "model_name": "gpt2", 
+        "config_args": {
+            "use_cache": False,
+            "remove_unused_columns": False,
+            "return_dict": False,
+            "n_head": 32,
+            "num_hidden_layers": 24,
+            "n_embd": 2048,
+        }
+    },
+    "gpt3_2_7B": {
+        "model_name": "gpt2", 
+        "config_args": {
+            "use_cache": False,
+            "remove_unused_columns": False,
+            "return_dict": False,
+            "n_head": 32,
+            "num_hidden_layers": 32,
+            "n_embd": 2560,
+        }
+    },
+    "gpt3_6_7B": {
+        "model_name": "gpt2", 
+        "config_args": {
+            "use_cache": False,
+            "remove_unused_columns": False,
+            "return_dict": False,
+            "n_head": 32,
+            "num_hidden_layers": 32,
+            "n_embd": 4096,
+        }
+    },
     "bert_340M": {
         "model_name": "bert-base-cased",
         "config_args": {

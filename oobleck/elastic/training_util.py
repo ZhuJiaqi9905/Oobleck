@@ -12,6 +12,7 @@ class DistributedArguments(Serializable):
     node_port: int = 22
     num_workers: int = 1
     num_agents_per_node: int = 1
+    world_size: int = 0
     username: str | None = None
 
 
