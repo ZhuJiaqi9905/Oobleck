@@ -396,7 +396,7 @@ class PipelineCommunication:
                 recv_req_grad = torch.LongTensor(data=[0]).to(self.pipeline.device)
                 self._recv(recv_req_grad, sender_rank)
                 recv_req_grad = True if recv_req_grad.item() == 1 else False
-                print(f"recv buffer: recv dtype: {recv_dtype}")
+                # print(f"recv buffer: recv dtype: {recv_dtype}")
                 buffers.append(
                     torch.zeros(
                         recv_shape,
