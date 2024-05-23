@@ -7,15 +7,15 @@ job:
   fault_threshold: 1
   microbatch_size: 2
   global_microbatch_size: 128
-  steps: 10
+  steps: 20
 
 model:
-  model_name: bert
+  model_name: bert-base-cased
   model_tag: bert_340M
   dataset_path: wikitext
   dataset_name: wikitext-2-raw-v1
   model_args:
-    n_positions: 1024
+    n_positions: 512
     hidden_size: 1024
     num_hidden_layers: 24 
     num_attention_heads: 16
