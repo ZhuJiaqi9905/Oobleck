@@ -7,7 +7,7 @@ job:
   fault_threshold: 1
   microbatch_size: 2
   global_microbatch_size: 128
-  steps: 30
+  steps: 10
 
 model:
   model_name: gpt2

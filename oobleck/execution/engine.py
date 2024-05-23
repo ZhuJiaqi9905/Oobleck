@@ -777,8 +777,9 @@ class OobleckEngine:
                 print(f"training step: {step} done")
                 sync_timer.log(["step"])    
                 log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
-                if step == 5:
-                    self.fake_stop_and_reconfigure("10.20.23.91")
+                # if step == 10:
+                #     self.fake_stop_and_reconfigure("10.20.23.91")
+
             except StopIteration:
                 step_timer: SynchronizedWallClockTimer.Timer = sync_timer("step")
                 step_timer.reset()
@@ -788,3 +789,4 @@ class OobleckEngine:
         dist.barrier()
         torch.cuda.synchronize()
         logger.info("Training done.")
+        
