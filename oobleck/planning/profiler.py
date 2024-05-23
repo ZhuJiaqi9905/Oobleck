@@ -115,7 +115,7 @@ class Profiler:
         # broadcast results to other nodes
         # 2d tensor, for each layer, multiple allreduce with different number of nodes
         results: torch.Tensor = torch.tensor(
-            results, dtype=torch.float16, device="cuda", requires_grad=False
+            results, dtype=torch.float32, device="cuda", requires_grad=False
         )
         logger.info("before broadcast")
         dist.broadcast(results, 0)
@@ -183,7 +183,7 @@ class Profiler:
         # broadcast results to other nodes
         # 2d tensor, for each layer, multiple allreduce with different number of nodes
         results: torch.Tensor = torch.tensor(
-            results, dtype=torch.float16, device="cuda", requires_grad=False
+            results, dtype=torch.float32, device="cuda", requires_grad=False
         )
         dist.broadcast(results, 0)
 
@@ -234,7 +234,7 @@ class Profiler:
         # broadcast results to other nodes
         # 2d tensor, for each layer, multiple allreduce with different number of nodes
         results: torch.Tensor = torch.tensor(
-            results, dtype=torch.float16, device="cuda", requires_grad=False
+            results, dtype=torch.float32, device="cuda", requires_grad=False
         )
         dist.broadcast(results, 0)
 
