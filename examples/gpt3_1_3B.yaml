@@ -1,12 +1,12 @@
 dist:
   num_agents_per_node: 1
   num_workers: 1
-  world_size: 5
+  world_size: 8
 
 job:
   fault_threshold: 1
   microbatch_size: 2
-  global_microbatch_size: 128
+  global_microbatch_size: 1024
   steps: 50
 
 model:

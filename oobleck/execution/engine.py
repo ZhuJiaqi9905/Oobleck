@@ -774,8 +774,8 @@ class OobleckEngine:
         for step in range(self._hf_training_args.max_steps):
             try:
                 self._train_step()
-                dist.barrier()
-                torch.cuda.synchronize()
+                # dist.barrier()
+                # torch.cuda.synchronize()
                 print(f"training step: {step} done")
                 sync_timer.log(["step"])    
                 log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
