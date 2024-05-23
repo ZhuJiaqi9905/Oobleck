@@ -1,7 +1,7 @@
 dist:
   num_agents_per_node: 1
   num_workers: 1
-  word_size: 5
+  world_size: 5
 
 job:
   fault_threshold: 1
