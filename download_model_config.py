@@ -73,5 +73,5 @@ def download_tokenizer():
     tokenizer.save_pretrained("/workspace/Oobleck/data/tokenizer/bert")
 if __name__ == "__main__":
     pass
-    # download_model_config()
+    download_model_config()
     # download_tokenizer()
