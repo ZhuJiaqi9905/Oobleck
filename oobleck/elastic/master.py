@@ -70,7 +70,7 @@ class OobleckMasterDaemon:
         node_ip = args.dist.node_ips[node_index]
 
         async with asyncssh.connect(
-            node_ip, args.dist.node_port, username=args.dist.username
+            node_ip, args.dist.node_port, username=args.dist.username, known_hosts=None
         ) as conn:
             cmd = '/bin/bash -ic "conda run --no-capture-output -n oobleck '
             cmd += "python -m oobleck.elastic.agent "

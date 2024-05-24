@@ -1,4 +1,5 @@
 from __future__ import annotations
+import copy
 from transformers.training_args import TrainingArguments as HFTrainingArguments
 import logging
 from multiprocessing import connection
@@ -18,12 +19,17 @@ from oobleck.planning.instantiator import HeterogeneousPipelinesExecutionPlan, P
 from tests.conftest import OobleckSingleProcessTestCase
 from deepspeed.utils.logging import LoggerFactory, log_dist
 from deepspeed.utils.logging import logging
+import argparse
+import json
 
 logger = LoggerFactory.create_logger("oobleck_engine", logging.DEBUG)
 
 
 class SimulatorEngine:
-    def __init__(self, num_nodes, num_gpus_per_node, args: OobleckArguments) -> None:
+    def __init__(self, num_nodes, num_gpus_per_node, args: OobleckArguments, microbatch: int, world_size: int) -> None:
+        args.job.microbatch_size = microbatch
+        args.dist.world_size = world_size
+
         self._num_nodes: int = num_nodes
         self._num_gpus_per_node: int = num_gpus_per_node
         self._args = args
@@ -151,6 +157,33 @@ class SimulatorEngine:
             num_gpus_per_node=self._num_gpus_per_node,
             step=0,
         )
+        self.num_microbatches = copy.deepcopy(execution_plan.num_microbatches)
+        self.old_rank_grids =  [
+            copy.deepcopy(pipeline.rank_grid) for pipeline in self._pipelines
+        ]
+        
+
+    def get_pipelines(self):
+        num_pipeline = len(self.old_rank_grids)
+        pipelines = []
+        for i in range(num_pipeline):
+            num_layers_per_stage = []
+            layers = 1
+            ranks = [rank[0] for (layer, rank) in self.old_rank_grids[i].items()]
+            curr_rank = ranks[0]
+            
+            for j in range(1, len(ranks)):
+                if curr_rank == ranks[j]:
+                    layers += 1
+                else:
+                    num_layers_per_stage.append(layers)
+                    layers = 1
+                    curr_rank = ranks[j]
+            num_layers_per_stage.append(layers)
+            assert(sum(num_layers_per_stage) == len(self.old_rank_grids[i]))
+            pipeline = {"layers": self.old_rank_grids[i], "num_of_microbatches": self.num_microbatches[i], "num_layers_per_stage": num_layers_per_stage}
+            pipelines.append(pipeline)
+        return pipelines
 
 def simulate(): 
     lose_ranks = [1]
@@ -166,6 +199,45 @@ def simulate():
     reconfigure_engine.on_reconfigure(lose_ranks)
     print(f"after reconfigure. old_grid_ranks: {reconfigure_engine._record_old_rank_grids}, new_grid_ranks: {reconfigure_engine._record_new_rank_grids}")
 
+def simulate_pipelines(model: str, microbatch: int, world_size: int):
+    if model == "gpt3_2_7B":
+        config_path = "/workspace/Oobleck/examples/gpt3_2_7B.yaml"
+    elif model == "gpt3_1_3B":
+        config_path = "/workspace/Oobleck/examples/gpt3_1_3B.yaml"
+    elif model == "gpt3_6_7B":
+        config_path = "/workspace/Oobleck/examples/gpt3_6_7B.yaml"
+    elif model == "gpt3_350M":
+        config_path = "/workspace/Oobleck/examples/gpt3_350M.yaml"
+    elif model == "bert_340M":
+        config_path = "/workspace/Oobleck/examples/bert_340M.yaml"
+    else:
+        raise Exception(f"No config path for model: {model}")
+    args = OobleckArguments.load_yaml(config_path)
+    engine = SimulatorEngine(world_size, 1, args, microbatch, world_size)
+    pipelines = engine.get_pipelines()
+    result = {"model": model, "microbatch_size": microbatch, "world_size": world_size, "pipelines": pipelines}
+    with open(f'/workspace/Oobleck/tmp/pipelines/{model}-{microbatch}-{world_size}.json', 'w', encoding='utf-8') as f:
+        json.dump(result,f)
+    print(result)
+
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='SSH connect to a node with asyncssh.')
+    parser.add_argument('--model', type=str, help='model tag')
+    parser.add_argument('--microbatch', type=int, help='microbatch size')
+    parser.add_argument('--worldsize', type=int, help='world size')
+    args = parser.parse_args()
+    simulate_pipelines(args.model, args.microbatch, args.worldsize)
+
+
+
+
+
+
+
+
+
 # old_rank_grids:[
 #     {0: [0], 1: [0], 2: [0], 3: [0], 4: [0], 5: [0], 6: [0], 7: [0], 8: [0], 9: [0], 10: [0], 11: [0], 12: [0], 13: [0], 14: [0], 15: [0], 16: [0], 17: [0], 18: [0], 19: [0], 20: [0], 21: [0], 22: [0], 23: [0], 24: [0], 25: [0], 26: [0], 27: [0], 28: [0], 29: [0], 30: [0], 31: [0], 32: [1], 33: [1], 34: [1], 35: [1], 36: [1], 37: [1], 38: [1], 39: [1], 40: [1], 41: [1], 42: [1], 43: [1], 44: [1], 45: [1], 46: [1], 47: [1], 48: [1], 49: [1], 50: [1], 51: [1], 52: [1], 53: [1], 54: [1], 55: [1], 56: [1], 57: [1], 58: [1], 59: [1], 60: [1], 61: [1]},
 #     {0: [2], 1: [2], 2: [2], 3: [2], 4: [2], 5: [2], 6: [2], 7: [2], 8: [2], 9: [2], 10: [2], 11: [2], 12: [2], 13: [2], 14: [2], 15: [2], 16: [2], 17: [2], 18: [2], 19: [2], 20: [2], 21: [2], 22: [3], 23: [3], 24: [3], 25: [3], 26: [3], 27: [3], 28: [3], 29: [3], 30: [3], 31: [3], 32: [3], 33: [3], 34: [3], 35: [3], 36: [3], 37: [3], 38: [3], 39: [3], 40: [3], 41: [3], 42: [4], 43: [4], 44: [4], 45: [4], 46: [4], 47: [4], 48: [4], 49: [4], 50: [4], 51: [4], 52: [4], 53: [4], 54: [4], 55: [4], 56: [4], 57: [4], 58: [4], 59: [4], 60: [4], 61: [4]}
@@ -175,69 +247,69 @@ def simulate():
 #     {0: [0], 1: [0], 2: [0], 3: [0], 4: [0], 5: [0], 6: [0], 7: [0], 8: [0], 9: [0], 10: [0], 11: [0], 12: [0], 13: [0], 14: [0], 15: [0], 16: [0], 17: [0], 18: [0], 19: [0], 20: [0], 21: [0], 22: [0], 23: [0], 24: [0], 25: [0], 26: [0], 27: [0], 28: [0], 29: [0], 30: [0], 31: [0], 32: [1], 33: [1], 34: [1], 35: [1], 36: [1], 37: [1], 38: [1], 39: [1], 40: [1], 41: [1], 42: [1], 43: [1], 44: [1], 45: [1], 46: [1], 47: [1], 48: [1], 49: [1], 50: [1], 51: [1], 52: [1], 53: [1], 54: [1], 55: [1], 56: [1], 57: [1], 58: [1], 59: [1], 60: [1], 61: [1]},
 #     {0: [2], 1: [2], 2: [2], 3: [2], 4: [2], 5: [2], 6: [2], 7: [2], 8: [2], 9: [2], 10: [2], 11: [2], 12: [2], 13: [2], 14: [2], 15: [2], 16: [2], 17: [2], 18: [2], 19: [2], 20: [2], 21: [2], 22: [2], 23: [2], 24: [2], 25: [2], 26: [2], 27: [2], 28: [2], 29: [2], 30: [2], 31: [2], 32: [3], 33: [3], 34: [3], 35: [3], 36: [3], 37: [3], 38: [3], 39: [3], 40: [3], 41: [3], 42: [3], 43: [3], 44: [3], 45: [3], 46: [3], 47: [3], 48: [3], 49: [3], 50: [3], 51: [3], 52: [3], 53: [3], 54: [3], 55: [3], 56: [3], 57: [3], 58: [3], 59: [3], 60: [3], 61: [3]}
 # ]
-
-old_rank_grids = [
-    {0: [0], 1: [0], 2: [0], 3: [0], 4: [0], 5: [0], 6: [0], 7: [0], 8: [0], 9: [0], 10: [0], 11: [0], 12: [0], 13: [0], 14: [0], 15: [0], 16: [0], 17: [0], 18: [0], 19: [0], 20: [0], 21: [0], 22: [0], 23: [0], 24: [0], 25: [0], 26: [0], 27: [0], 28: [0], 29: [0], 30: [0], 31: [0], 32: [1], 33: [1], 34: [1], 35: [1], 36: [1], 37: [1], 38: [1], 39: [1], 40: [1], 41: [1], 42: [1], 43: [1], 44: [1], 45: [1], 46: [1], 47: [1], 48: [1], 49: [1], 50: [1], 51: [1], 52: [1], 53: [1], 54: [1], 55: [1], 56: [1], 57: [1], 58: [1], 59: [1], 60: [1], 61: [1]},
-    {0: [2], 1: [2], 2: [2], 3: [2], 4: [2], 5: [2], 6: [2], 7: [2], 8: [2], 9: [2], 10: [2], 11: [2], 12: [2], 13: [2], 14: [2], 15: [2], 16: [2], 17: [2], 18: [2], 19: [2], 20: [2], 21: [2], 22: [3], 23: [3], 24: [3], 25: [3], 26: [3], 27: [3], 28: [3], 29: [3], 30: [3], 31: [3], 32: [3], 33: [3], 34: [3], 35: [3], 36: [3], 37: [3], 38: [3], 39: [3], 40: [3], 41: [3], 42: [4], 43: [4], 44: [4], 45: [4], 46: [4], 47: [4], 48: [4], 49: [4], 50: [4], 51: [4], 52: [4], 53: [4], 54: [4], 55: [4], 56: [4], 57: [4], 58: [4], 59: [4], 60: [4], 61: [4]}
+def current_not_used():
+    old_rank_grids = [
+        {0: [0], 1: [0], 2: [0], 3: [0], 4: [0], 5: [0], 6: [0], 7: [0], 8: [0], 9: [0], 10: [0], 11: [0], 12: [0], 13: [0], 14: [0], 15: [0], 16: [0], 17: [0], 18: [0], 19: [0], 20: [0], 21: [0], 22: [0], 23: [0], 24: [0], 25: [0], 26: [0], 27: [0], 28: [0], 29: [0], 30: [0], 31: [0], 32: [1], 33: [1], 34: [1], 35: [1], 36: [1], 37: [1], 38: [1], 39: [1], 40: [1], 41: [1], 42: [1], 43: [1], 44: [1], 45: [1], 46: [1], 47: [1], 48: [1], 49: [1], 50: [1], 51: [1], 52: [1], 53: [1], 54: [1], 55: [1], 56: [1], 57: [1], 58: [1], 59: [1], 60: [1], 61: [1]},
+        {0: [2], 1: [2], 2: [2], 3: [2], 4: [2], 5: [2], 6: [2], 7: [2], 8: [2], 9: [2], 10: [2], 11: [2], 12: [2], 13: [2], 14: [2], 15: [2], 16: [2], 17: [2], 18: [2], 19: [2], 20: [2], 21: [2], 22: [3], 23: [3], 24: [3], 25: [3], 26: [3], 27: [3], 28: [3], 29: [3], 30: [3], 31: [3], 32: [3], 33: [3], 34: [3], 35: [3], 36: [3], 37: [3], 38: [3], 39: [3], 40: [3], 41: [3], 42: [4], 43: [4], 44: [4], 45: [4], 46: [4], 47: [4], 48: [4], 49: [4], 50: [4], 51: [4], 52: [4], 53: [4], 54: [4], 55: [4], 56: [4], 57: [4], 58: [4], 59: [4], 60: [4], 61: [4]}
+        ]
+    new_rank_grids = [
+        {0: [0], 1: [0], 2: [0], 3: [0], 4: [0], 5: [0], 6: [0], 7: [0], 8: [0], 9: [0], 10: [0], 11: [0], 12: [0], 13: [0], 14: [0], 15: [0], 16: [0], 17: [0], 18: [0], 19: [0], 20: [0], 21: [0], 22: [0], 23: [0], 24: [0], 25: [0], 26: [0], 27: [0], 28: [0], 29: [0], 30: [0], 31: [0], 32: [1], 33: [1], 34: [1], 35: [1], 36: [1], 37: [1], 38: [1], 39: [1], 40: [1], 41: [1], 42: [1], 43: [1], 44: [1], 45: [1], 46: [1], 47: [1], 48: [1], 49: [1], 50: [1], 51: [1], 52: [1], 53: [1], 54: [1], 55: [1], 56: [1], 57: [1], 58: [1], 59: [1], 60: [1], 61: [1]},
+        {0: [2], 1: [2], 2: [2], 3: [2], 4: [2], 5: [2], 6: [2], 7: [2], 8: [2], 9: [2], 10: [2], 11: [2], 12: [2], 13: [2], 14: [2], 15: [2], 16: [2], 17: [2], 18: [2], 19: [2], 20: [2], 21: [2], 22: [2], 23: [2], 24: [2], 25: [2], 26: [2], 27: [2], 28: [2], 29: [2], 30: [2], 31: [2], 32: [3], 33: [3], 34: [3], 35: [3], 36: [3], 37: [3], 38: [3], 39: [3], 40: [3], 41: [3], 42: [3], 43: [3], 44: [3], 45: [3], 46: [3], 47: [3], 48: [3], 49: [3], 50: [3], 51: [3], 52: [3], 53: [3], 54: [3], 55: [3], 56: [3], 57: [3], 58: [3], 59: [3], 60: [3], 61: [3]}
     ]
-new_rank_grids = [
-    {0: [0], 1: [0], 2: [0], 3: [0], 4: [0], 5: [0], 6: [0], 7: [0], 8: [0], 9: [0], 10: [0], 11: [0], 12: [0], 13: [0], 14: [0], 15: [0], 16: [0], 17: [0], 18: [0], 19: [0], 20: [0], 21: [0], 22: [0], 23: [0], 24: [0], 25: [0], 26: [0], 27: [0], 28: [0], 29: [0], 30: [0], 31: [0], 32: [1], 33: [1], 34: [1], 35: [1], 36: [1], 37: [1], 38: [1], 39: [1], 40: [1], 41: [1], 42: [1], 43: [1], 44: [1], 45: [1], 46: [1], 47: [1], 48: [1], 49: [1], 50: [1], 51: [1], 52: [1], 53: [1], 54: [1], 55: [1], 56: [1], 57: [1], 58: [1], 59: [1], 60: [1], 61: [1]},
-    {0: [2], 1: [2], 2: [2], 3: [2], 4: [2], 5: [2], 6: [2], 7: [2], 8: [2], 9: [2], 10: [2], 11: [2], 12: [2], 13: [2], 14: [2], 15: [2], 16: [2], 17: [2], 18: [2], 19: [2], 20: [2], 21: [2], 22: [2], 23: [2], 24: [2], 25: [2], 26: [2], 27: [2], 28: [2], 29: [2], 30: [2], 31: [2], 32: [3], 33: [3], 34: [3], 35: [3], 36: [3], 37: [3], 38: [3], 39: [3], 40: [3], 41: [3], 42: [3], 43: [3], 44: [3], 45: [3], 46: [3], 47: [3], 48: [3], 49: [3], 50: [3], 51: [3], 52: [3], 53: [3], 54: [3], 55: [3], 56: [3], 57: [3], 58: [3], 59: [3], 60: [3], 61: [3]}
-]
-# layer->[fsdp index[GPUs]]
-old_layer_map:dict[int, list[list[int]]] = {}
-for pipeline in old_rank_grids:
-    for layer, ranks in pipeline.items():
-        if layer in old_layer_map:
-            for i, rank in enumerate(ranks):
-                old_layer_map[layer][i].append(rank)
-        else:
-            old_layer_map[layer] = [ranks]
+    # layer->[fsdp index[GPUs]]
+    old_layer_map:dict[int, list[list[int]]] = {}
+    for pipeline in old_rank_grids:
+        for layer, ranks in pipeline.items():
+            if layer in old_layer_map:
+                for i, rank in enumerate(ranks):
+                    old_layer_map[layer][i].append(rank)
+            else:
+                old_layer_map[layer] = [ranks]
 
 
-new_layer_map:dict[int, list[list[int]]] = {}
-for pipeline in new_rank_grids:
-    for layer, ranks in pipeline.items():
-        if layer in new_layer_map:
-            for i, rank in enumerate(ranks):
-                new_layer_map[layer][i].append(rank)
-        else:
-            new_layer_map[layer] = [ranks]
+    new_layer_map:dict[int, list[list[int]]] = {}
+    for pipeline in new_rank_grids:
+        for layer, ranks in pipeline.items():
+            if layer in new_layer_map:
+                for i, rank in enumerate(ranks):
+                    new_layer_map[layer][i].append(rank)
+            else:
+                new_layer_map[layer] = [ranks]
 
-fsdp_size = len(new_layer_map[0])
-print(f"old_layer_map: {old_layer_map}")
-print(f"new_layer_map: {new_layer_map}")
-layer_nums = len(new_layer_map)
-assert(len(old_layer_map) == len(new_layer_map))
+    fsdp_size = len(new_layer_map[0])
+    print(f"old_layer_map: {old_layer_map}")
+    print(f"new_layer_map: {new_layer_map}")
+    layer_nums = len(new_layer_map)
+    assert(len(old_layer_map) == len(new_layer_map))
 
-# (layer, fsdp_index) -> ranks need broadcast
-reconfigure_layers : dict[tuple[int, int], set[int]]= {}
+    # (layer, fsdp_index) -> ranks need broadcast
+    reconfigure_layers : dict[tuple[int, int], set[int]]= {}
 
-for layer in old_layer_map.keys():
-    for fsdp_index in range(len(old_layer_map[layer])):
-        old_ranks = set(old_layer_map[layer][fsdp_index])
-        new_ranks = set(new_layer_map[layer][fsdp_index])
-        unite_ranks = old_ranks.intersection(new_ranks)
-        assert(len(unite_ranks) > 0)
-        diff_ranks = new_ranks.difference(unite_ranks)
-        if len(diff_ranks) > 0:
-            reconfigure_layers[(layer, fsdp_index)] = diff_ranks
+    for layer in old_layer_map.keys():
+        for fsdp_index in range(len(old_layer_map[layer])):
+            old_ranks = set(old_layer_map[layer][fsdp_index])
+            new_ranks = set(new_layer_map[layer][fsdp_index])
+            unite_ranks = old_ranks.intersection(new_ranks)
+            assert(len(unite_ranks) > 0)
+            diff_ranks = new_ranks.difference(unite_ranks)
+            if len(diff_ranks) > 0:
+                reconfigure_layers[(layer, fsdp_index)] = diff_ranks
 
-print(f"reconfigure_layers: {reconfigure_layers}")
+    print(f"reconfigure_layers: {reconfigure_layers}")
 
-# broadcast_time = [0, 10, 20, 30]
-def get_layer_size(layer_index: int, layer_nums: int):
-    if layer_index == 0:
-        return 0
-    elif layer_index == layer_nums - 1:
-        return 1 
-    else :
-        return 2
-    
-# {(layer_size, broad_cast_nums) -> time}
-# 需要实测这个
-broadcast_time:dict[(int, int), float] = {}
-total_time = 0
-for (layer, fsdp_index), ranks in reconfigure_layers.items():
-    total_time += broadcast_time[(get_layer_size(layer,), len(ranks))]
-print(f"total_time: {total_time}")
+    # broadcast_time = [0, 10, 20, 30]
+    def get_layer_size(layer_index: int, layer_nums: int):
+        if layer_index == 0:
+            return 0
+        elif layer_index == layer_nums - 1:
+            return 1 
+        else :
+            return 2
+        
+    # {(layer_size, broad_cast_nums) -> time}
+    # 需要实测这个
+    broadcast_time:dict[(int, int), float] = {}
+    total_time = 0
+    for (layer, fsdp_index), ranks in reconfigure_layers.items():
+        total_time += broadcast_time[(get_layer_size(layer,), len(ranks))]
+    print(f"total_time: {total_time}")

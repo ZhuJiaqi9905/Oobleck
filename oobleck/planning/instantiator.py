@@ -246,7 +246,7 @@ class PipelineInstantiator:
         result: HeterogeneousPipelinesExecutionPlan = min(
             execution_plans, key=lambda plan: plan.iteration_time
         )
-
+        
         logger.info(f"Best execution plan: {result}")
         return result
 

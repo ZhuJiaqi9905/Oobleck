@@ -638,7 +638,7 @@ class OobleckPipeline:
             pg = dist.new_group(list(set(ranks)))
             # 持有同一个shrad_id的不同layer的rank组成的pg
             self._per_sharded_pp_pgs[shard_id] = pg
-
+            # print(f"ranks: {}")
             if my_rank in ranks:
                 unique_ranks = list(set(ranks))
                 rank_index = unique_ranks.index(my_rank)
