@@ -78,23 +78,18 @@ def parse_layers(file_path) -> list[Layer] | None:
 
 def test_broadcast(global_rank: int, layers: Sequence[Layer], pgs):
     start = time.time()
-    print("begin broadcast test")
-    # dist.broadcast()
     for id, layer in enumerate(layers):
         if global_rank in layer._ranks:
-            print("begin broadcast. layer {}, ranks {}", id, layer._ranks)
             layer.broadcast(pgs)
-            print("end broadcast. layer {}, ranks {}", id, layer._ranks)
     dist.barrier()
     torch.cuda.synchronize()
-    print("end broadcast test")
     end = time.time()
     return (end - start) * 1000
 
 
 def run(local_rank, global_rank, layers: Sequence[Layer]):
-    warmup_times = 2
-    repeat_times = 2
+    warmup_times = 0
+    repeat_times = 1
     torch.cuda.set_device(local_rank)
     # init tensors
     for layer in layers:
