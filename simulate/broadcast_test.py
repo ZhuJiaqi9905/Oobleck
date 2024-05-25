@@ -15,7 +15,7 @@ class Layer:
         self, sizes: Sequence[Sequence[int]], ranks: Sequence[int], names: Sequence[str]
     ) -> None:
         self._sizes = sizes
-        self._ranks = set(ranks)
+        self._ranks = ranks
         self._names = names
         self._gradients = []
         self._parameters = []
@@ -42,7 +42,7 @@ class Layer:
 
     def broadcast(self, pgs):
         src = self._ranks[0]
-        pg = pgs[self._ranks]
+        pg = pgs[tuple(sorted(self._ranks))]
         
         for param in self._parameters:
             dist.broadcast(param, src, pg)
@@ -76,7 +76,7 @@ def parse_layers(file_path) -> list[Layer] | None:
 
 def test_broadcast(global_rank: int, layers: Sequence[Layer], pgs):
     start = time.time()
-    print("begin broadcast")
+    print("begin broadcast test")
     # dist.broadcast()
     for id, layer in enumerate(layers):
         if global_rank in layer._ranks:
@@ -85,7 +85,7 @@ def test_broadcast(global_rank: int, layers: Sequence[Layer], pgs):
             print("end broadcast. layer {}, ranks {}", id, layer._ranks)
     dist.barrier()
     torch.cuda.synchronize()
-    print("end broadcast")
+    print("end broadcast test")
     end = time.time()
     return (end - start) * 1000
 
@@ -97,13 +97,15 @@ def run(local_rank, global_rank, layers: Sequence[Layer]):
     # init tensors
     for layer in layers:
         layer.init_tensors()
+    print("init tensor success")
+
     # init pgs
     pgs = {}
-    for layer in layers:
-        if layer._ranks not in pgs:
-           pgs[layer._ranks] = dist.new_group(list(layer._ranks)) 
-           print(f"new pg: {layer._ranks}")
-    
+    unique_ranks = {tuple(sorted(layer._ranks)) for layer in layers}
+    for ranks in unique_ranks:
+        pgs[ranks] = dist.new_group(list(ranks))
+        print(f"new pg: {ranks}") 
+    print("init pgs success")
 
     for _ in range(warmup_times):
         _ = test_broadcast(global_rank, layers, pgs)
@@ -136,7 +138,7 @@ def init_process(
         init_method=init_method,
         timeout=timedelta(minutes=3),
     )
-
+    print("init process group success")
     fn(local_rank, global_rank, layers)
 
 
@@ -152,11 +154,12 @@ if __name__ == "__main__":
     parser.add_argument("--master-port", type=str)
 
     args = parser.parse_args()
+    print(args.layer_file)
     layers = parse_layers(args.layer_file)
     if not layers:
         print("parse json error")
-        exit
-
+        exit()
+    print("parse layers success")
     gpus_per_node = args.gpus_per_node
     num_nodes = args.num_nodes
     node_rank = args.node_rank
