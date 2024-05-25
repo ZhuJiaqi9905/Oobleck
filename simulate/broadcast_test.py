@@ -26,7 +26,9 @@ class Layer:
     # def init_process_group(self):
     #     self._pg = dist.new_group(self._ranks)
 
-    def init_tensors(self):
+    def init_tensors(self, global_rank: int):
+        if global_rank not in self._ranks:
+            return
         for size in self._sizes:
             self._parameters.append(torch.randn(size, dtype=torch.float16).cuda())
             self._gradients.append(torch.randn(size, dtype=torch.float16).cuda())
@@ -96,7 +98,7 @@ def run(local_rank, global_rank, layers: Sequence[Layer]):
     torch.cuda.set_device(local_rank)
     # init tensors
     for layer in layers:
-        layer.init_tensors()
+        layer.init_tensors(global_rank)
     print("init tensor success")
 
     # init pgs

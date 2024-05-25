@@ -5,10 +5,9 @@ import asyncssh
 import subprocess
 
 model_configs = {
-    "gpt3_1_3B": {"microbatch": 4, "world_sizes": list(range(8, 17))},
-    "gpt3_2_7B": {"microbatch": 4, "world_sizes": list(range(8, 17))},
-    "gpt3_6_7B": {"microbatch": 2, "world_sizes": list(range(10, 17))},
-    "gpt3_350M": {"microbatch": 8, "world_sizes": list(range(8, 16))},
+    "gpt3_1_3B": {"microbatch": 4, "world_sizes": list(range(9, 17))},
+    "gpt3_2_7B": {"microbatch": 4, "world_sizes": list(range(10, 17))},
+    # "gpt3_350M": {"microbatch": 8, "world_sizes": list(range(8, 16))},
 }
 
 
@@ -59,16 +58,17 @@ async def run_model_tasks(nodes, layer_file, label):
 
 async def main():
     nodes = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.92"]
-    label = "gpt3_1_3B-4-8"
+    label = "gpt3_2_7B-4-16"
     layer_file = f"/workspace/Oobleck/important_data/lost/{label}.json"
     await run_model_tasks(nodes, layer_file, label)
-    # for model, config in model_configs.items():
-    #     microbatch = config["microbatch"]
-    #     for world_size in config["world_sizes"]:
-    #         label = f"{model}-{microbatch}-{world_size}"
-    #         layer_file = f"/workspace/Oobleck/important_data/lost/{label}.json"
-    #         await run_model_tasks(nodes, layer_file, label)
-            # exit()
+    exit()
+    for model, config in model_configs.items():
+        microbatch = config["microbatch"]
+        for world_size in config["world_sizes"]:
+            label = f"{model}-{microbatch}-{world_size}"
+            layer_file = f"/workspace/Oobleck/important_data/lost/{label}.json"
+            await run_model_tasks(nodes, layer_file, label)
+            await asyncio.sleep(5)
 
 if __name__ == "__main__":
     asyncio.run(main())
