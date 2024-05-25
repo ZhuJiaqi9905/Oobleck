@@ -10,17 +10,19 @@ model_configs = {
     "gpt3_1_3B": {"microbatch": 4, "world_sizes": list(range(8, 17))},
     "gpt3_2_7B": {"microbatch": 4, "world_sizes": list(range(8, 17))},
     "gpt3_6_7B": {"microbatch": 2, "world_sizes": list(range(10, 17))},
-    "gpt3_350M": {"microbatch": 8, "world_sizes": list(range(8, 17))},
+    "gpt3_350M": {"microbatch": 8, "world_sizes": list(range(8, 16))},
 }
 
 # 超时时间（秒）
 timeout_seconds = 600
 
 # 定义要运行的命令模板
-command_template = (
+pipeline_command_template = (
     "python oobleck_simulate.py --model {} --microbatch {} --worldsize {}"
 )
-
+lost_command_template = (
+    "python oobleck_simulate.py --model {} --microbatch {} --worldsize {}  --lost-nodes {}"
+)
 
 def run_command(command):
     try:
@@ -40,9 +42,16 @@ def run_with_timeout(command, timeout):
 
 
 # 生成所有参数组合
+# for model, config in model_configs.items():
+#     microbatch = config["microbatch"]
+#     for world_size in config["world_sizes"]:
+#         command = pipeline_command_template.format(model, microbatch, world_size)
+#         print(f"Running command: {command}")
+#         run_with_timeout(command, timeout_seconds)
+
 for model, config in model_configs.items():
     microbatch = config["microbatch"]
     for world_size in config["world_sizes"]:
-        command = command_template.format(model, microbatch, world_size)
+        command = lost_command_template.format(model, microbatch, world_size, 1)
         print(f"Running command: {command}")
         run_with_timeout(command, timeout_seconds)

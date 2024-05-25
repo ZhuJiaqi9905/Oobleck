@@ -1,5 +1,6 @@
 from __future__ import annotations
 import copy
+from typing import Mapping, Sequence
 from transformers.training_args import TrainingArguments as HFTrainingArguments
 import logging
 from multiprocessing import connection
@@ -21,7 +22,7 @@ from deepspeed.utils.logging import LoggerFactory, log_dist
 from deepspeed.utils.logging import logging
 import argparse
 import json
-
+import random
 logger = LoggerFactory.create_logger("oobleck_engine", logging.DEBUG)
 
 
@@ -185,19 +186,107 @@ class SimulatorEngine:
             pipelines.append(pipeline)
         return pipelines
 
-def simulate(): 
-    lose_ranks = [1]
-
-    num_nodes = 5
-    num_gpus_per_node = 1
-    config_path = "./examples/simulate_gpt2.yaml"
+def simulate_lost(model: str, microbatch: int, world_size: int, lost_nodes: int): 
+    if model == "gpt3_2_7B":
+        config_path = "/workspace/Oobleck/examples/gpt3_2_7B.yaml"
+    elif model == "gpt3_1_3B":
+        config_path = "/workspace/Oobleck/examples/gpt3_1_3B.yaml"
+    elif model == "gpt3_6_7B":
+        config_path = "/workspace/Oobleck/examples/gpt3_6_7B.yaml"
+    elif model == "gpt3_350M":
+        config_path = "/workspace/Oobleck/examples/gpt3_350M.yaml"
+    elif model == "bert_340M":
+        config_path = "/workspace/Oobleck/examples/bert_340M.yaml"
+    else:
+        raise Exception(f"No config path for model: {model}")
     args = OobleckArguments.load_yaml(config_path)
-    print(f"{args}")
-    engine = SimulatorEngine(num_nodes, num_gpus_per_node, args)
-    print("simulatorEngine init")
+    engine = SimulatorEngine(world_size, 1, args, microbatch, world_size)
+    pipelines = engine.get_pipelines()
+    assert(len(pipelines) > lost_nodes)
+
+    lost_ranks:list[int] = []
+    
+    for i in range(lost_nodes):
+        pipeline_stages = pipelines[i]["num_layers_per_stage"]
+        if len(pipeline_stages) > 2:
+            lost_stage_id = random.randint(1, len(pipeline_stages) - 2)
+        else:
+            lost_stage_id = 0
+        lost_layer_id = sum(pipeline_stages[:lost_stage_id])
+        print(f"lost_stage_id: {lost_stage_id}, lost_layer_id: {lost_layer_id}")
+        lost_ranks.append(pipelines[i]["layers"][lost_layer_id][0])
+
+    print(f"lost ranks: {lost_ranks}")
     reconfigure_engine = ReconfigurationEngine(engine, engine._pipelines, is_simulated=True)
-    reconfigure_engine.on_reconfigure(lose_ranks)
+    reconfigure_engine.on_reconfigure(lost_ranks)
     print(f"after reconfigure. old_grid_ranks: {reconfigure_engine._record_old_rank_grids}, new_grid_ranks: {reconfigure_engine._record_new_rank_grids}")
+    result = get_reconfigure_layers(engine, reconfigure_engine._record_old_rank_grids, reconfigure_engine._record_new_rank_grids, lost_ranks)
+    # with open(f'/workspace/Oobleck/tmp/lost/{model}-{microbatch}-{world_size}.json', 'w', encoding='utf-8') as f:
+    #     json.dump(result,f)
+    print(result)
+
+
+def get_reconfigure_layers(engine: SimulatorEngine, old_rank_grids: Sequence[Mapping[int, Sequence[int]]], new_rank_grids: Sequence[Mapping[int, Sequence[int]]], lost_ranks: list[int]):
+    # layer -> list of ranks contains that layer
+    old_layer_map:dict[int, list[list[int]]] = {}
+    for pipeline in old_rank_grids:
+        for layer, ranks in pipeline.items():
+            if layer in old_layer_map:
+                for i, rank in enumerate(ranks):
+                    old_layer_map[layer][i].append(rank)
+            else:
+                old_layer_map[layer] = [ranks]
+    # layer -> list of ranks container that layer
+    new_layer_map:dict[int, list[list[int]]] = {}
+    for pipeline in new_rank_grids:
+        for layer, ranks in pipeline.items():
+            if layer in new_layer_map:
+                for i, rank in enumerate(ranks):
+                    new_layer_map[layer][i].append(rank)
+            else:
+                new_layer_map[layer] = [ranks]
+
+    print(f"old_layer_map: {old_layer_map}")
+    print(f"new_layer_map: {new_layer_map}")
+    assert(len(old_layer_map) == len(new_layer_map))
+
+    # layer -> process group of broadcast (the first rank in the pg will broadcast to others)
+    reconfigure_layers : dict[int, list[int]]= {}
+    for layer in old_layer_map.keys():
+        old_ranks: set[int] = {rank for fsdp_ranks in old_layer_map[layer] for rank in fsdp_ranks}
+        new_ranks: set[int] = {rank for fsdp_ranks in new_layer_map[layer] for rank in fsdp_ranks} 
+        unite_ranks = old_ranks.intersection(new_ranks)
+        diff_ranks = new_ranks.difference(unite_ranks)
+        if len(diff_ranks) > 0:
+            if len(unite_ranks) > 0:
+                reconfigure_layers[layer] = [next(iter(unite_ranks))] + list(diff_ranks)
+            elif len(old_ranks.difference(lost_ranks)) > 0:
+                reconfigure_layers[layer] = [next(iter(old_ranks.difference(lost_ranks)))] + list(diff_ranks)
+            else:
+                raise Exception("Can not reconfigure. No redudant data")
+
+    print(f"original reconfigure_layers: {reconfigure_layers}")
+    # map candidiate ranks to new serial numbers
+    candidate_ranks = {rank for ranks in reconfigure_layers.values() for rank in ranks}
+    rank_map:dict[int, int] = {}
+    new_rank_id = 0
+    for candidate_rank in candidate_ranks:
+        rank_map[candidate_rank] = new_rank_id
+        new_rank_id += 1
+    for ranks in reconfigure_layers.values():
+        for i in range(len(ranks)):
+            ranks[i] = rank_map[ranks[i]]
+
+    print(f"reconfigure_layers: {reconfigure_layers}")
+    result = []
+    for layer_id, ranks in  reconfigure_layers.items():
+        sizes = []
+        names = []
+        for name, param in engine._model.layers[layer_id].named_parameters():
+            sizes.append(param.size())
+            names.append(name)
+        result.append({"sizes": sizes, "ranks": ranks, "names": names})
+    return {"world_size": len(candidate_ranks), "layers": result}
 
 def simulate_pipelines(model: str, microbatch: int, world_size: int):
     if model == "gpt3_2_7B":
@@ -221,14 +310,17 @@ def simulate_pipelines(model: str, microbatch: int, world_size: int):
     print(result)
 
 
-
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='SSH connect to a node with asyncssh.')
+    parser = argparse.ArgumentParser(description='Oobleck simulator')
     parser.add_argument('--model', type=str, help='model tag')
     parser.add_argument('--microbatch', type=int, help='microbatch size')
     parser.add_argument('--worldsize', type=int, help='world size')
+    parser.add_argument('--lost-nodes', type=int, default=0, help='The number of nodes want to lost')
     args = parser.parse_args()
-    simulate_pipelines(args.model, args.microbatch, args.worldsize)
+    if args.lost_nodes == 0:
+        simulate_pipelines(args.model, args.microbatch, args.worldsize)
+    else:
+        simulate_lost(args.model, args.microbatch, args.worldsize, args.lost_nodes)
 
 
 
