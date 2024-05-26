@@ -4,15 +4,10 @@ import aiofiles
 import asyncssh
 import subprocess
 
-model_configs = {
-    "gpt3_1_3B": {"microbatch": 4, "world_sizes": list(range(9, 17))},
-    "gpt3_2_7B": {"microbatch": 4, "world_sizes": list(range(9, 17))},
-    # "gpt3_350M": {"microbatch": 8, "world_sizes": list(range(8, 16))},
-}
 
 
-async def run_command_on_node(node, command, label):
-    output_file = f"/workspace/Oobleck/tmp/simulate_broadcast_logs/{label}/"
+async def run_command_on_node(node, command):
+    output_file = f"/workspace/Oobleck/tmp/simulate_allreduce_logs/"
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     output_file = f"{output_file}/{node}.log"
 
@@ -35,40 +30,34 @@ async def run_command_on_node(node, command, label):
         print(f"Error connecting to {node}: {exc}")
 
 
-async def run_model_tasks(nodes, layer_file, label):
+async def run_model_tasks(nodes):
     # Command template
-    print(f"{layer_file} broadcast test begin")
+    print(f"{len(nodes)} nodes test begin")
     master_addr = "172.21.0.42"
     master_port = 10078
-    command_template = '/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/broadcast_test.py --master-ip {}  --master-port {} --node-rank {} --layer-file {} --gpus-per-node 4 --num-nodes 4"'
+    command_template = '/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/all_reduce_test.py --master-ip {}  --master-port {} --node-rank {} --gpus-per-node 4 --num-nodes 4"'
     # Create tasks for running commands on nodes
     tasks = []
     for node_rank, node in enumerate(nodes):
         command = command_template.format(
-            master_addr, master_port, node_rank, layer_file
+            master_addr, master_port, node_rank,
         )
         print(f"run command {command} on node {node}")
-        task = asyncio.create_task(run_command_on_node(node, command, label))
+        task = asyncio.create_task(run_command_on_node(node, command))
         tasks.append(task)
 
     # Wait for all tasks to complete
     await asyncio.gather(*tasks)
-    print(f"All tasks for {layer_file} completed.")
+    print(f"All tasks for {len(nodes)} nodes completed.")
 
 
 async def main():
     nodes = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.92"]
-    # label = "gpt3_2_7B-4-16"
-    # layer_file = f"/workspace/Oobleck/important_data/lost/{label}.json"
-    # await run_model_tasks(nodes, layer_file, label)
-    # exit()
-    for model, config in model_configs.items():
-        microbatch = config["microbatch"]
-        for world_size in config["world_sizes"]:
-            label = f"{model}-{microbatch}-{world_size}"
-            layer_file = f"/workspace/Oobleck/important_data/lost/{label}.json"
-            await run_model_tasks(nodes, layer_file, label)
-            await asyncio.sleep(5)
+
+    for nodes_num in range(2, 5):
+        await run_model_tasks(nodes[:nodes_num])
+        await asyncio.sleep(5)
+    
 
 if __name__ == "__main__":
     asyncio.run(main())

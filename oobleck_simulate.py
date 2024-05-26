@@ -282,9 +282,12 @@ def get_reconfigure_layers(engine: SimulatorEngine, old_rank_grids: Sequence[Map
     for layer_id, ranks in  reconfigure_layers.items():
         sizes = []
         names = []
+        p = 0
         for name, param in engine._model.layers[layer_id].named_parameters():
             sizes.append(param.size())
             names.append(name)
+            p += param.numel()
+        print(f"parameters: {p}")
         result.append({"sizes": sizes, "ranks": ranks, "names": names})
     return {"world_size": len(candidate_ranks), "layers": result}
 
