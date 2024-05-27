@@ -6,8 +6,8 @@ import subprocess
 
 
 
-async def run_command_on_node(node, command):
-    output_file = f"/workspace/Oobleck/tmp/simulate_allreduce_logs/"
+async def run_command_on_node(node, command, label):
+    output_file = f"/workspace/Oobleck/tmp/simulate_allreduce_logs/{label}/"
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     output_file = f"{output_file}/{node}.log"
 
@@ -35,15 +35,16 @@ async def run_model_tasks(nodes):
     print(f"{len(nodes)} nodes test begin")
     master_addr = "172.21.0.42"
     master_port = 10078
-    command_template = '/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/all_reduce_test.py --master-ip {}  --master-port {} --node-rank {} --gpus-per-node 4 --num-nodes 4"'
+    command_template = '/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/all_reduce_test.py --master-ip {}  --master-port {} --node-rank {} --gpus-per-node 4 --num-nodes {}"'
     # Create tasks for running commands on nodes
     tasks = []
+    label = len(nodes)
     for node_rank, node in enumerate(nodes):
         command = command_template.format(
-            master_addr, master_port, node_rank,
+            master_addr, master_port, node_rank, len(nodes)
         )
         print(f"run command {command} on node {node}")
-        task = asyncio.create_task(run_command_on_node(node, command))
+        task = asyncio.create_task(run_command_on_node(node, command, label))
         tasks.append(task)
 
     # Wait for all tasks to complete
@@ -54,7 +55,7 @@ async def run_model_tasks(nodes):
 async def main():
     nodes = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.92"]
 
-    for nodes_num in range(2, 5):
+    for nodes_num in range(1, 2):
         await run_model_tasks(nodes[:nodes_num])
         await asyncio.sleep(5)
     
