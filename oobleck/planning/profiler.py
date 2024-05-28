@@ -267,7 +267,8 @@ def profile(
     directory = get_profile_path(args.model.model_tag, args.job.microbatch_size, world_size, num_workers_per_node)
     directory.mkdir(parents=True, exist_ok=True)
 
-    logger.info("Profiling model %s. rank %d, world_size %d, num_workers_per_node %d", args.model.model_name, rank, world_size, num_workers_per_node)
+    logger.info("Profiling model %s. rank %d, world_size %d, num_workers_per_node %d.", args.model.model_name, rank, world_size, num_workers_per_node)
+
 
     dataset = OobleckDataset(
         args.model.model_name, args.model.dataset_path, args.model.dataset_name
@@ -304,8 +305,9 @@ def profile(
     path = directory / f"mb{args.job.microbatch_size}.json"
     logger.info("Profiling model execution latency.")
     layer_execution_result = profiler.profile_execution_layers(args.job.microbatch_size)
+    # Hack: 4 GPUs per node
     # In each node, the first process writes a file.
-    if dist.get_rank() % num_workers_per_node == 0:
+    if dist.get_rank() % 4 == 0:
         with path.open(mode="w") as f:
             json.dump(layer_execution_result, f)
             f.flush()
@@ -313,7 +315,8 @@ def profile(
     path = directory / "allreduce_across_nodes.json"
     logger.info("Profiling cross-node allreduce latency.")
     allreduce_across_nodes = profiler.profile_allreduce_across_nodes()
-    if dist.get_rank() % num_workers_per_node == 0:
+    
+    if dist.get_rank() % 4 == 0:
         with path.open(mode="w") as f:
             json.dump(allreduce_across_nodes, f)
             f.flush()
@@ -321,14 +324,14 @@ def profile(
     path = directory / "allreduce_in_node.json"
     logger.info("Profiling in-node allreduce latency.")
     allreduce_in_node = profiler.profile_allreduce_in_node(num_workers_per_node)
-    if dist.get_rank() % num_workers_per_node == 0:
+    if dist.get_rank() % 4 == 0:
         with path.open(mode="w") as f:
             json.dump(allreduce_in_node, f)
             f.flush()
 
     # export configuration
     path = directory / "model_args.json"
-    if dist.get_rank() % num_workers_per_node == 0:
+    if dist.get_rank() % 4 == 0:
         with open(path, "w") as f:
             json.dump(args.model.model_args, f)
 

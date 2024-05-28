@@ -68,17 +68,17 @@ class OobleckMasterDaemon:
         log_path: Path,
     ):
         node_ip = args.dist.node_ips[node_index]
-
+        node_port = args.dist.node_ports[node_index]
         async with asyncssh.connect(
-            node_ip, args.dist.node_port, username=args.dist.username, known_hosts=None
+            node_ip, node_port, username=args.dist.username, known_hosts=None
         ) as conn:
             cmd = '/bin/bash -ic "conda run --no-capture-output -n oobleck '
             cmd += "python -m oobleck.elastic.agent "
             cmd += f"--master_ip {args.dist.master_ip} --master_port {args.dist.master_port} "
-            cmd += f'--job_id {job_id} --agent_index {agent_index}"'
+            cmd += f'--job_id {job_id} --agent_index {agent_index} --node_id {node_index}"'
             logger.info(f"Launching an agent on {node_ip}: {cmd}")
 
-            log_file_path = log_path / f"{node_ip}.out"
+            log_file_path = log_path / f"{node_ip}-{node_port}.out"
             async with aiofiles.open(
                 log_file_path, "w"
             ) as log_file, conn.create_process(
@@ -86,7 +86,7 @@ class OobleckMasterDaemon:
                 term_type="xterm",
             ) as process:
                 logger.info(
-                    f"Agent {node_ip} output will be written at {log_file_path}"
+                    f"Agent {node_ip}-{node_port} output will be written at {log_file_path}"
                 )
                 async for data in process.stdout:
                     await log_file.write(data)

@@ -9,7 +9,7 @@ TIMEOUT = 5
 
 @dataclass
 class DistributionInfo:
-    agent_ips: list[str]
+    agent_ip_ports: list[str]
     world_size: int
 
 

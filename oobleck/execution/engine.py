@@ -95,13 +95,14 @@ class ReconfigurationEngine:
         except (EOFError, ValueError):
             # Connection closed. Exit.
             pass
-
+    
+    # TODO: remove lost node ip and port
     def remove_lost_node_from_dist_info(self, lost_node_ip: str) -> list[int]:
         engine = self.engine
         assert (
             hasattr(engine, "_dist_info") and engine._dist_info is not None
         ), "Distributed is not initialized yet."
-        engine._dist_info.agent_ips.remove(lost_node_ip)
+        engine._dist_info.agent_ip_ports.remove(lost_node_ip)
         engine._dist_info.world_size -= engine._num_gpus_per_node
         return engine._rank_map.pop(lost_node_ip)
 
@@ -467,7 +468,7 @@ class OobleckEngine:
         num_nodes: int,
         num_gpus_per_node: int,
         pipe: connection.Connection,
-        my_ip: str,
+        my_ip_port: str,
         args: OobleckArguments,
     ):
         assert (
@@ -475,7 +476,7 @@ class OobleckEngine:
         ), "torch.distributed must not be initialized when initializing OobleckEngine."
         
         self._agent_pipe: connection.Connection = pipe
-        self._my_ip = my_ip
+        self._my_ip_port = my_ip_port
         self._args: OobleckArguments = args
         training_args = {
             "output_dir": f"/workspace/Oobleck/tmp/output/{args.model.model_name}-{args.model.model_tag}",
@@ -615,34 +616,36 @@ class OobleckEngine:
         # 检查self是否具有"_dist_info"的属性
         if not (hasattr(self, "_dist_info") and self._dist_info is not None):
             self._dist_info: DistributionInfo = self._agent_pipe.recv()
+            # A ip:port corresponding to a node.
+            # node -> [ranks]
             self._rank_map: dict[str, list[int]] = {
-                ip: list(
+                ip_port: list(
                     range(
                         i * self._num_gpus_per_node, (i + 1) * self._num_gpus_per_node
                     )
                 )
-                for i, ip in enumerate(self._dist_info.agent_ips)
+                for i, ip_port in enumerate(self._dist_info.agent_ip_ports)
             }
             logger.debug(f"regenerate rank_map {self._rank_map}")
         dist_info = self._dist_info
 
-        # my_ip: str = socket.gethostbyname(socket.gethostname())
         assert (
-            self._my_ip in dist_info.agent_ips
-        ), f"My IP {self._my_ip} is not in dist info {dist_info.agent_ips}."
+            self._my_ip_port in dist_info.agent_ip_ports
+        ), f"My IP {self._my_ip_port} is not in dist info {dist_info.agent_ip_ports}."
 
-        self._num_nodes = len(dist_info.agent_ips)
+        self._num_nodes = len(dist_info.agent_ip_ports)
         self._world_size = dist_info.world_size
         if self._args.dist.world_size == 0:
             logger.warn("not set world_size in yaml config")
         else:
             assert(self._args.dist.world_size == dist_info.world_size)
-        self._rank = self._rank_map[self._my_ip][self._local_rank]
+        self._rank = self._rank_map[self._my_ip_port][self._local_rank]
         logger.info(f"init pg: rank {self._rank}, world_size: {self._world_size}, rank_map: {self._rank_map}")
-        if next(iter(self._rank_map)) == self._my_ip and self._local_rank == 0:
+
+        if next(iter(self._rank_map)) == self._my_ip_port and self._local_rank == 0:
 
             store = torch.distributed.TCPStore(
-                host_name=self._my_ip,
+                host_name=self._my_ip_port.split(":")[0],
                 port=0,
                 world_size=dist_info.world_size,
                 is_master=True,
@@ -656,9 +659,9 @@ class OobleckEngine:
             logger.info("Waiting for a port information...")
             # wait for rank 0's port information
             port: int = self._agent_pipe.recv()
-            logger.info(f"Received torch master: {dist_info.agent_ips[0]}.{port}")
+            logger.info(f"Received torch master: {dist_info.agent_ip_ports[0]}.{port}")
             store = torch.distributed.TCPStore(
-                host_name=dist_info.agent_ips[0],
+                host_name=dist_info.agent_ip_ports[0].split(":")[0],
                 port=port,
                 world_size=dist_info.world_size,
                 is_master=False,
@@ -732,6 +735,7 @@ class OobleckEngine:
         self._dp_engine.do_allreduce()
         self._pipeline.execution.optimizer_step()
 
+    # TODO: reconfigure need ip and port
     def fake_stop_and_reconfigure(self, lost_ip: str):
         logger.info("in fake_stop_and_reconfigure")
         dist.barrier()

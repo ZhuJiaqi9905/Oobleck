@@ -52,18 +52,21 @@ class OobleckAgent:
        the agent queries a new distribution information from the master and forward it to workers.
     """
 
-    def __init__(self, master_ip: str, master_port: int, job_id: int, agent_index: int):
+    def __init__(self, master_ip: str, master_port: int, job_id: int, agent_index: int, node_index: int):
         self._master_ip = master_ip
         self._master_port = master_port
         self._job_id = job_id
         self._agent_index = agent_index
-
+        self._node_index = node_index
         self._args: OobleckArguments | None = None
         self._conn: tuple[asyncio.StreamReader, asyncio.StreamWriter] | None = None
         self._workers: list[Worker] = []
         self._response_callbacks: dict[message_util.RequestType, callable] = {}
         self._job_done: bool = False
-        self._my_ip = ""
+
+        # one node only has one agent
+        assert(self._agent_index == 0)
+        print(f"node_index: {node_index}")
 
     async def run(self):
         await self._connect_to_master(self._master_ip, self._master_port)
@@ -98,24 +101,16 @@ class OobleckAgent:
     def _run_profiler(self, args: OobleckArguments):
         ctx = multiprocessing.get_context("spawn")
         profiler_processes: list[multiprocessing.Process] = []
-
+       
         for index in range(args.dist.num_workers):
             # use CUDA_VISIBLE_DEVICES environment variable 
             os.environ["CUDA_VISIBLE_DEVICES"] = str(index)
-            my_ip = socket.gethostbyname(socket.gethostname())
+            
             master_ip = args.dist.node_ips[0]
             master_port = 23456
             world_size = len(args.dist.node_ips) * args.dist.num_workers
-            if args.dist.node_ips.count(my_ip) > 0:
-                rank = args.dist.node_ips.index(my_ip) * args.dist.num_workers + index
-            else:
-                ip_address = get_all_ip_addresses()
-                for ip in ip_address:
-                    if args.dist.node_ips.count(ip) > 0:
-                        my_ip = ip
-                        rank = args.dist.node_ips.index(my_ip) * args.dist.num_workers + index
-                        break 
-            logger.info(f"my_ip: {my_ip}")
+            
+            rank = self._node_index * args.dist.num_workers + index
             # each worker run profile() in a new process
             process = ctx.Process(
                 target=profile,
@@ -161,8 +156,12 @@ class OobleckAgent:
             )
             self._run_profiler(args)
 
+        assert(len(args.dist.node_ips) == len(args.dist.node_ports))
+        agent_ip_ports = []
+        for i in range(len(args.dist.node_ips)):
+            agent_ip_ports.append(f"{args.dist.node_ips[i]}:{args.dist.node_ports[i]}")
         dist_info = message_util.DistributionInfo(
-            agent_ips=args.dist.node_ips,
+            agent_ip_ports,
             world_size=len(args.dist.node_ips) * args.dist.num_workers,
         )
 
@@ -174,16 +173,15 @@ class OobleckAgent:
             self._agent_index * args.dist.num_workers,
             (self._agent_index + 1) * args.dist.num_workers,
         )
-        # If a worker has rank 0, it should forward its port to the master
-        my_ip: str = socket.gethostbyname(socket.gethostname())
-        if args.dist.node_ips.count(my_ip) <= 0:
-            ip_address = get_all_ip_addresses()
-            for ip in ip_address:
-                if args.dist.node_ips.count(ip) > 0:
-                    my_ip = ip
-                    break 
-        self._my_ip = my_ip
-        logger.info(f"in agent. my_ip {my_ip}, node_ips {args.dist.node_ips}")
+
+        my_ip_port = f"{args.dist.node_ips[self._node_index]}:{args.dist.node_ports[self._node_index]}"
+
+        node_ip_ports = []
+        for i in range(len(args.dist.node_ips)):
+            node_ip_ports.append(f"{args.dist.node_ips[i]}:{args.dist.node_ports[i]}")
+
+        logger.info(f"in agent. my_ip_port {my_ip_port}, node_ip_ports {node_ip_ports}")
+
         for gpu_index in gpu_indices:
             logger.info(f"Launching worker {gpu_index}...")
             # TODO: add all arguments. Arguments should be passed from the master
@@ -198,7 +196,7 @@ class OobleckAgent:
                     len(args.dist.node_ips),
                     args.dist.num_workers,
                     child_pipe,
-                    my_ip,
+                    node_ip_ports[self._node_index],
                     args,
                 ),
                 daemon=True,
@@ -214,7 +212,8 @@ class OobleckAgent:
         os.environ.pop("CUDA_VISIBLE_DEVICES")
 
 
-        if my_ip == args.dist.node_ips[0]:
+        # If a worker has rank 0, it should forward its port to the master
+        if self._node_index == 0:
             await self.forward_worker_port(self._workers[0].pipe)
         
 
@@ -262,6 +261,7 @@ class OobleckAgent:
                 self._conn[1], args, need_pickle=True, drain=True, close=False
             )
 
+    # TODO: reconfiguration need node_ip and port
     async def on_receive_reconfiguration(self, lost_node_ip: str):
         logger.debug(f"reconfiguration request received due to node failure: {lost_node_ip}")
 
@@ -278,6 +278,7 @@ class OobleckAgent:
             # Send notification to workers
             for worker in self._workers:
                 worker.pipe.send(lost_node_ip)
+            
             if self._my_ip == self._args.dist.node_ips[0]:
                 await self.forward_worker_port(self._workers[0].pipe)
             
@@ -345,6 +346,7 @@ if __name__ == "__main__":
     parser.add_argument("--master_port", type=int)
     parser.add_argument("--job_id", type=int)
     parser.add_argument("--agent_index", type=int)
+    parser.add_argument("--node_id", type=int)
 
     # os.environ["NCCL_DEBUG"] = "INFO"
     # os.environ["NCCL_SOCKET_IFNAME"] = "eno1"
@@ -355,6 +357,6 @@ if __name__ == "__main__":
     # os.environ["TORCH_DISTRIBUTED_DEBUG"] = "DETAIL"  # set to DETAIL for runtime logging.
     args = parser.parse_args()
     agent = OobleckAgent(
-        args.master_ip, args.master_port, args.job_id, args.agent_index
+        args.master_ip, args.master_port, args.job_id, args.agent_index, args.node_id
     )
     asyncio.run(agent.run())
