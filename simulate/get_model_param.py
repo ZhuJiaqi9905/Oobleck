@@ -234,8 +234,8 @@ def get_model_layers(model_tag):
         else:
             raise Exception(f"No model config for model: {model_tag}")
         model = AutoModelForPreTraining.from_config(model_config, torch_dtype=torch.float16)
-        sample_inputs = 
-        trace_input_names = list(sample_inputs.keys())
+        # hack
+        trace_input_names = ['input_ids', 'attention_mask', 'labels']
         split_points = get_split_points(model_config)
         layers = shard_model(model, trace_input_names, split_points)
         return layers
