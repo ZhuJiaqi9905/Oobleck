@@ -35,13 +35,14 @@ async def run_model_tasks(nodes):
     print(f"{len(nodes)} nodes test begin")
     master_addr = "172.21.0.42"
     master_port = 10078
-    command_template = '/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/all_reduce_test.py --master-ip {}  --master-port {} --node-rank {} --gpus-per-node 4 --num-nodes {}"'
+    command_template = '/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/all_reduce_test.py --master-ip {}  --master-port {} --node-rank {} --gpus-per-node {} --num-nodes {}"'
     # Create tasks for running commands on nodes
     tasks = []
-    label = len(nodes)
+    gpus_per_node = 1
+    label = f"{len(nodes)}-{gpus_per_node}"
     for node_rank, node in enumerate(nodes):
         command = command_template.format(
-            master_addr, master_port, node_rank, len(nodes)
+            master_addr, master_port, node_rank, gpus_per_node, len(nodes)
         )
         print(f"run command {command} on node {node}")
         task = asyncio.create_task(run_command_on_node(node, command, label))

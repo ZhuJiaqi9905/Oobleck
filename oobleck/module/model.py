@@ -89,7 +89,7 @@ class OobleckModel:
         
         self.sample_inputs = sample_inputs
         self.trace_input_names = list(sample_inputs.keys())
-
+        print(f"trace_input_names: {self.trace_input_names}")
         split_points = get_split_points(model_config)
         self.layers = shard_model(model, self.trace_input_names, split_points)
         self.model_name = model_name
