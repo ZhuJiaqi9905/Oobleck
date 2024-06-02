@@ -207,9 +207,9 @@ def shard_model(
     return module_list
 
 model_configs = {
-    "gpt3_1_3B": {"microbatch": 4, "world_sizes": list(range(9, 17))},
-    "gpt3_2_7B": {"microbatch": 4, "world_sizes": list(range(10, 17))},
-    # "gpt3_350M": {"microbatch": 8, "world_sizes": list(range(8, 16))},
+    "gpt3_1_3B": {"microbatch": 4, "world_sizes": list(range(8, 9))},
+    "gpt3_2_7B": {"microbatch": 4, "world_sizes": list(range(8, 10))},
+    "gpt3_350M": {"microbatch": 8, "world_sizes": list(range(8, 9))},
 }
 automodel_dict = {
     "gpt2": AutoModelForPreTraining,
@@ -253,12 +253,13 @@ def get_stage_parameters(file_path: str, model_tag):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
     layers = get_model_layers(model_tag)
+    print("get model layers")
     for pipeline in pipelines:
         num_layers_per_stage = pipeline["num_layers_per_stage"]
+        start_idx = 0
         for num_layers in num_layers_per_stage:
-            end_idx += num_layers
             get_parameters(layers[start_idx: start_idx + num_layers])
-            start_idx = 0
+            start_idx += num_layers 
 
 def get_parameters(layers):
     num_params = sum(
@@ -274,4 +275,5 @@ if __name__ == "__main__":
         for world_size in config["world_sizes"]:
             label = f"{model}-{microbatch}-{world_size}"
             layer_file = f"/workspace/Oobleck/important_data/pipelines/{label}.json"
+            print(f"layer_file: {layer_file}")
             get_stage_parameters(layer_file, model)
