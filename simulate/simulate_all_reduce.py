@@ -56,7 +56,7 @@ async def run_model_tasks(nodes):
 async def main():
     nodes = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.92"]
 
-    for nodes_num in range(1, 2):
+    for nodes_num in range(2, 5):
         await run_model_tasks(nodes[:nodes_num])
         await asyncio.sleep(5)
     
