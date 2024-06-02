@@ -307,7 +307,8 @@ def profile(
     layer_execution_result = profiler.profile_execution_layers(args.job.microbatch_size)
     # Hack: 4 GPUs per node
     # In each node, the first process writes a file.
-    if dist.get_rank() % 4 == 0:
+    need_write = args.dist.node_ports[rank] == 2220
+    if need_write:
         with path.open(mode="w") as f:
             json.dump(layer_execution_result, f)
             f.flush()
@@ -316,7 +317,7 @@ def profile(
     logger.info("Profiling cross-node allreduce latency.")
     allreduce_across_nodes = profiler.profile_allreduce_across_nodes()
     
-    if dist.get_rank() % 4 == 0:
+    if need_write:
         with path.open(mode="w") as f:
             json.dump(allreduce_across_nodes, f)
             f.flush()
@@ -324,14 +325,14 @@ def profile(
     path = directory / "allreduce_in_node.json"
     logger.info("Profiling in-node allreduce latency.")
     allreduce_in_node = profiler.profile_allreduce_in_node(num_workers_per_node)
-    if dist.get_rank() % 4 == 0:
+    if need_write:
         with path.open(mode="w") as f:
             json.dump(allreduce_in_node, f)
             f.flush()
 
     # export configuration
     path = directory / "model_args.json"
-    if dist.get_rank() % 4 == 0:
+    if need_write:
         with open(path, "w") as f:
             json.dump(args.model.model_args, f)
 

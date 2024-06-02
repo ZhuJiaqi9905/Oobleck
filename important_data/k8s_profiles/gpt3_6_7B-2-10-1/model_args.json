@@ -1,0 +1,1 @@
+{"n_embd": 4096, "n_head": 32, "n_positions": 2048, "num_hidden_layers": 32, "use_cache": false, "remove_unused_columns": false, "return_dict": false}

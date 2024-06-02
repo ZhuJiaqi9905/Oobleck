@@ -1,0 +1,1 @@
+{"hidden_size": 1024, "n_positions": 2048, "num_attention_heads": 16, "num_hidden_layers": 24, "use_cache": false, "remove_unused_columns": false, "return_dict": false}
