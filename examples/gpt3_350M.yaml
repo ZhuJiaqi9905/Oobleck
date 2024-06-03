@@ -1,7 +1,7 @@
 dist:
   num_agents_per_node: 1
   num_workers: 1
-  world_size: 10
+  world_size: 16
   master_ip: 10.16.0.185
   master_port: 22
   node_ips: [10.16.0.181, 10.16.0.182]

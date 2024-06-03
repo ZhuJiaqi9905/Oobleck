@@ -149,10 +149,10 @@ class OobleckAgent:
                 raise RuntimeError("Model arguments are inconsistent")
 
             logger.info(f"Job arguments: {args}")
-        except Exception:
+        except Exception as e:
             # Run profiler
             logger.warning(
-                f"Profile data for model {args.model.model_name} not found. Launching profiler..."
+                f"Profile data for model {args.model.model_name} not found. Exception {e} Launching profiler..."
             )
             self._run_profiler(args)
 

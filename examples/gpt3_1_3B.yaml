@@ -7,7 +7,7 @@ dist:
   node_ips: [10.16.0.181, 10.16.0.182]
 job:
   fault_threshold: 1
-  microbatch_size: 8
+  microbatch_size: 4
   global_microbatch_size: 1024
   steps: 20
 

@@ -731,10 +731,12 @@ class OobleckEngine:
 
     @measure_time("step")
     def _train_step(self):
+        begin = time.time()
         self._pipeline.train()
         self._dp_engine.do_allreduce()
         self._pipeline.execution.optimizer_step()
-
+        end = time.time()
+        print(f"train step time: {end - begin}s")
     # TODO: reconfigure need ip and port
     def fake_stop_and_reconfigure(self, lost_ip: str):
         logger.info("in fake_stop_and_reconfigure")
@@ -776,7 +778,9 @@ class OobleckEngine:
 
         assert self._hf_training_args.max_steps > 0
         for step in range(self._hf_training_args.max_steps):
+            print(f"step: {step}")
             try:
+                print(f"step in try: {step}")
                 self._train_step()
                 # dist.barrier()
                 # torch.cuda.synchronize()
@@ -787,6 +791,7 @@ class OobleckEngine:
                 #     self.fake_stop_and_reconfigure("10.20.23.91")
 
             except StopIteration:
+                print(f"step in exception: {step}")
                 step_timer: SynchronizedWallClockTimer.Timer = sync_timer("step")
                 step_timer.reset()
                 self._pipeline.reset_iterator()
