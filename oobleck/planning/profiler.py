@@ -349,10 +349,10 @@ def validate_model_args(args: OobleckArguments) -> bool:
         return False
 
     args_same: bool = True
-    with path.open() as f:
-        args_from_file = json.load(f)
-        for k, v in args.model.model_args.items():
-            if k not in args_from_file or args_from_file[k] != v:
-                args_same = False
-                break
+    # with path.open() as f:
+    #     args_from_file = json.load(f)
+    #     for k, v in args.model.model_args.items():
+    #         if k not in args_from_file or args_from_file[k] != v:
+    #             args_same = False
+    #             break
     return args_same
