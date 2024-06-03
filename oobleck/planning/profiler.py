@@ -342,7 +342,7 @@ def profile(
 
 
 def validate_model_args(args: OobleckArguments) -> bool:
-    directory = get_profile_path(args.model.model_name, args.model.model_tag, args.dist.world_size, args.dist.num_workers)
+    directory = get_profile_path(args.model.model_tag, args.job.microbatch_size, args.dist.world_size, args.dist.num_workers)
     path = directory / "model_args.json"
 
     if not directory.exists() or not path.exists():
