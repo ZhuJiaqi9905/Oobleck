@@ -41,7 +41,7 @@ def run_with_timeout(command, timeout):
         timer.cancel()
 
 
-# 生成所有参数组合
+# 生成所有参数组合的pipelines
 # for model, config in model_configs.items():
 #     microbatch = config["microbatch"]
 #     for world_size in config["world_sizes"]:
@@ -49,6 +49,7 @@ def run_with_timeout(command, timeout):
 #         print(f"Running command: {command}")
 #         run_with_timeout(command, timeout_seconds)
 
+# 生成所有参数组合的lost nodes
 for model, config in model_configs.items():
     microbatch = config["microbatch"]
     for world_size in config["world_sizes"]:

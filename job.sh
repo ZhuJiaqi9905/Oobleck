@@ -1,6 +1,15 @@
 #!/bin/bash
 
-world_size=10
+if [$# -ne 3]; then
+    echo "need 3 args. <model> <world_size> <mbs>"
+    exit
+fi
+
+model=${1}
+world_size=${2}
+mbs=${3}
+
+
 if [ "$world_size" -eq 8 ]; then
     nodes="10.20.23.42 10.20.23.42 10.20.23.46 10.20.23.46 10.20.23.90 10.20.23.90 10.20.23.92 10.20.23.92"
     node_ports="2220 2221 2220 2221 2220 2221 2220 2221"
@@ -31,10 +40,14 @@ elif [ ${world_size} -eq 16 ]; then
 fi
 
 
+config_file=./examples/tmp-${model}-${world_size}-${mbs}.yaml
+
+world_size=${world_size} mbs=${mbs}  envsubst < ./examples/${model}.template.yaml > ${config_file}
 
 python -m oobleck.run \
---config_path ./examples/gpt3_350M.yaml \
+--config_path ${config_file} \
 --node_ips ${nodes} \
 --node_ports ${node_ports} \
 --master_ip 10.20.23.42 \
 --master_port 60000
+
