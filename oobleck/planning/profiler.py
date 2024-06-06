@@ -271,7 +271,7 @@ def profile(
 
 
     dataset = OobleckDataset(
-        args.model.model_name, args.model.dataset_path, args.model.dataset_name
+        args.model.model_name, args.model.dataset_path, args.model.dataset_name, args.model.model_args["n_positions"]
     )
     logger.info("Dataset loaded")
     model = OobleckModel(
