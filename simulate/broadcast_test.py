@@ -17,9 +17,9 @@ class Layer:
         self._sizes = sizes
         self._ranks = ranks
         self._names = names
-        self._gradients = []
+        # self._gradients = []
         self._parameters = []
-        self._optimizer_gradients = []
+        self._optimizer_parameters = []
         self._optimizer_momentums = []
         self._optimizer_variants = []
 
@@ -31,8 +31,8 @@ class Layer:
             return
         for size in self._sizes:
             self._parameters.append(torch.randn(size, dtype=torch.float16).cuda())
-            self._gradients.append(torch.randn(size, dtype=torch.float16).cuda())
-            self._optimizer_gradients.append(
+            # self._gradients.append(torch.randn(size, dtype=torch.float16).cuda())
+            self._optimizer_parameters.append(
                 torch.randn(size, dtype=torch.float32).cuda()
             )
             self._optimizer_momentums.append(
@@ -48,10 +48,10 @@ class Layer:
         
         for param in self._parameters:
             dist.broadcast(param, src, pg)
-        for grad in self._gradients:
-            dist.broadcast(grad, src, pg)
-        for op_grad in self._optimizer_gradients:
-            dist.broadcast(op_grad, src, pg)
+        # for grad in self._gradients:
+        #     dist.broadcast(grad, src, pg)
+        for op_param in self._optimizer_parameters:
+            dist.broadcast(op_param, src, pg)
         for op_mom in self._optimizer_momentums:
             dist.broadcast(op_mom, src, pg)
         for op_var in self._optimizer_variants:
