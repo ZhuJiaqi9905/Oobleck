@@ -638,7 +638,7 @@ class OobleckPipeline:
         self.communication: PipelineCommunication | None = None
 
         my_rank = dist.get_rank()
-        print(f"rank_grid: {self.rank_grid}")
+        print(f"my_rank: {my_rank}, rank_grid: {self.rank_grid}")
 
         for shard_id in range(len(self.rank_grid[0])):
             print(f"shard_id: {shard_id}")
