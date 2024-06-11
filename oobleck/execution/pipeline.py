@@ -67,7 +67,6 @@ class OobleckPipelineSchedule(schedule.TrainSchedule):
 
             # First/last stage loads
             if self.stage_id == 0 or self.stage_id == self.stages - 1:
-                print(f"is_forward: {is_forward}, _valid_micro_batch: {self._valid_micro_batch(micro_batch_id)}")
                 if is_forward and self._valid_micro_batch(micro_batch_id):
                     cmds.append(schedule.LoadMicroBatch(curr_buffer))
 
@@ -145,8 +144,6 @@ class PipelineExecution:
             data = data.clone().detach().to(self.pipeline.device)
             data.requires_grad = data.is_floating_point()
             return data
-        else:
-            print(f"_prepare_input. type of data is {type(data)}")
         return data
 
     # https://github.com/huggingface/transformers/blob/v4.26.1/src/transformers/trainer.py#L2472
@@ -166,9 +163,6 @@ class PipelineExecution:
 
         if self.pipeline.is_first_stage():
             batch = next(self._data_iterator)
-            print(f"the type of batch: {type(batch)}")
-            if isinstance(batch, dict):
-                print(f"batch is {batch}")
             self.pipeline.pipe_buffers["inputs"][buffer_id] = self._prepare_inputs(
                 batch
             )
@@ -500,7 +494,7 @@ class OobleckPipeline:
         # print(f"this pipeline layer index -> list of ranks:{self.rank_grid}")
 
     def train(self):
-        print(f"pipelineid: {self._pipeline_id}, stage_id: {self.train_schedule.stage_id}, stages: {self.train_schedule.stages}, is_first_stage: {self.is_first_stage()}")
+        # print(f"pipelineid: {self._pipeline_id}, stage_id: {self.train_schedule.stage_id}, stages: {self.train_schedule.stages}, is_first_stage: {self.is_first_stage()}")
         # A map of PipeInstruction types to methods. Each method will be executed with the
         # kwargs provided to the PipeInstruction from the scheduler.
         instruction_map = {
@@ -638,14 +632,14 @@ class OobleckPipeline:
         self.communication: PipelineCommunication | None = None
 
         my_rank = dist.get_rank()
-        print(f"my_rank: {my_rank}, rank_grid: {self.rank_grid}")
+        # print(f"my_rank: {my_rank}, rank_grid: {self.rank_grid}")
 
         for shard_id in range(len(self.rank_grid[0])):
-            print(f"shard_id: {shard_id}")
+            # print(f"shard_id: {shard_id}")
             ranks: list[int] = [
                 ranks_per_layer[shard_id] for ranks_per_layer in self.rank_grid.values()
             ]
-            print(f"ranks: {ranks}")
+            # print(f"ranks: {ranks}")
             # Remove potential duplicates
             pg = dist.new_group(list(set(ranks)))
             # 持有同一个shrad_id的不同layer的rank组成的pg
@@ -655,9 +649,9 @@ class OobleckPipeline:
                 unique_ranks = list(set(ranks))
                 unique_ranks.sort()
                 rank_index = unique_ranks.index(my_rank)
-                print(f"unique_ranks: {unique_ranks}. rank_index: {rank_index}")
+                # print(f"unique_ranks: {unique_ranks}. rank_index: {rank_index}")
 
-                print(f"prev_rank: {unique_ranks[rank_index - 1] if rank_index > 0 else None}. next_rank: {unique_ranks[rank_index + 1] if rank_index < len(unique_ranks) - 1 else None}")
+                # print(f"prev_rank: {unique_ranks[rank_index - 1] if rank_index > 0 else None}. next_rank: {unique_ranks[rank_index + 1] if rank_index < len(unique_ranks) - 1 else None}")
 
                 self.communication = PipelineCommunication(
                     pipeline=self,
