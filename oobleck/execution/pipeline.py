@@ -638,18 +638,26 @@ class OobleckPipeline:
         self.communication: PipelineCommunication | None = None
 
         my_rank = dist.get_rank()
+        print(f"rank_grid: {self.rank_grid}")
+
         for shard_id in range(len(self.rank_grid[0])):
+            print(f"shard_id: {shard_id}")
             ranks: list[int] = [
                 ranks_per_layer[shard_id] for ranks_per_layer in self.rank_grid.values()
             ]
+            print(f"ranks: {ranks}")
             # Remove potential duplicates
             pg = dist.new_group(list(set(ranks)))
             # 持有同一个shrad_id的不同layer的rank组成的pg
             self._per_sharded_pp_pgs[shard_id] = pg
-            # print(f"ranks: {}")
+
             if my_rank in ranks:
                 unique_ranks = list(set(ranks))
                 rank_index = unique_ranks.index(my_rank)
+                print(f"unique_ranks: {unique_ranks}. rank_index: {rank_index}")
+
+                print(f"prev_rank: {unique_ranks[rank_index - 1] if rank_index > 0 else None}. next_rank: {unique_ranks[rank_index + 1] if rank_index < len(unique_ranks) - 1 else None}")
+
                 self.communication = PipelineCommunication(
                     pipeline=self,
                     process_group=pg,
