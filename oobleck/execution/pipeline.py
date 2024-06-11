@@ -653,6 +653,7 @@ class OobleckPipeline:
 
             if my_rank in ranks:
                 unique_ranks = list(set(ranks))
+                unique_ranks.sort()
                 rank_index = unique_ranks.index(my_rank)
                 print(f"unique_ranks: {unique_ranks}. rank_index: {rank_index}")
 
