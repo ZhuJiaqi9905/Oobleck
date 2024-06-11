@@ -67,6 +67,7 @@ class OobleckPipelineSchedule(schedule.TrainSchedule):
 
             # First/last stage loads
             if self.stage_id == 0 or self.stage_id == self.stages - 1:
+                print(f"is_forward: {is_forward}, _valid_micro_batch: {self._valid_micro_batch(micro_batch_id)}")
                 if is_forward and self._valid_micro_batch(micro_batch_id):
                     cmds.append(schedule.LoadMicroBatch(curr_buffer))
 
@@ -483,6 +484,7 @@ class OobleckPipeline:
         self._training_args = training_args
         self.device = torch.device("cuda")
 
+
         if is_simulated:
             self.my_pipeline = bool(pipeline_id == 0)
         else:
@@ -498,6 +500,7 @@ class OobleckPipeline:
         # print(f"this pipeline layer index -> list of ranks:{self.rank_grid}")
 
     def train(self):
+        print(f"pipelineid: {self._pipeline_id}, stage_id: {self.train_schedule.stage_id}, stages: {self.train_schedule.stages}, is_first_stage: {self.is_first_stage()}")
         # A map of PipeInstruction types to methods. Each method will be executed with the
         # kwargs provided to the PipeInstruction from the scheduler.
         instruction_map = {
