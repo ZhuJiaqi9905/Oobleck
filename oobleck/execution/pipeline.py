@@ -144,6 +144,8 @@ class PipelineExecution:
             data = data.clone().detach().to(self.pipeline.device)
             data.requires_grad = data.is_floating_point()
             return data
+        else:
+            print(f"_prepare_input. type of data is {type(data)}")
         return data
 
     # https://github.com/huggingface/transformers/blob/v4.26.1/src/transformers/trainer.py#L2472
@@ -163,6 +165,9 @@ class PipelineExecution:
 
         if self.pipeline.is_first_stage():
             batch = next(self._data_iterator)
+            print(f"the type of batch: {type(batch)}")
+            if isinstance(batch, dict):
+                print(f"batch is {batch}")
             self.pipeline.pipe_buffers["inputs"][buffer_id] = self._prepare_inputs(
                 batch
             )
