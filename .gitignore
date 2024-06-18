@@ -13,9 +13,10 @@ tmp/
 .idea
 .DS_Store
 .apex
-data/
 # due to using tox and pytest
 .tox
 .cache
 
 *.lock
+.hypothesis
+data/dataset
