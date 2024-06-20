@@ -17,22 +17,18 @@ class Layer:
         self._sizes = sizes
         self._ranks = ranks
         self._names = names
-        self._gradients = []
         self._parameters = []
-        self._optimizer_gradients = []
+        self._optimizer_parameters = []
         self._optimizer_momentums = []
         self._optimizer_variants = []
 
-    # def init_process_group(self):
-    #     self._pg = dist.new_group(self._ranks)
 
     def init_tensors(self, global_rank: int):
         if global_rank not in self._ranks:
             return
         for size in self._sizes:
             self._parameters.append(torch.randn(size, dtype=torch.float16).cuda())
-            self._gradients.append(torch.randn(size, dtype=torch.float16).cuda())
-            self._optimizer_gradients.append(
+            self._optimizer_parameters.append(
                 torch.randn(size, dtype=torch.float32).cuda()
             )
             self._optimizer_momentums.append(
@@ -45,20 +41,18 @@ class Layer:
     def broadcast(self, pgs):
         src = self._ranks[0]
         pg = pgs[tuple(sorted(self._ranks))]
-        
+
         for param in self._parameters:
             dist.broadcast(param, src, pg)
-        for grad in self._gradients:
-            dist.broadcast(grad, src, pg)
-        for op_grad in self._optimizer_gradients:
-            dist.broadcast(op_grad, src, pg)
+        for op_param in self._optimizer_parameters:
+            dist.broadcast(op_param, src, pg)
         for op_mom in self._optimizer_momentums:
             dist.broadcast(op_mom, src, pg)
         for op_var in self._optimizer_variants:
             dist.broadcast(op_var, src, pg)
 
 
-def parse_layers(file_path) -> list[Layer] | None:
+def parse_layer_file(file_path) -> tuple[list[Layer], int] | None:
     try:
         with open(file_path, "r", encoding="utf-8") as file:
             # 读取并解析JSON文件
@@ -67,7 +61,7 @@ def parse_layers(file_path) -> list[Layer] | None:
             layers = []
             for l in data_layers:
                 layers.append(Layer(l["sizes"], l["ranks"], l["names"]))
-            return layers
+            return (layers, int(data["world_size"]))
     except FileNotFoundError:
         print(f"Error: The file {file_path} was not found.")
     except json.JSONDecodeError:
@@ -87,9 +81,13 @@ def test_broadcast(global_rank: int, layers: Sequence[Layer], pgs):
     return (end - start) * 1000
 
 
-def run(local_rank, global_rank, layers: Sequence[Layer]):
-    warmup_times = 0
-    repeat_times = 1
+def run(
+    local_rank: int,
+    global_rank: int,
+    warmup_times: int,
+    repeat_times: int,
+    layers: Sequence[Layer],
+):
     torch.cuda.set_device(local_rank)
     # init tensors
     for layer in layers:
@@ -101,7 +99,7 @@ def run(local_rank, global_rank, layers: Sequence[Layer]):
     unique_ranks = {tuple(sorted(layer._ranks)) for layer in layers}
     for ranks in unique_ranks:
         pgs[ranks] = dist.new_group(list(ranks))
-        print(f"new pg: {ranks}") 
+        print(f"new pg: {ranks}")
     print("init pgs success")
 
     for _ in range(warmup_times):
@@ -122,9 +120,14 @@ def init_process(
     world_size: int,
     master_ip: str,
     master_port: str,
+    warmup_times: int,
+    repeat_times: int,
     layers: Sequence[Layer],
     fn,
 ):
+    if global_rank >= world_size:
+        return
+
     init_method = "tcp://"
     init_method += master_ip + ":" + master_port
 
@@ -136,7 +139,7 @@ def init_process(
         timeout=timedelta(minutes=3),
     )
     print("init process group success")
-    fn(local_rank, global_rank, layers)
+    fn(local_rank, global_rank, warmup_times, repeat_times, layers)
 
 
 if __name__ == "__main__":
@@ -145,24 +148,24 @@ if __name__ == "__main__":
         "--layer-file", type=str, help="The path to the JSON file of layer"
     )
     parser.add_argument("--gpus-per-node", type=int)
-    parser.add_argument("--num-nodes", type=int)
     parser.add_argument("--node-rank", type=int)
     parser.add_argument("--master-ip", type=str)
     parser.add_argument("--master-port", type=str)
+    parser.add_argument("--warmup-times", type=int)
+    parser.add_argument("--repeat-times", type=int)
 
     args = parser.parse_args()
     print(args.layer_file)
-    layers = parse_layers(args.layer_file)
+    layers, world_size = parse_layer_file(args.layer_file)
     if not layers:
         print("parse json error")
         exit()
     print("parse layers success")
     gpus_per_node = args.gpus_per_node
-    num_nodes = args.num_nodes
     node_rank = args.node_rank
 
     multiproc.set_start_method("spawn")
-    world_size: int = gpus_per_node * num_nodes
+
     processes = []
     for local_rank in range(gpus_per_node):
         global_rank = gpus_per_node * node_rank + local_rank
@@ -174,6 +177,8 @@ if __name__ == "__main__":
                 world_size,
                 args.master_ip,
                 args.master_port,
+                args.warmup_times,
+                args.repeat_times,
                 layers,
                 run,
             ),
