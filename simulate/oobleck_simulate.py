@@ -24,6 +24,7 @@ import argparse
 import json
 import random
 logger = LoggerFactory.create_logger("oobleck_engine", logging.DEBUG)
+CUDA_MEMORY = None
 
 
 class SimulatorEngine:
@@ -99,7 +100,7 @@ class SimulatorEngine:
             math.ceil(
                 total_memory_consumption
                 / (
-                    torch.cuda.get_device_properties("cuda:0").total_memory
+                    CUDA_MEMORY
                     * self._num_gpus_per_node
                 )
             ),
@@ -186,7 +187,7 @@ class SimulatorEngine:
             pipelines.append(pipeline)
         return pipelines
 
-def simulate_lost(model: str, microbatch: int, world_size: int, lost_nodes: int): 
+def simulate_lost(model: str, microbatch: int, world_size: int, lost_nodes: int, out_dir: str): 
     if model == "gpt3_2_7B":
         config_path = "/workspace/Oobleck/examples/gpt3_2_7B.yaml"
     elif model == "gpt3_1_3B":
@@ -202,28 +203,54 @@ def simulate_lost(model: str, microbatch: int, world_size: int, lost_nodes: int)
     args = OobleckArguments.load_yaml(config_path)
     engine = SimulatorEngine(world_size, 1, args, microbatch, world_size)
     pipelines = engine.get_pipelines()
-    assert(len(pipelines) > lost_nodes)
 
+    # 模拟要丢失的nodes
+    assert(len(pipelines) > 1)
+    can_lost_pipeline_stages = sum([len(pipeline["num_layers_per_stage"]) for pipeline in pipelines[: -1]])
+    assert(can_lost_pipeline_stages >= lost_nodes)
+
+    ignore_Embedding = True
+    if lost_nodes > can_lost_pipeline_stages - 2 * (len(pipelines) - 1):
+        ignore_Embedding = False
+
+    
     lost_ranks:list[int] = []
     
-    for i in range(lost_nodes):
-        pipeline_stages = pipelines[i]["num_layers_per_stage"]
-        if len(pipeline_stages) > 2:
-            lost_stage_id = random.randint(1, len(pipeline_stages) - 2)
+    pipeline_id = 0
+    # 已知：每个rank只能有一个pipeline stage
+    while len(lost_ranks) < lost_nodes:
+        pipeline_stages = pipelines[pipeline_id]["num_layers_per_stage"]
+        if ignore_Embedding and len(pipeline_stages) > 1:
+            lost_stage_id = 1
         else:
             lost_stage_id = 0
-        lost_layer_id = sum(pipeline_stages[:lost_stage_id])
-        print(f"lost_stage_id: {lost_stage_id}, lost_layer_id: {lost_layer_id}")
-        lost_ranks.append(pipelines[i]["layers"][lost_layer_id][0])
 
+        # 尝试找到一个可以丢失的rank
+        while True:
+            if lost_stage_id == len(pipeline_stages):
+                break
+            lost_layer_id = sum(pipeline_stages[:lost_stage_id])
+            # print(f"lost_stage_id: {lost_stage_id}, lost_layer_id: {lost_layer_id}")
+            lost_rank = pipelines[pipeline_id]["layers"][lost_layer_id][0]
+            if lost_rank in lost_ranks:
+                lost_stage_id += 1
+            else:
+                lost_ranks.append(lost_rank)
+                print(f"lost_rank: {lost_rank}. lost_pipeline_id: {pipeline_id}, lost_stage_id: {lost_stage_id}, lost_layer_id: {lost_layer_id}")
+                break
+        pipeline_id = (pipeline_id + 1) % (len(pipelines) - 1) 
+    lost_ranks.sort()
     print(f"lost ranks: {lost_ranks}")
+
+
     reconfigure_engine = ReconfigurationEngine(engine, engine._pipelines, is_simulated=True)
     reconfigure_engine.on_reconfigure(lost_ranks)
     print(f"after reconfigure. old_grid_ranks: {reconfigure_engine._record_old_rank_grids}, new_grid_ranks: {reconfigure_engine._record_new_rank_grids}")
     result = get_reconfigure_layers(engine, reconfigure_engine._record_old_rank_grids, reconfigure_engine._record_new_rank_grids, lost_ranks)
-    # with open(f'/workspace/Oobleck/tmp/lost/{model}-{microbatch}-{world_size}.json', 'w', encoding='utf-8') as f:
-    #     json.dump(result,f)
-    print(result)
+    result["world_size"] = world_size
+    with open(f'{out_dir}/{model}-{world_size}-{microbatch}-{lost_nodes}.json', 'w', encoding='utf-8') as f:
+        json.dump(result,f)
+    # print(result)
 
 
 def get_reconfigure_layers(engine: SimulatorEngine, old_rank_grids: Sequence[Mapping[int, Sequence[int]]], new_rank_grids: Sequence[Mapping[int, Sequence[int]]], lost_ranks: list[int]):
@@ -267,17 +294,17 @@ def get_reconfigure_layers(engine: SimulatorEngine, old_rank_grids: Sequence[Map
 
     print(f"original reconfigure_layers: {reconfigure_layers}")
     # map candidiate ranks to new serial numbers
-    candidate_ranks = {rank for ranks in reconfigure_layers.values() for rank in ranks}
-    rank_map:dict[int, int] = {}
-    new_rank_id = 0
-    for candidate_rank in candidate_ranks:
-        rank_map[candidate_rank] = new_rank_id
-        new_rank_id += 1
-    for ranks in reconfigure_layers.values():
-        for i in range(len(ranks)):
-            ranks[i] = rank_map[ranks[i]]
+    # candidate_ranks = {rank for ranks in reconfigure_layers.values() for rank in ranks}
+    # rank_map:dict[int, int] = {}
+    # new_rank_id = 0
+    # for candidate_rank in candidate_ranks:
+    #     rank_map[candidate_rank] = new_rank_id
+    #     new_rank_id += 1
+    # for ranks in reconfigure_layers.values():
+    #     for i in range(len(ranks)):
+    #         ranks[i] = rank_map[ranks[i]]
 
-    print(f"reconfigure_layers: {reconfigure_layers}")
+    # print(f"reconfigure_layers: {reconfigure_layers}")
     result = []
     for layer_id, ranks in  reconfigure_layers.items():
         sizes = []
@@ -289,7 +316,7 @@ def get_reconfigure_layers(engine: SimulatorEngine, old_rank_grids: Sequence[Map
             p += param.numel()
         print(f"parameters: {p}")
         result.append({"sizes": sizes, "ranks": ranks, "names": names})
-    return {"world_size": len(candidate_ranks), "layers": result}
+    return {"layers": result}
 
 def simulate_pipelines(model: str, microbatch: int, world_size: int):
     if model == "gpt3_2_7B":
@@ -319,11 +346,15 @@ if __name__ == "__main__":
     parser.add_argument('--microbatch', type=int, help='microbatch size')
     parser.add_argument('--worldsize', type=int, help='world size')
     parser.add_argument('--lost-nodes', type=int, default=0, help='The number of nodes want to lost')
+    parser.add_argument('--out-dir', type=str, help='output dir of result')
+    parser.add_argument('--cuda-memory', type=int)
     args = parser.parse_args()
+
+    CUDA_MEMORY = args.cuda_memory
     if args.lost_nodes == 0:
         simulate_pipelines(args.model, args.microbatch, args.worldsize)
     else:
-        simulate_lost(args.model, args.microbatch, args.worldsize, args.lost_nodes)
+        simulate_lost(args.model, args.microbatch, args.worldsize, args.lost_nodes, args.out_dir)
 
 
 

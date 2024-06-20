@@ -28,4 +28,5 @@
 - `install_oobleck.sh`。在容器中运行，给其他的容器安装oobleck。
     - `local_install_oobleck.sh`。被`install_oobleck.sh`调用。
 - `run_exps.py`。在容器中运行，跑实验。
+- `si`
 - `simulate_broadcast.py`。在容器中运行，根据丢失的layer信息计算传输时间。
