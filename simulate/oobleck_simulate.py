@@ -160,6 +160,7 @@ class SimulatorEngine:
             step=0,
         )
         self.num_microbatches = copy.deepcopy(execution_plan.num_microbatches)
+        # rank_grids: layer -> [ranks]
         self.old_rank_grids =  [
             copy.deepcopy(pipeline.rank_grid) for pipeline in self._pipelines
         ]

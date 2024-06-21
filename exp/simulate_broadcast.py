@@ -83,6 +83,7 @@ async def run_model_tasks(world_size: int, layer_file: str, prefix: str):
             command = COMMAND_TEMPLATE.format(node_rank, layer_file)
             node_rank += 1
             task = asyncio.create_task(run_command_on_node(ip, port, command, prefix))
+            tasks.append(task)
     # Wait for all tasks to complete
     await asyncio.gather(*tasks)
     print(f"{layer_file} test completed.")
