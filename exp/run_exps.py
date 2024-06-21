@@ -3,23 +3,20 @@ import threading
 import time
 import subprocess
 
-model_configs = {
-    "gpt3_1_3B": {"world_sizes": list(range(8, 17))},
-    "gpt3_2_7B": {"world_sizes": list(range(8, 17))},
-    "gpt3_6_7B": {"world_sizes": list(range(10, 17))},
-    "gpt3_350M": {"world_sizes": list(range(8, 16))},
-}
+
 
 MODELS = ["gpt3_350M", "gpt3_1_3B", "gpt3_2_7B","gpt3_6_7B" ]
-MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 16
+MIN_WORLD_SIZE = 2
+MAX_WORLD_SIZE = 3
 WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 32
 TIMEOUT_SECONDS = 600
-NODE_IPS = ["10.20.23.42", "10.20.23.46", "10.20.23.90", "10.20.23.92"]
-NODE_PORTS = ["2220", "2221", "2222", "2223"]
-MASTER_IP = "10.20.23.42"
-MASTER_PORT  = "60000" 
+
+NODE_IPS = ["172.31.11.113", "172.31.11.170"]
+NODE_PORTS = ["2220"]
+MASTER_IP = "172.31.11.113"
+MASTER_PORT  = "60000"
+
 MONITOR_INTERVAL = 15
 
 

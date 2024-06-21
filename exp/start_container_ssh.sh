@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # run in host
-addrs=(172.21.0.42 172.21.0.46 172.21.0.91 172.21.0.92)
-ssh_ports=(2220 2221 2222 2223)
+addrs=(172.31.11.113  172.31.11.170)
+ssh_ports=(2220)
 num_containers=${#ssh_ports[@]}
 
 for addr in "${addrs[@]}"; do
