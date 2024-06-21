@@ -1,6 +1,6 @@
 #!/bin/bash
 # run in container
-addrs=("172.21.0.42" "172.21.0.46")
+addrs=("172.31.11.113" "172.31.9.213")
 # ports=(2220 2221 2222 2223)
 ports=(2220)
 mkdir -p ./tmp/logs/install/

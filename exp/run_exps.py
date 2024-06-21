@@ -12,9 +12,9 @@ WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 2
 TIMEOUT_SECONDS = 600
 
-NODE_IPS = ["172.21.0.42", "172.21.0.46"]
+NODE_IPS = ["172.31.9.213", "172.31.11.113"]
 NODE_PORTS = ["2220"]
-MASTER_IP = "172.21.0.42"
+MASTER_IP = "172.31.11.113"
 MASTER_PORT  = "60000"
 
 MONITOR_INTERVAL = 15
@@ -66,7 +66,6 @@ def run_job(model: str, world_size: int, mbs: int) :
     command.extend(["--master_ip", MASTER_IP, "--master_port", MASTER_PORT])
     print(f"run job: {command}")
     result = subprocess.run(command, capture_output=True, text=True)
-    print("here")
     return result
 
 def monitor_logs():
@@ -114,12 +113,12 @@ for model in MODELS:
             master_cmd = f"python -m oobleck.elastic.master  --ip {MASTER_IP} --port {MASTER_PORT}  > ./tmp/logs/master.log 2>&1 "
             print(f"run master: {master_cmd}")
             master_proc = subprocess.Popen(master_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            time.sleep(5)
+            time.sleep(10)
             job_proc = run_job(model, world_size, mbs)
             if job_proc.returncode != 0:
                 print(f"finish exp: {model}-{world_size}-{mbs}. run job error. stdout: {job_proc.stdout}. stderr: {job_proc.stderr}")
                 exit()
-            print(f"job_stdout: {job_proc.stdout}, job_stderr: {job_proc.stderr}")
+            print(f"start job. job_stdout: {job_proc.stdout}, job_stderr: {job_proc.stderr}")
             res = monitor_logs()
             kill_processes()
             time.sleep(5)
