@@ -9,6 +9,7 @@ image="oobleck:v12"
 
 docker_command="docker run --gpus device=%d -d -v ~/code/python/:/workspace --net=host --ipc=host --ulimit memlock=-1:-1 --name oob-%d ${image} sleep infinity"
 
+mkdir -p ./tmp/logs/install/
 
 for addr in "${addrs[@]}"; do
     # ssh ${addr} "$(printf "${docker_command}" 0 0)
@@ -16,5 +17,5 @@ for addr in "${addrs[@]}"; do
     #     $(printf "${docker_command}" 2 2)
     #     $(printf "${docker_command}" 3 3)"
 
-   ssh ${addr} "$(printf "${docker_command}" 0 0)" 
+   ssh ${addr} "$(printf "${docker_command}" 0 0)" >./tmp/logs/install/sc-${addr}.log 2>&1 &
 done
