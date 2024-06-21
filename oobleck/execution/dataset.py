@@ -163,8 +163,8 @@ class OobleckDataset:
             tokenizer = AutoTokenizer.from_pretrained("/workspace/Oobleck/data/tokenizer/bert")
         else:
             raise Exception(f"No tokenizer for model {model_name}")
-        # raw_dataset = load_dataset(dataset_path, dataset_name)
-        raw_dataset = load_from_disk("/workspace/Oobleck/data/dataset")
+        raw_dataset = load_dataset(dataset_path, dataset_name)
+        # raw_dataset = load_from_disk("/workspace/Oobleck/data/dataset")
         if "validation" not in raw_dataset.keys():
             raw_dataset["validation"] = load_dataset(
                 dataset_path,

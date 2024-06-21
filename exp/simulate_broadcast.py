@@ -46,7 +46,7 @@ async def run_command_on_node(node_ip: str, node_port: int, command: str, prefix
     current_time = time.localtime(time.time())
     current_time = time.strftime("%m-%d-%Y-%H-%M-%S", current_time)
     output_file = (
-        f"/workspace/Oobleck/tmp/simulate_broadcast_logs/{current_time}-{prefix}/"
+        f"/{LOG_DIR}/{current_time}-{prefix}/"
     )
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     output_file = f"{output_file}/{node_ip}-{node_port}.log"
