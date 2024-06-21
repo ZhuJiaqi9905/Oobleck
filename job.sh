@@ -35,7 +35,7 @@ node_ports="2220 2220"
 
 python -m oobleck.run \
 --config_path ./examples/gpt3_350M.yaml \
---node_ips ${nodes} \
---node_ports ${node_ports} \
---master_ip 172.31.11.170 \
+--node_ips '172.21.0.42' '172.21.0.46' \
+--node_ports "2220" "2220" \
+--master_ip '172.21.0.42' \
 --master_port 60000

@@ -12,17 +12,17 @@ WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 2
 TIMEOUT_SECONDS = 600
 
-NODE_IPS = ["172.31.11.170", "172.31.9.213"]
+NODE_IPS = ["172.21.0.42", "172.21.0.46"]
 NODE_PORTS = ["2220"]
-MASTER_IP = "172.31.11.170"
+MASTER_IP = "172.21.0.42"
 MASTER_PORT  = "60000"
 
 MONITOR_INTERVAL = 15
 
 
-def get_nodes_and_ports(world_size: int) -> tuple[str, str]:
-    nodes = ""
-    ports = ""
+def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[str]]:
+    nodes = []
+    ports = []
     # ports = []
 
     node_nums = len(NODE_IPS)
@@ -35,8 +35,8 @@ def get_nodes_and_ports(world_size: int) -> tuple[str, str]:
     i = 0
     for node_idx in range(node_nums):
         for port_idx in range(batch):
-            nodes += NODE_IPS[node_idx] + " "
-            ports += NODE_PORTS[port_idx] + " "
+            nodes.append(NODE_IPS[node_idx])
+            ports.append(NODE_PORTS[port_idx])
             # ports.append(NODE_PORTS[port_idx])
             i += 1
             if i == world_size:
@@ -58,9 +58,15 @@ def run_job(model: str, world_size: int, mbs: int) :
     nodes, ports = get_nodes_and_ports(world_size)
     print(f"nodes: {nodes}. ports: {ports}")
     # 运行python命令
-    command = f"python -m oobleck.run --config_path {config_file} --node_ips {nodes.strip()} --node_ports {ports.strip()} --master_ip {MASTER_IP} --master_port {MASTER_PORT}"
-
-    result = subprocess.run(command, shell=True, capture_output=True, text=True)
+    command = ["python", "-m", "oobleck.run","--config_path", config_file]
+    command.append("--node_ips")
+    command.extend(nodes)
+    command.append("--node_ports")
+    command.extend(ports)
+    command.extend(["--master_ip", MASTER_IP, "--master_port", MASTER_PORT])
+    print(f"run job: {command}")
+    result = subprocess.run(command, capture_output=True, text=True)
+    print("here")
     return result
 
 def monitor_logs():
@@ -105,14 +111,15 @@ for model in MODELS:
     for world_size in range(MAX_WORLD_SIZE, MIN_WORLD_SIZE - 1, -WORLD_SIZE_INTERVAL):
         while mbs > 0:
             print(f"start exp: {model}-{world_size}-{mbs}.")
-            master_cmd = f"python -m oobleck.elastic.master  --ip {MASTER_IP} --port {MASTER_PORT}"
+            master_cmd = f"python -m oobleck.elastic.master  --ip {MASTER_IP} --port {MASTER_PORT}  > ./tmp/logs/master.log 2>&1 "
+            print(f"run master: {master_cmd}")
             master_proc = subprocess.Popen(master_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            time.sleep(10)
+            time.sleep(5)
             job_proc = run_job(model, world_size, mbs)
             if job_proc.returncode != 0:
                 print(f"finish exp: {model}-{world_size}-{mbs}. run job error. stdout: {job_proc.stdout}. stderr: {job_proc.stderr}")
                 exit()
-            
+            print(f"job_stdout: {job_proc.stdout}, job_stderr: {job_proc.stderr}")
             res = monitor_logs()
             kill_processes()
             time.sleep(5)
