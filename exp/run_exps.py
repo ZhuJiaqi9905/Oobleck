@@ -7,14 +7,14 @@ import subprocess
 
 MODELS = ["gpt3_350M", "gpt3_1_3B", "gpt3_2_7B","gpt3_6_7B" ]
 MIN_WORLD_SIZE = 2
-MAX_WORLD_SIZE = 3
+MAX_WORLD_SIZE = 2
 WORLD_SIZE_INTERVAL = 1
-MAX_MBS = 32
+MAX_MBS = 2
 TIMEOUT_SECONDS = 600
 
-NODE_IPS = ["172.31.11.113", "172.31.11.170"]
+NODE_IPS = ["172.31.11.170", "172.31.9.213"]
 NODE_PORTS = ["2220"]
-MASTER_IP = "172.31.11.113"
+MASTER_IP = "172.31.11.170"
 MASTER_PORT  = "60000"
 
 MONITOR_INTERVAL = 15
@@ -56,6 +56,7 @@ def run_job(model: str, world_size: int, mbs: int) :
     os.environ['world_size'] = ""
     os.environ['mbs'] = ""
     nodes, ports = get_nodes_and_ports(world_size)
+    print(f"nodes: {nodes}. ports: {ports}")
     # 运行python命令
     command = f"python -m oobleck.run --config_path {config_file} --node_ips {nodes.strip()} --node_ports {ports.strip()} --master_ip {MASTER_IP} --master_port {MASTER_PORT}"
 
@@ -106,7 +107,7 @@ for model in MODELS:
             print(f"start exp: {model}-{world_size}-{mbs}.")
             master_cmd = f"python -m oobleck.elastic.master  --ip {MASTER_IP} --port {MASTER_PORT}"
             master_proc = subprocess.Popen(master_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            time.sleep(5)
+            time.sleep(10)
             job_proc = run_job(model, world_size, mbs)
             if job_proc.returncode != 0:
                 print(f"finish exp: {model}-{world_size}-{mbs}. run job error. stdout: {job_proc.stdout}. stderr: {job_proc.stderr}")

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # run in host
-addrs=(172.31.11.113  172.31.11.170)
+addrs=(172.31.14.142 172.31.11.170)
 ssh_ports=(2220)
 num_containers=${#ssh_ports[@]}
 

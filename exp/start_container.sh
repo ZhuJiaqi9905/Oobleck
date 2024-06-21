@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # run in host
-addrs=(172.31.11.113  172.31.11.170)
+addrs=(172.31.14.142 172.31.11.170)
 image="oobleck:v12"
 
 # Define the common part of the docker run command

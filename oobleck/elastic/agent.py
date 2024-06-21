@@ -348,7 +348,7 @@ if __name__ == "__main__":
     parser.add_argument("--agent_index", type=int)
     parser.add_argument("--node_id", type=int)
 
-    # os.environ["NCCL_DEBUG"] = "INFO"
+    os.environ["NCCL_DEBUG"] = "INFO"
     os.environ["NCCL_SOCKET_IFNAME"] = "ens3"
     os.environ["GLOO_SOCKET_IFNAME"] = "ens3"
     # os.environ["NCCL_DESYNC_DEBUG"] = "1"
