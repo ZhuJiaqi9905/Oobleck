@@ -349,10 +349,10 @@ if __name__ == "__main__":
     parser.add_argument("--agent_index", type=int)
     parser.add_argument("--node_id", type=int)
 
-    os.environ["NCCL_DEBUG"] = "INFO"
+    # os.environ["NCCL_DEBUG"] = "INFO"
 
-    os.environ["NCCL_SOCKET_IFNAME"] = "eno1"
-    os.environ["GLOO_SOCKET_IFNAME"] = "eno1"
+    os.environ["NCCL_SOCKET_IFNAME"] = "enp"
+    os.environ["GLOO_SOCKET_IFNAME"] = "enp"
     # os.environ["NCCL_NSOCKS_PERTHREAD"] = "1"
     # os.environ["NCCL_NTHREADS"] = "64"
     # os.environ["NCCL_MAX_NCHANNELS"] = "1"

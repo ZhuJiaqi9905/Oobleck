@@ -5,9 +5,9 @@ import subprocess
 
 
 
-MODELS = ["gpt3_350M", "gpt3_1_3B", "gpt3_2_7B","gpt3_6_7B" ]
+MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B" ,"gpt3_1_3B", "gpt3_6_7B" ]
 MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 16
+MAX_WORLD_SIZE = 15
 WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 16
 TIMEOUT_SECONDS = 600
@@ -97,7 +97,7 @@ def monitor_logs():
                 content = f.read()
                 if 'CUDA out of memory' in content:
                     cuda_oom = True
-                elif 'RuntimeError' in content:
+                elif 'RuntimeError' in content or 'ApplicationError:' in content:
                     runtime_error = True
                 elif 'Training is done.' in content:
                     return 0
@@ -105,7 +105,7 @@ def monitor_logs():
             return -1
         elif runtime_error:
             return -2
-    return 0
+    return -3
 
 def kill_processes():
     subprocess.run("./exp/kill.sh", shell=True, capture_output=True, text=True)
@@ -134,8 +134,11 @@ for model in MODELS:
                 mbs = mbs // 2
                 print(f"finish exp: {model}-{world_size}-{mbs} CUDA OOM.")
                 continue
-            else:
+            elif res == -2:
                 print(f"finish exp: {model}-{world_size}-{mbs} Runtime error.")
+                break
+            elif res == -3:
+                print(f"finish exp: {model}-{world_size}-{mbs} may timeout.")
                 break
 
 
