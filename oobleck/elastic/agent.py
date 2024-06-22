@@ -11,7 +11,7 @@ import simple_parsing as sp
 from deepspeed.utils.logging import LoggerFactory
 from deepspeed.utils.logging import logging
 from oobleck.elastic.worker import worker_main
-
+import oobleck
 import oobleck.elastic.message_util as message_util
 from oobleck.csrc.planning.pipeline_template import get_profile_results
 from oobleck.elastic.training_util import OobleckArguments
@@ -341,6 +341,7 @@ class OobleckAgent:
 
 
 if __name__ == "__main__":
+    print(oobleck.__file__)
     parser = sp.ArgumentParser()
     parser.add_argument("--master_ip", type=str)
     parser.add_argument("--master_port", type=int)
@@ -348,7 +349,7 @@ if __name__ == "__main__":
     parser.add_argument("--agent_index", type=int)
     parser.add_argument("--node_id", type=int)
 
-    os.environ["NCCL_DEBUG"] = "TRACE"
+    # os.environ["NCCL_DEBUG"] = "TRACE"
 
     os.environ["NCCL_SOCKET_IFNAME"] = "eno1"
     os.environ["GLOO_SOCKET_IFNAME"] = "eno1"

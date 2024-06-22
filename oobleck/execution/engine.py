@@ -589,12 +589,17 @@ class OobleckEngine:
         # TODO: Calculate num_gpus_range based on profile results
         print(f"min_nodes: {min_num_nodes}, max_nodes: {max_num_nodes}, gpus: {num_gpus_per_node}, ")
         template_generator = PipelineTemplateGenerator()
+        # pipeline_templates: list[
+        #     PipelineTemplate
+        # ] = template_generator.create_pipeline_templates_serial(
+        #     profile_results, (min_num_nodes, max_num_nodes), num_gpus_per_node
+        # )
+
         pipeline_templates: list[
             PipelineTemplate
-        ] = template_generator.create_pipeline_templates_serial(
+        ] = template_generator.create_pipeline_templates(
             profile_results, (min_num_nodes, max_num_nodes), num_gpus_per_node
         )
-
         return dataset, model, profile_results, pipeline_templates
 
     def initialize_distributed(self):
