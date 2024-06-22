@@ -17,9 +17,13 @@ TIMEOUT_SECONDS = 600
 # NODE_PORTS = ["2220"]
 # MASTER_IP = "172.31.11.113"
 
-NODE_IPS = ["172.31.10.88", "172.31.8.235"]
-NODE_PORTS = ["2220", "2221", "2222", "2223", "2224", "2225", "2226", "2227"]
-MASTER_IP = "172.31.10.88"
+# NODE_IPS = ["172.31.10.88", "172.31.8.235"]
+# NODE_PORTS = ["2220", "2221", "2222", "2223", "2224", "2225", "2226", "2227"]
+# MASTER_IP = "172.31.10.88"
+
+NODE_IPS = ["172.31.11.113", "172.31.9.213"]
+NODE_PORTS = ["2220"]
+MASTER_IP = "172.31.11.113"
 
 MASTER_PORT  = "60000"
 
@@ -119,7 +123,7 @@ for model in MODELS:
             master_cmd = f"python -m oobleck.elastic.master  --ip {MASTER_IP} --port {MASTER_PORT}  > ./tmp/logs/master.log 2>&1 "
             print(f"run master: {master_cmd}")
             master_proc = subprocess.Popen(master_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            time.sleep(10)
+            time.sleep(15)
             job_proc = run_job(model, world_size, mbs)
             if job_proc.returncode != 0:
                 print(f"finish exp: {model}-{mbs}-{world_size}. run job error. stdout: {job_proc.stdout}. stderr: {job_proc.stderr}")
