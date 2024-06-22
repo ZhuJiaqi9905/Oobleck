@@ -349,11 +349,13 @@ if __name__ == "__main__":
     parser.add_argument("--node_id", type=int)
 
     os.environ["NCCL_DEBUG"] = "TRACE"
-    os.environ["NCCL_SOCKET_IFNAME"] = "ens3"
-    os.environ["GLOO_SOCKET_IFNAME"] = "ens3"
-    os.environ["NCCL_NSOCKS_PERTHREAD"] = "1"
-    os.environ["NCCL_NTHREADS"] = "64"
-    os.environ["NCCL_MAX_NCHANNELS"] = "1"
+
+    os.environ["NCCL_SOCKET_IFNAME"] = "eno1"
+    os.environ["GLOO_SOCKET_IFNAME"] = "eno1"
+    # os.environ["NCCL_NSOCKS_PERTHREAD"] = "1"
+    # os.environ["NCCL_NTHREADS"] = "64"
+    # os.environ["NCCL_MAX_NCHANNELS"] = "1"
+
     # os.environ["NCCL_IB_DISABLE"] = "1"
     # os.environ["NCCL_DESYNC_DEBUG"] = "1"
     # os.environ["NCCL_ASYNC_ERROR_HANDLING"] = "1"
