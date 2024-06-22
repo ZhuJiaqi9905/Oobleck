@@ -424,7 +424,7 @@ PipelineTemplateGenerator::divide_and_conquer(
   int start_layer_index = std::get<0>(layer_indices);
   int end_layer_index = std::get<1>(layer_indices);
 
-  std::cout << "divide_and_conquer [" << start_layer_index << ", " << end_layer_index << "]" << std::endl;
+  // std::cout << "divide_and_conquer [" << start_layer_index << ", " << end_layer_index << "]" << std::endl;
   std::shared_ptr<DCExecutionResult> result(nullptr);
   DCExecutionResult::key key =
       std::make_tuple(num_stages, start_layer_index, end_layer_index, num_nodes,
