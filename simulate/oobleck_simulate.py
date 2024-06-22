@@ -124,7 +124,7 @@ class SimulatorEngine:
         pipeline_templates: list[
             PipelineTemplate
         ] = template_generator.create_pipeline_templates(
-            profile_results, (min_num_nodes, max_num_nodes), num_gpus_per_node
+            profile_results, (min_num_nodes, max_num_nodes), self._num_gpus_per_node
         )
         return dataset, model, profile_results, pipeline_templates
     
@@ -194,6 +194,7 @@ class SimulatorEngine:
         return pipelines
 
 def simulate_lost(model: str, microbatch: int, world_size: int, lost_nodes: int, out_dir: str): 
+    print(f"simulate lost: {model}, mbs {world_size}, world_size {world_size}, lost_nodes {lost_nodes}")
     if model == "gpt3_2_7B":
         config_path = "/workspace/Oobleck/examples/gpt3_2_7B.yaml"
     elif model == "gpt3_1_3B":

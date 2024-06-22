@@ -5,6 +5,7 @@ dist:
   master_ip: 10.16.0.185
   master_port: 22
   node_ips: [10.16.0.181, 10.16.0.182]
+  node_ports: [2200, 2200]
 job:
   fault_threshold: 1
   microbatch_size: 2

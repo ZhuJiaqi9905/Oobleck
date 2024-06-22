@@ -5,10 +5,10 @@ import time
 
 
 MODEL_CONFIGS = {
-    "gpt3_1_3B": {"microbatch": 4, "world_sizes": list(range(8, 17)), "lost_nodes": list(range(1, 5))},
+    "gpt3_1_3B": {"microbatch": 1, "world_sizes": list(range(16, 17)), "lost_nodes": list(range(1, 5))},
+    "gpt3_350M": {"microbatch": 8, "world_sizes": list(range(8, 16)), "lost_nodes": list(range(1, 5))},
     "gpt3_2_7B": {"microbatch": 4, "world_sizes": list(range(8, 17)), "lost_nodes": list(range(1, 5))},
     "gpt3_6_7B": {"microbatch": 2, "world_sizes": list(range(10, 17)), "lost_nodes": list(range(1, 5))},
-    "gpt3_350M": {"microbatch": 8, "world_sizes": list(range(8, 16)), "lost_nodes": list(range(1, 5))},
 }
 
 # 超时时间（秒）
@@ -43,3 +43,5 @@ for model, config in MODEL_CONFIGS.items():
             command = COMMAND_TEMPLATE.format(model, microbatch, world_size, lost_nodes, OUT_DIR, CUDA_MEMORY)
             print(f"Running command: {command}")
             run_with_timeout(command, TIMEOUT_SECONDS)
+            
+            exit()
