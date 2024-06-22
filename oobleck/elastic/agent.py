@@ -351,8 +351,10 @@ if __name__ == "__main__":
 
     # os.environ["NCCL_DEBUG"] = "INFO"
 
-    os.environ["NCCL_SOCKET_IFNAME"] = "enp"
-    os.environ["GLOO_SOCKET_IFNAME"] = "enp"
+    os.environ["NCCL_SOCKET_IFNAME"] = "ens3"
+    os.environ["GLOO_SOCKET_IFNAME"] = "ens3"
+    # os.environ["NCCL_SOCKET_IFNAME"] = "enp"
+    # os.environ["GLOO_SOCKET_IFNAME"] = "enp"
     # os.environ["NCCL_NSOCKS_PERTHREAD"] = "1"
     # os.environ["NCCL_NTHREADS"] = "64"
     # os.environ["NCCL_MAX_NCHANNELS"] = "1"

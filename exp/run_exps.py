@@ -5,12 +5,13 @@ import subprocess
 
 
 
-MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_1_3B", "gpt3_13B" , "gpt3_6_7B" ]
-MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 14
+MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
+# MODELS = ["gpt3_1_3B","gpt3_2_7B",  "gpt3_13B" , "gpt3_6_7B" ]
+MIN_WORLD_SIZE = 24
+MAX_WORLD_SIZE = 32
 WORLD_SIZE_INTERVAL = 1
-MAX_MBS = 8
-TIMEOUT_SECONDS = 500
+MAX_MBS = 32
+TIMEOUT_SECONDS = 600
 
 # NODE_IPS = ["172.31.9.213", "172.31.11.113"]
 # NODE_PORTS = ["2220"]
