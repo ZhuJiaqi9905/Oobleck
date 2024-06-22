@@ -5,12 +5,12 @@ import subprocess
 
 
 
-MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B" ,"gpt3_1_3B", "gpt3_6_7B" ]
+MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_1_3B", "gpt3_13B" , "gpt3_6_7B" ]
 MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 15
+MAX_WORLD_SIZE = 14
 WORLD_SIZE_INTERVAL = 1
-MAX_MBS = 16
-TIMEOUT_SECONDS = 600
+MAX_MBS = 8
+TIMEOUT_SECONDS = 500
 
 # NODE_IPS = ["172.31.9.213", "172.31.11.113"]
 # NODE_PORTS = ["2220"]
@@ -49,7 +49,7 @@ def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[str]]:
     return (nodes, ports)
 
 def run_job(model: str, world_size: int, mbs: int) :
-    config_file = f'./examples/tmp-{model}-{world_size}-{mbs}.yaml'
+    config_file = f'./examples/tmp-{model}-{mbs}-{world_size}.yaml'
     os.environ['world_size'] = str(world_size)
     os.environ['mbs'] = str(mbs)
     template_file = f'./examples/{model}.template.yaml'
@@ -114,31 +114,31 @@ for model in MODELS:
     mbs = MAX_MBS
     for world_size in range(MAX_WORLD_SIZE, MIN_WORLD_SIZE - 1, -WORLD_SIZE_INTERVAL):
         while mbs > 0:
-            print(f"start exp: {model}-{world_size}-{mbs}.")
+            print(f"start exp: {model}-{mbs}-{world_size}.")
             master_cmd = f"python -m oobleck.elastic.master  --ip {MASTER_IP} --port {MASTER_PORT}  > ./tmp/logs/master.log 2>&1 "
             print(f"run master: {master_cmd}")
             master_proc = subprocess.Popen(master_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             time.sleep(10)
             job_proc = run_job(model, world_size, mbs)
             if job_proc.returncode != 0:
-                print(f"finish exp: {model}-{world_size}-{mbs}. run job error. stdout: {job_proc.stdout}. stderr: {job_proc.stderr}")
+                print(f"finish exp: {model}-{mbs}-{world_size}. run job error. stdout: {job_proc.stdout}. stderr: {job_proc.stderr}")
                 exit()
             print(f"start job. job_stdout: {job_proc.stdout}, job_stderr: {job_proc.stderr}")
             res = monitor_logs()
             kill_processes()
             time.sleep(5)
             if res == 0:
-                print(f"finish exp: {model}-{world_size}-{mbs} success.")
+                print(f"finish exp: {model}-{mbs}-{world_size} success.")
                 break
             elif res == -1:
                 mbs = mbs // 2
-                print(f"finish exp: {model}-{world_size}-{mbs} CUDA OOM.")
+                print(f"finish exp: {model}-{mbs}-{world_size} CUDA OOM.")
                 continue
             elif res == -2:
-                print(f"finish exp: {model}-{world_size}-{mbs} Runtime error.")
+                print(f"finish exp: {model}-{mbs}-{world_size} Runtime error.")
                 break
             elif res == -3:
-                print(f"finish exp: {model}-{world_size}-{mbs} may timeout.")
+                print(f"finish exp: {model}-{mbs}-{world_size} may timeout.")
                 break
 
 

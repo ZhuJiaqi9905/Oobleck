@@ -167,7 +167,7 @@ PipelineTemplateGenerator::create_pipeline_templates(
   std::map<int, std::vector<cppcoro::task<std::shared_ptr<DCExecutionResult>>>>
       tasks;
   for (int i = min_num_nodes; i <= max_num_nodes; i++) {
-    std::cout << "Creating tasks for " << i << " nodes" << std::endl;
+    // std::cout << "Creating tasks for " << i << " nodes" << std::endl;
     int min_num_stages = i;
     int max_num_stages = layer_execution_results->size();
     std::vector<cppcoro::task<std::shared_ptr<DCExecutionResult>>>
@@ -188,14 +188,14 @@ PipelineTemplateGenerator::create_pipeline_templates(
   // for (auto&& num_node_tasks = tasks.begin(); num_node_tasks != tasks.end();
   //      num_node_tasks++) {
   for (auto&& num_node_tasks : tasks) {
-    std::cout << "Waiting for tasks for " << num_node_tasks.first << " nodes"
-              << std::endl;
+    // std::cout << "Waiting for tasks for " << num_node_tasks.first << " nodes"
+    //           << std::endl;
     std::vector<std::shared_ptr<DCExecutionResult>> results =
         cppcoro::sync_wait(cppcoro::when_all(std::move(num_node_tasks.second)));
-    std::cout << "Wait done" << std::endl;
+    // std::cout << "Wait done" << std::endl;
 
-    std::cout << "Cache hit: " << cache_hit_.load()
-              << ", miss: " << cache_miss_.load() << std::endl;
+    // std::cout << "Cache hit: " << cache_hit_.load()
+    //           << ", miss: " << cache_miss_.load() << std::endl;
 
     if (std::all_of(results.begin(), results.end(),
                     [](const std::shared_ptr<DCExecutionResult>& result)

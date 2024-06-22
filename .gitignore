@@ -20,3 +20,4 @@ tmp/
 *.lock
 .hypothesis
 data/dataset
+examples/tmp-*

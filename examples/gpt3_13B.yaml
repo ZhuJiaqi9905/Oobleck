@@ -7,17 +7,17 @@ dist:
   node_ips: [10.16.0.181, 10.16.0.182]
 job:
   fault_threshold: 1
-  microbatch_size: 16
+  microbatch_size: 2
   global_microbatch_size: 1024
-  steps: 10
+  steps: 20
 
 model:
   model_name: gpt2
-  model_tag: gpt3_350M
+  model_tag: gpt3_13B
   dataset_path: wikitext
   dataset_name: wikitext-2-raw-v1
   model_args:
     n_positions: 2048
-    num_hidden_layers: 24
-    n_embd: 1024
-    n_head: 16
+    num_hidden_layers: 40
+    n_embd: 5120
+    n_head: 40

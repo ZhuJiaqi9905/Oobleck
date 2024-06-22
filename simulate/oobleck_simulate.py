@@ -202,6 +202,8 @@ def simulate_lost(model: str, microbatch: int, world_size: int, lost_nodes: int,
         config_path = "/workspace/Oobleck/examples/gpt3_6_7B.yaml"
     elif model == "gpt3_350M":
         config_path = "/workspace/Oobleck/examples/gpt3_350M.yaml"
+    elif model == "gpt3_13B":
+        config_path = "/workspace/Oobleck/examples/gpt3_13B.yaml"
     elif model == "bert_340M":
         config_path = "/workspace/Oobleck/examples/bert_340M.yaml"
     else:
@@ -333,6 +335,8 @@ def simulate_pipelines(model: str, microbatch: int, world_size: int):
         config_path = "/workspace/Oobleck/examples/gpt3_6_7B.yaml"
     elif model == "gpt3_350M":
         config_path = "/workspace/Oobleck/examples/gpt3_350M.yaml"
+    elif model == "gpt3_13B":
+        config_path = "/workspace/Oobleck/examples/gpt3_13B.yaml"
     elif model == "bert_340M":
         config_path = "/workspace/Oobleck/examples/bert_340M.yaml"
     else:

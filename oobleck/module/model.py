@@ -71,6 +71,8 @@ class OobleckModel:
             model_config = AutoConfig.from_pretrained("/workspace/Oobleck/data/model/gpt3_6_7B/config.json")
         elif model_tag == "gpt3_350M":
             model_config = AutoConfig.from_pretrained("/workspace/Oobleck/data/model/gpt3_350M/config.json")
+        elif model_tag == "gpt3_13B":
+            model_config = AutoConfig.from_pretrained("/workspace/Oobleck/data/model/gpt3_13B/config.json")        
         elif model_tag == "bert_340M":
             model_config = AutoConfig.from_pretrained("/workspace/Oobleck/data/model/bert_340M/config.json")
         else:
