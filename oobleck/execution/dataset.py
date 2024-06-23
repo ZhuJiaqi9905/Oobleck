@@ -171,7 +171,7 @@ class OobleckDataset:
                 dataset_name,
                 split=f"train[:5%]",
             )
-        raw_dataset.save_to_disk("/workspace/Oobleck/data/dataset")
+        # raw_dataset.save_to_disk("/workspace/Oobleck/data/dataset")
         column_names = list(raw_dataset["train"].features)
         # print(f"column_names{column_names}")
         text_column_name = "text" if "text" in column_names else column_names[0]
