@@ -63,7 +63,7 @@ async def run_command_on_node(node_ip: str, node_port: int, command: str, prefix
                 async for data in process.stdout:
                     await log_file.write(data)
                     await log_file.flush()
-            # print(f"run {command} on node {node_ip}-{node_port}")
+            print(f"run {command} on node {node_ip}-{node_port}")
     except (OSError, asyncssh.Error) as exc:
         print(f"Error connecting to {node_ip}-{node_port}: {exc}")
 

@@ -169,8 +169,10 @@ if __name__ == "__main__":
     multiproc.set_start_method("spawn")
 
     processes = []
+    print(f"gpus_per_node: {gpus_per_node}")
     for local_rank in range(gpus_per_node):
         global_rank = gpus_per_node * node_rank + local_rank
+        print(f"local_rank: {local_rank}. global_rank: {global_rank}")
         p = multiproc.Process(
             target=init_process,
             args=(
