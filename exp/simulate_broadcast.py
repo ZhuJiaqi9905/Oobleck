@@ -81,13 +81,16 @@ async def run_model_tasks(world_size: int, layer_file: str, prefix: str):
     current_time = time.localtime(time.time())
     current_time = time.strftime("%m-%d-%Y-%H-%M-%S", current_time)
     prefix = f"{current_time}-{prefix}"
-    print(f"log prefix: {prefix}")
-    for ip in ips:
-        for port in ports:
-            command = COMMAND_TEMPLATE.format(node_rank, layer_file)
-            node_rank += 1
-            task = asyncio.create_task(run_command_on_node(ip, port, command, prefix))
-            tasks.append(task)
+    print(f"log prefix: {prefix}.ips: {ips}. ports: {ports}")
+    assert(len(ips) == len(ports))
+    for i in range(len(ips)):
+        ip = ips[i]
+        port = ports[i]
+        command = COMMAND_TEMPLATE.format(node_rank, layer_file)
+        node_rank += 1
+        task = asyncio.create_task(run_command_on_node(ip, port, command, prefix))
+        tasks.append(task)
+        # print(f"node_rank: {node_rank}. command: {command}")
     # Wait for all tasks to complete
     await asyncio.gather(*tasks)
     print(f"{layer_file} test completed.")
@@ -103,7 +106,6 @@ async def main():
         world_size = int(metadatas[1])
         # print(f"{prefix}, {world_size}")
         await run_model_tasks(world_size, f"{DIR}/{filename}", prefix)
-        # await asyncio.sleep(15)
-        exit()
+        await asyncio.sleep(15)
 if __name__ == "__main__":
     asyncio.run(main())
