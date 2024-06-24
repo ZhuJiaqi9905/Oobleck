@@ -12,10 +12,7 @@ NODE_PORTS = [2220, 2221, 2222, 2223]
 
 DIR = "/workspace/Oobleck/important_data/asplos/lost_nodes/"
 LOG_DIR = "/workspace/Oobleck/tmp/simulate_broadcast_logs/"
-COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n \
-                        oobleck python /workspace/Oobleck/simulate/broadcast_test.py \
-                        --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 \
-                        --warmup-times 2 --repeat-times 10 --node-rank {} --layer-file {}"'''
+COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/broadcast_test.py --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 --warmup-times 2 --repeat-times 10 --node-rank {} --layer-file {}"'''
 
 
 def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[int]]:
@@ -47,10 +44,9 @@ async def run_command_on_node(node_ip: str, node_port: int, command: str, prefix
     """
     prefix: 存储log文件的文件夹前缀
     """
-    current_time = time.localtime(time.time())
-    current_time = time.strftime("%m-%d-%Y-%H-%M-%S", current_time)
+
     output_file = (
-        f"/{LOG_DIR}/{current_time}-{prefix}/"
+        f"/{LOG_DIR}/{prefix}/"
     )
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
     output_file = f"{output_file}/{node_ip}-{node_port}.log"
@@ -61,13 +57,13 @@ async def run_command_on_node(node_ip: str, node_port: int, command: str, prefix
                 command,
                 term_type="xterm",
             ) as process:
-                print(
-                    f"Agent {node_ip}-{node_port} output will be written at {output_file}"
-                )
+                # print(
+                #     f"Agent {node_ip}-{node_port} output will be written at {output_file}"
+                # )
                 async for data in process.stdout:
                     await log_file.write(data)
                     await log_file.flush()
-            print(f"run {command} on node {node_ip}-{node_port}")
+            # print(f"run {command} on node {node_ip}-{node_port}")
     except (OSError, asyncssh.Error) as exc:
         print(f"Error connecting to {node_ip}-{node_port}: {exc}")
 
@@ -82,6 +78,10 @@ async def run_model_tasks(world_size: int, layer_file: str, prefix: str):
     # 在这些容器上启动任务
     tasks = []
     node_rank = 0
+    current_time = time.localtime(time.time())
+    current_time = time.strftime("%m-%d-%Y-%H-%M-%S", current_time)
+    prefix = f"{current_time}-{prefix}"
+    print(f"log prefix: {prefix}")
     for ip in ips:
         for port in ports:
             command = COMMAND_TEMPLATE.format(node_rank, layer_file)
@@ -103,6 +103,7 @@ async def main():
         world_size = int(metadatas[1])
         # print(f"{prefix}, {world_size}")
         await run_model_tasks(world_size, f"{DIR}/{filename}", prefix)
-        await asyncio.sleep(15)
+        # await asyncio.sleep(15)
+        exit()
 if __name__ == "__main__":
     asyncio.run(main())

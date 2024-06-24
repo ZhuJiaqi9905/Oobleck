@@ -89,6 +89,7 @@ def run(
     layers: Sequence[Layer],
 ):
     torch.cuda.set_device(local_rank)
+    print(f"local_rank: {local_rank}")
     # init tensors
     for layer in layers:
         layer.init_tensors(global_rank)
@@ -125,6 +126,7 @@ def init_process(
     layers: Sequence[Layer],
     fn,
 ):
+    print(f"global_rank: {global_rank}. world_size: {world_size}")
     if global_rank >= world_size:
         return
 
@@ -136,7 +138,7 @@ def init_process(
         world_size=world_size,
         rank=global_rank,
         init_method=init_method,
-        timeout=timedelta(minutes=3),
+        timeout=timedelta(minutes=5),
     )
     print("init process group success")
     fn(local_rank, global_rank, warmup_times, repeat_times, layers)
