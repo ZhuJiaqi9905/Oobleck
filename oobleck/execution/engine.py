@@ -737,12 +737,15 @@ class OobleckEngine:
 
     @measure_time("step")
     def _train_step(self):
+        torch.cuda.synchronize()
         begin = time.time()
         self._pipeline.train()
         self._dp_engine.do_allreduce()
         self._pipeline.execution.optimizer_step()
+        torch.cuda.synchronize()
         end = time.time()
         print(f"train step time: {end - begin}s")
+    
     # TODO: reconfigure need ip and port
     def fake_stop_and_reconfigure(self, lost_ip: str):
         logger.info("in fake_stop_and_reconfigure")

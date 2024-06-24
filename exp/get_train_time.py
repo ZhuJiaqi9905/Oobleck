@@ -2,17 +2,24 @@
 import os
 import re
 
-def extract_time(line):
+def extract_total_time(line):
     match = re.search(r'\[Rank 0\] time \(ms\) \| step: (\d+\.\d+)', line)
     if match:
         return float(match.group(1))
     return None
 
-def get_last_three_times(file_path):
+def extract_compute_time(line):
+    match = re.search(r'train step time: (\d+\.\d+)s', line)
+    if match:
+        return float(match.group(1))
+    return None   
+
+def get_times(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
-    times = [extract_time(line) for line in lines if extract_time(line) is not None]
-    return times[-3:]
+    total_times = [extract_total_time(line) for line in lines if extract_total_time(line) is not None]
+    compute_times = [extract_compute_time(line) for line in lines if extract_compute_time(line) is not None]
+    return total_times, compute_times
 
 def calculate_average(times):
     if len(times) != 3:
@@ -20,22 +27,21 @@ def calculate_average(times):
     return sum(times) / len(times)
 
 def main():
-    logs_dir = '/tmp/logs'
+    logs_dir = './tmp/logs/'
     average_times = []
-
+    dir_names = []
     for root, dirs, files in os.walk(logs_dir):
         for dir_name in dirs:
-            file_path = os.path.join(root, dir_name, '172.21.0.42-2220.out')
-            if os.path.exists(file_path):
-                last_three_times = get_last_three_times(file_path)
-                if len(last_three_times) == 3:
-                    average = calculate_average(last_three_times)
-                    average_times.append(average)
-                    print(f"Folder: {dir_name}, Average of last three times: {average}")
-
-    if average_times:
-        overall_average = sum(average_times) / len(average_times)
-        print(f"Overall average of last three times from all folders: {overall_average}")
+            dir_names.append(dir_name)
+    dir_names.sort()
+    for dir_name in dir_names:
+        file_path = os.path.join(logs_dir, dir_name, '172.21.0.42-2220.out')
+        
+        if os.path.exists(file_path):
+            total_times, compute_times = get_times(file_path)
+            if len(total_times) > 1:
+                print(f"Folder: {dir_name}, Average total time: {sum(total_times[1:]) / len(total_times[1:])}, Average compute times: {sum(compute_times[1:]) / len(compute_times[1:])}")
+                # exit()
 
 if __name__ == "__main__":
     main()

@@ -7,10 +7,10 @@ import subprocess
 
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
 # MODELS = ["gpt3_1_3B","gpt3_2_7B",  "gpt3_13B" , "gpt3_6_7B" ]
-MODELS = ["gpt3_350M"]
+MODELS = ["gpt3_1_3B"]
 
 MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 12
+MAX_WORLD_SIZE = 16
 WORLD_SIZE_INTERVAL = 2
 MAX_MBS = 8
 TIMEOUT_SECONDS = 900
@@ -36,6 +36,8 @@ def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[str]]:
     nodes = []
     ports = []
     # ports = []
+
+
 
     node_nums = len(NODE_IPS)
 
