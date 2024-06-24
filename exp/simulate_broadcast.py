@@ -5,13 +5,16 @@ import asyncssh
 import subprocess
 import time
 import numpy as np
-NODE_IPS = ["10.20.23.42", "10.20.23.46", "10.20.23.90", "10.20.23.92"]
+
+NODE_IPS = ["172.21.0.42", "172.21.0.46","172.21.0.47", "172.21.0.90", "172.21.0.91", "172.21.0.92"]
 NODE_PORTS = [2220, 2221, 2222, 2223]
+
+
 DIR = "/workspace/Oobleck/important_data/asplos/lost_nodes/"
 LOG_DIR = "/workspace/Oobleck/tmp/simulate_broadcast_logs/"
-COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n 
-                        oobleck python /workspace/Oobleck/simulate/broadcast_test.py 
-                        --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 
+COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n \
+                        oobleck python /workspace/Oobleck/simulate/broadcast_test.py \
+                        --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 \
                         --warmup-times 2 --repeat-times 10 --node-rank {} --layer-file {}"'''
 
 
@@ -33,7 +36,8 @@ def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[int]]:
     for node_idx in range(node_nums):
         for port_idx in range(batch):
             nodes.append(NODE_IPS[node_idx])
-            nodes.append(NODE_PORTS[port_idx])
+            ports.append(NODE_PORTS[port_idx])
+
             i += 1
             if i == world_size:
                 return (nodes, ports)
@@ -98,7 +102,7 @@ async def main():
         metadatas = prefix.split('-')
         world_size = int(metadatas[1])
         # print(f"{prefix}, {world_size}")
-        await run_model_tasks(world_size, filename, prefix)
-        await asyncio.sleep(5)
+        await run_model_tasks(world_size, f"{DIR}/{filename}", prefix)
+        await asyncio.sleep(15)
 if __name__ == "__main__":
     asyncio.run(main())

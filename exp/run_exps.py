@@ -5,12 +5,14 @@ import subprocess
 
 
 
-MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
+# MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
 # MODELS = ["gpt3_1_3B","gpt3_2_7B",  "gpt3_13B" , "gpt3_6_7B" ]
+MODELS = ["gpt3_350M"]
+
 MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 24
+MAX_WORLD_SIZE = 12
 WORLD_SIZE_INTERVAL = 2
-MAX_MBS = 16
+MAX_MBS = 8
 TIMEOUT_SECONDS = 900
 
 NODE_IPS = ["172.21.0.42", "172.21.0.46","172.21.0.47", "172.21.0.90", "172.21.0.91", "172.21.0.92"]
@@ -101,8 +103,10 @@ def monitor_logs():
             with open(file, 'r') as f:
                 content = f.read()
                 if 'CUDA out of memory' in content:
+                    print(f"{file} report CUDA OOM error.")
                     cuda_oom = True
                 elif 'RuntimeError' in content or 'ApplicationError:' in content:
+                    print(f"{file} report error.")
                     runtime_error = True
                 elif 'Training is done.' in content:
                     return 0
@@ -130,8 +134,9 @@ for model in MODELS:
                 exit()
             print(f"start job. job_stdout: {job_proc.stdout}, job_stderr: {job_proc.stderr}")
             res = monitor_logs()
+            master_proc.kill()
             kill_processes()
-            time.sleep(5)
+            time.sleep(10)
             if res == 0:
                 print(f"finish exp: {model}-{mbs}-{world_size} success.")
                 break
