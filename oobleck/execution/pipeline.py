@@ -168,7 +168,7 @@ class PipelineExecution:
 
             # inputs is a tuple[Tensor] with 3 elements.
             s = (self.pipeline._args.job.microbatch_size , self.pipeline._args.model.model_args["n_positions"]) 
-            print(f"size: {s}")
+            # print(f"size: {s}")
             inputs = (torch.randint(1, 10000, s, dtype=torch.int64, requires_grad=False).to(self.pipeline.device), 
                         torch.ones(s, dtype=torch.int64, requires_grad=False).to(self.pipeline.device),
                         torch.randint(1, 10000, s, dtype=torch.int64, requires_grad=False).to(self.pipeline.device))
