@@ -36,7 +36,8 @@ class OobleckSampler(BatchSampler):
         self.epoch = epoch
         self.shuffle = shuffle
         self.seed = seed
-
+        print(f"dataloader: mbs {self.microbatch_size}")
+        
         assert self.pipeline_index < len(self.num_microbatches)
         self.total_bucket_size = self.microbatch_size * sum(self.num_microbatches)
 

@@ -720,6 +720,7 @@ class OobleckEngine:
             training_args=self._hf_training_args,
             num_gpus_per_node=self._num_gpus_per_node,
             step=0,
+            args=self._args
         )
         
         # print(f"total pipelines: {len(pipelines)}")

@@ -6,14 +6,15 @@ import subprocess
 
 
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
-# MODELS = ["gpt3_1_3B","gpt3_2_7B",  "gpt3_13B" , "gpt3_6_7B" ]
-MODELS = ["gpt3_1_3B"]
+MODELS = ["gpt3_1_3B","gpt3_2_7B" ,"gpt3_6_7B" , "gpt3_350M"]
 
-MIN_WORLD_SIZE = 8
+# MODELS = ["gpt3_350M"]
+
+MIN_WORLD_SIZE = 16
 MAX_WORLD_SIZE = 16
 WORLD_SIZE_INTERVAL = 2
-MAX_MBS = 8
-TIMEOUT_SECONDS = 900
+MAX_MBS = 32
+TIMEOUT_SECONDS = 1200
 
 NODE_IPS = ["172.21.0.42", "172.21.0.46","172.21.0.47", "172.21.0.90", "172.21.0.91", "172.21.0.92"]
 NODE_PORTS = ["2220", "2221", "2222", "2223"]
@@ -38,14 +39,17 @@ def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[str]]:
     # ports = []
 
 
-
     node_nums = len(NODE_IPS)
 
     batch = world_size // node_nums
     
     if world_size % node_nums != 0:
         batch += 1
-    port_idx = 0
+    
+    # if world_size == 8 or world_size == 10:
+    #     batch = 4
+    batch = 4
+    
     i = 0
     for node_idx in range(node_nums):
         for port_idx in range(batch):
@@ -122,6 +126,14 @@ def kill_processes():
     subprocess.run("./exp/kill.sh", shell=True, capture_output=True, text=True)
 
 for model in MODELS:
+    if model == "gpt3_6_7B":
+        MAX_MBS = 4
+    elif model == "gpt3_350M":
+        MAX_MBS = 8
+    elif model == "gpt3_1_3B":
+        MAX_MBS = 16
+    elif model == "gpt3_2_7B":
+        MAX_MBS = 8
     mbs = MAX_MBS
     for world_size in range(MAX_WORLD_SIZE, MIN_WORLD_SIZE - 1, -WORLD_SIZE_INTERVAL):
         while mbs > 0:

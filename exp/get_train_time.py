@@ -27,12 +27,11 @@ def calculate_average(times):
     return sum(times) / len(times)
 
 def main():
-    logs_dir = './tmp/logs/'
-    average_times = []
+    logs_dir = './tmp/logs/unused'
+
     dir_names = []
-    for root, dirs, files in os.walk(logs_dir):
-        for dir_name in dirs:
-            dir_names.append(dir_name)
+    for dir_name in os.listdir(logs_dir):
+        dir_names.append(dir_name)
     dir_names.sort()
     for dir_name in dir_names:
         file_path = os.path.join(logs_dir, dir_name, '172.21.0.42-2220.out')

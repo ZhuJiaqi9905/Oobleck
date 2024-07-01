@@ -19,7 +19,7 @@ from oobleck.execution.dataloader import OobleckDataLoader, OobleckSampler
 from oobleck.execution.layer import Layer
 from oobleck.execution.utils import DTYPE_TO_ID, ID_TO_DTYPE, zero_grads
 from oobleck.module.model import OobleckModel
-
+from oobleck.elastic.training_util import OobleckArguments, ModelArguments
 
 class OobleckPipelineSchedule(schedule.TrainSchedule):
     """A schedule for training a batch using pipeline parallelism.
@@ -104,7 +104,8 @@ class PipelineExecution:
         self._layers = layers
         self._shard_id = shard_id
         self._dataloader = dataloader
-        self._data_iterator = iter(self._dataloader)
+        # self._data_iterator = iter(self._dataloader)
+        
         self._training_args = training_args
 
         # stores the loss for the current microbatch being processed
@@ -162,10 +163,14 @@ class PipelineExecution:
         ), "load_microatch can only be called at either the first stage or the last stage."
 
         if self.pipeline.is_first_stage():
-            batch = next(self._data_iterator)
-            self.pipeline.pipe_buffers["inputs"][buffer_id] = self._prepare_inputs(
-                batch
-            )
+            # batch = next(self._data_iterator)
+            # inputs = self._prepare_inputs(batch)
+
+            # inputs is a tuple[Tensor] with 3 elements.
+            s = (self.pipeline._args.job.microbatch_size , self.pipeline._args.model.model_args["n_positions"]) 
+            print(f"size: {s}")
+            inputs = (torch.randn(s, dtype=torch.int64, requires_grad=False), torch.ones(s, dtype=torch.int64, requires_grad=False), torch.randn(s, dtype=torch.int64, requires_grad=False))
+            self.pipeline.pipe_buffers["inputs"][buffer_id] = inputs
 
     def forward_pass(self, buffer_id: int):
         ori_inputs: tuple[torch.Tensor, ...] = self.pipeline.pipe_buffers["inputs"][
@@ -200,7 +205,6 @@ class PipelineExecution:
             i += 1
         inputs: tuple[torch.Size | torch.Tensor] = tuple(inputs)
 
-        # print(f"converted inputs: {inputs}")
         # Execute forward
         for layer in self._layers:
             inputs = layer(inputs)
@@ -468,6 +472,7 @@ class OobleckPipeline:
         dataloader: OobleckDataLoader,
         step: int,
         training_args: TrainingArguments,
+        args: OobleckArguments,
         is_simulated = False
     ):
         self._pipeline_id = pipeline_id
@@ -477,7 +482,7 @@ class OobleckPipeline:
         self._global_step = step
         self._training_args = training_args
         self.device = torch.device("cuda")
-
+        self._args = args
 
         if is_simulated:
             self.my_pipeline = bool(pipeline_id == 0)
@@ -526,7 +531,8 @@ class OobleckPipeline:
         self._global_step += 1
 
     def reset_iterator(self):
-        self.execution._data_iterator = iter(self.execution._dataloader)
+        pass
+        # self.execution._data_iterator = iter(self.execution._dataloader)
 
     def initialize_execution(
         self,

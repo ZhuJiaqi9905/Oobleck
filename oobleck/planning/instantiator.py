@@ -10,7 +10,7 @@ from oobleck.csrc.planning.pipeline_template import PipelineTemplate
 from oobleck.execution.dataloader import OobleckDataLoader
 from oobleck.execution.pipeline import OobleckPipeline
 from oobleck.module.model import OobleckModel
-
+from oobleck.elastic.training_util import OobleckArguments
 
 class HeterogeneousPipelinesExecutionPlan:
     def __init__(
@@ -43,6 +43,8 @@ class HeterogeneousPipelinesExecutionPlan:
     def __repr__(self) -> str:
         result = ""
         for template in self.pipeline_templates:
+            # self.num_instances_set[template]: 这个template用了几条pipeline
+            # self.num_microbatches_set[template]：这个template的num of microbatches 
             result += (
                 f"{self.num_instances_set[template]} x {template} pipelines "
                 f"(b: {self.num_microbatches_set[template]})\n"
@@ -106,6 +108,7 @@ class HeterogeneousPipelinesExecutionPlan:
         dataloader: OobleckDataLoader,
         training_args: TrainingArguments,
         num_gpus_per_node: int,
+        args: OobleckArguments,
         ranks: list[list[int]] | None = None,
         step: int = 0,
         # layer_index -> dict of [fsdp_index -> ProcessGroup]
@@ -139,6 +142,7 @@ class HeterogeneousPipelinesExecutionPlan:
                     dataloader=dataloader,
                     step=step,
                     training_args=training_args,
+                    args=args
                 )
 
                 all_pipelines.append(pipeline)
