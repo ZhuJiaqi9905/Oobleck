@@ -27,7 +27,7 @@ def calculate_average(times):
     return sum(times) / len(times)
 
 def main():
-    logs_dir = './tmp/logs/unused'
+    logs_dir = './tmp/logs/'
 
     dir_names = []
     for dir_name in os.listdir(logs_dir):
