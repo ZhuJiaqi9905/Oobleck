@@ -23,6 +23,7 @@ from deepspeed.utils.logging import logging
 import argparse
 import json
 import random
+from argparse import Namespace
 logger = LoggerFactory.create_logger("oobleck_engine", logging.DEBUG)
 CUDA_MEMORY = None
 
@@ -162,6 +163,7 @@ class SimulatorEngine:
             dataloader=dataloader,
             training_args=self._hf_training_args,
             num_gpus_per_node=self._num_gpus_per_node,
+            args = self._args,
             step=0,
         )
         self.num_microbatches = copy.deepcopy(execution_plan.num_microbatches)
@@ -193,7 +195,7 @@ class SimulatorEngine:
             pipelines.append(pipeline)
         return pipelines
 
-def simulate_lost(model: str, microbatch: int, world_size: int, lost_nodes: int, out_dir: str): 
+def simulate_lost(model: str, microbatch: int, world_size: int, lost_nodes: int, out_dir: str, lost_ranks:list[int]=[]): 
     print(f"simulate lost: {model}, mbs {world_size}, world_size {world_size}, lost_nodes {lost_nodes}")
     if model == "gpt3_2_7B":
         config_path = "/workspace/Oobleck/examples/gpt3_2_7B.yaml"
@@ -222,8 +224,6 @@ def simulate_lost(model: str, microbatch: int, world_size: int, lost_nodes: int,
     if lost_nodes > can_lost_pipeline_stages - 2 * (len(pipelines) - 1):
         ignore_Embedding = False
 
-    
-    lost_ranks:list[int] = []
     
     pipeline_id = 0
     # 已知：每个rank只能有一个pipeline stage
@@ -351,6 +351,21 @@ def simulate_pipelines(model: str, microbatch: int, world_size: int):
     print(result)
 
 
+def parse_config_file(file_path):
+    try:
+        with open(file_path, "r", encoding="utf-8") as file:
+            # 读取并解析JSON文件
+            args = json.load(file)
+            print(f"args: {args}")
+            return Namespace(**args)
+    except FileNotFoundError:
+        print(f"Error: The file {file_path} was not found.")
+    except json.JSONDecodeError:
+        print(f"Error: The file {file_path} is not a valid JSON file.")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Oobleck simulator')
     parser.add_argument('--model', type=str, help='model tag')
@@ -359,13 +374,25 @@ if __name__ == "__main__":
     parser.add_argument('--lost-nodes', type=int, default=0, help='The number of nodes want to lost')
     parser.add_argument('--out-dir', type=str, help='output dir of result')
     parser.add_argument('--cuda-memory', type=int)
+    # if use config-file, all arguments are read in config-file
+    parser.add_argument('--config-file', type=str, help="The path to the JSON file of layer")
+
     args = parser.parse_args()
+    if args.config_file is not None:
+        args = parse_config_file(args.config_file)
+
 
     CUDA_MEMORY = args.cuda_memory
+    if CUDA_MEMORY is None:
+        CUDA_MEMORY = torch.cuda.get_device_properties("cuda:0").total_memory
     if args.lost_nodes == 0:
         simulate_pipelines(args.model, args.microbatch, args.worldsize)
     else:
-        simulate_lost(args.model, args.microbatch, args.worldsize, args.lost_nodes, args.out_dir)
+        if args.lost_ranks == None:
+            simulate_lost(args.model, args.microbatch, args.worldsize, args.lost_nodes, args.out_dir)
+        else:
+            assert(args.lost_nodes == len(args.lost_ranks)), 'no random lost.'
+            simulate_lost(args.model, args.microbatch, args.worldsize, args.lost_nodes, args.out_dir, args.lost_ranks)
 
 
 

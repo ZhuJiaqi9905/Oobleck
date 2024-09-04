@@ -8,4 +8,5 @@ source ~/.bash_profile
 conda activate oobleck
 conda env list
 cd /workspace/Oobleck
-pip install -e .
+# 在.bashrc中加入了PYTHONPATH, 应该不需要install
+# pip install -e .

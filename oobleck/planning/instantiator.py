@@ -161,6 +161,7 @@ class HeterogeneousPipelinesExecutionPlan:
         dataloader: OobleckDataLoader,
         training_args: TrainingArguments,
         num_gpus_per_node: int,
+        args: OobleckArguments,
         ranks: list[list[int]] | None = None,
         step: int = 0,
         # layer_index -> dict of [fsdp_index -> ProcessGroup]
@@ -194,6 +195,7 @@ class HeterogeneousPipelinesExecutionPlan:
                     dataloader=dataloader,
                     step=step,
                     training_args=training_args,
+                    args=args,
                     is_simulated=True
                 )
 

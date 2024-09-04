@@ -1,7 +1,9 @@
 
 import os
 import re
-
+'''  
+读取文件夹下的所有log文件，获取时间。
+'''
 def extract_total_time(line):
     match = re.search(r'\[Rank 0\] time \(ms\) \| step: (\d+\.\d+)', line)
     if match:
