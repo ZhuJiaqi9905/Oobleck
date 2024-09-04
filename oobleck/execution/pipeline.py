@@ -163,15 +163,15 @@ class PipelineExecution:
         ), "load_microatch can only be called at either the first stage or the last stage."
 
         if self.pipeline.is_first_stage():
-            batch = next(self._data_iterator)
-            inputs = self._prepare_inputs(batch)
+            # batch = next(self._data_iterator)
+            # inputs = self._prepare_inputs(batch)
 
             # inputs is a tuple[Tensor] with 3 elements.
-            # s = (self.pipeline._args.job.microbatch_size , self.pipeline._args.model.model_args["n_positions"]) 
-            # # print(f"size: {s}")
-            # inputs = (torch.randint(1, 10000, s, dtype=torch.int64, requires_grad=False).to(self.pipeline.device), 
-            #             torch.ones(s, dtype=torch.int64, requires_grad=False).to(self.pipeline.device),
-            #             torch.randint(1, 10000, s, dtype=torch.int64, requires_grad=False).to(self.pipeline.device))
+            s = (self.pipeline._args.job.microbatch_size , self.pipeline._args.model.model_args["n_positions"]) 
+            # print(f"size: {s}")
+            inputs = (torch.randint(1, 10000, s, dtype=torch.int64, requires_grad=False).to(self.pipeline.device), 
+                        torch.ones(s, dtype=torch.int64, requires_grad=False).to(self.pipeline.device),
+                        torch.randint(1, 10000, s, dtype=torch.int64, requires_grad=False).to(self.pipeline.device))
             self.pipeline.pipe_buffers["inputs"][buffer_id] = inputs
 
     def forward_pass(self, buffer_id: int):
@@ -534,7 +534,7 @@ class OobleckPipeline:
 
     def reset_iterator(self):
         pass
-        self.execution._data_iterator = iter(self.execution._dataloader)
+        # self.execution._data_iterator = iter(self.execution._dataloader)
 
     def initialize_execution(
         self,

@@ -27,6 +27,11 @@ class StageExecutionResult:
         layer_indices: tuple[int, int],
         num_gpus: int,
     ): ...
+    def __init__(
+        self,
+        layer_indices: list[int],
+        num_gpus: int,
+    ): ...
     _num_gpus: int
     _layer_indices: list[int]
     _size: int

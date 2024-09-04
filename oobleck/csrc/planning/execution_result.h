@@ -95,6 +95,12 @@ class StageExecutionResult
     assert(backward_ > 0);
   }
 
+  StageExecutionResult(
+      const std::vector<int>& layer_indices,
+      const int num_gpus)
+      : layer_indices_(layer_indices), num_gpus_(num_gpus) {
+  }
+  
   int num_layers() const { return layer_indices_.size(); }
   std::string to_string() const {
     int first_layer_index = layer_indices_.front();
