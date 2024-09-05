@@ -11,14 +11,14 @@ MODELS = ["gpt3_1_3B","gpt3_2_7B" ,"gpt3_6_7B" , "gpt3_350M"]
 # MODELS = ["gpt3_350M"]
 
 MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 16
+MAX_WORLD_SIZE = 20
 WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 32
 TIMEOUT_SECONDS = 1200
 
 # NODE_IPS = ["172.21.0.42", "172.21.0.47", "172.21.0.90", "172.21.0.91", "172.21.0.92", "172.21.0.46"]
 
-NODE_IPS = ["172.21.0.42", "172.21.0.90", "172.21.0.91", "172.21.0.92"]
+NODE_IPS = ["172.21.0.42",  "172.21.0.46", "172.21.0.90", "172.21.0.91", "172.21.0.92"]
 
 NODE_PORTS = ["2220", "2221", "2222", "2223"]
 MASTER_IP = "172.21.0.42"
@@ -58,7 +58,6 @@ def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[str]]:
         for port_idx in range(batch):
             nodes.append(NODE_IPS[node_idx])
             ports.append(NODE_PORTS[port_idx])
-            # ports.append(NODE_PORTS[port_idx])
             i += 1
             if i == world_size:
                 return (nodes, ports)

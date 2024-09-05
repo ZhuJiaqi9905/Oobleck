@@ -21,3 +21,4 @@ tmp/
 .hypothesis
 data/dataset
 examples/tmp-*
+backup/
