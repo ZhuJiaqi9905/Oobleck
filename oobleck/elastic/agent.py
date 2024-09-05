@@ -156,6 +156,12 @@ class OobleckAgent:
             )
             self._run_profiler(args)
 
+        # exit
+        # logger.info("profile finish. exit.")
+        # exit()
+
+
+
         assert(len(args.dist.node_ips) == len(args.dist.node_ports))
         agent_ip_ports = []
         for i in range(len(args.dist.node_ips)):

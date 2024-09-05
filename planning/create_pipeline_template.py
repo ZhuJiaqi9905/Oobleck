@@ -16,7 +16,7 @@ from oobleck.planning.instantiator import (
     PipelineInstantiator,
 )
 import json
-
+import concurrent.futures
 logger = LoggerFactory.create_logger("oobleck_engine", logging.DEBUG)
 
 
@@ -35,7 +35,7 @@ def pipeline_template_to_pipeline(template: PipelineTemplate):
     }
 
 
-def generate_pipeline_templates(
+def generate_pipeline_templates_and_plan(
     model: str,
     micro_batch_size: int,
     num_nodes: int,
@@ -225,11 +225,52 @@ def test():
     for template, val in plan.num_microbatches_set.items():
         print(f"{template}: {val}")
     
+def run_with_timeout(func, timeout, *args, **kwargs):
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        future = executor.submit(func, *args, **kwargs)
+        try:
+            result = future.result(timeout=timeout)
+            return result
+        except concurrent.futures.TimeoutError:
+            print(f"Function {func.__name__} timed out after {timeout} seconds")
+            return None
+        except Exception as e:
+            print(f"Function {func.__name__} throw exception {e}")
+            return None
 
-    
+def process_file(file_name, args):
+    print(f"Processing: {file_name}")
+
+    parts = file_name.split("-")
+    model = parts[0]
+    micro_batch_size = int(parts[1])
+    num_nodes = int(parts[2])
+    num_gpus_per_node = int(parts[3])
+
+    # Set timeout to 10 minutes (600 seconds)
+    timeout_seconds = 600
+    result = run_with_timeout(
+        generate_pipeline_templates_and_plan,
+        timeout_seconds,
+        model,
+        micro_batch_size,
+        num_nodes,
+        num_gpus_per_node,
+        args.cuda_memory,
+        args.gbs,
+    )
+
+    if result is not None:
+        out_file = os.path.join(args.out_path, f"{file_name}.json")
+        with open(out_file, "w") as fp:
+            json.dump(result, fp)
+        print(f"Result written for {file_name}")
+    else:
+        print(f"Skipping file: {file_name} due to timeout.")
+
+
+
 if __name__ == "__main__":
-    test()
-    exit()
     parser = argparse.ArgumentParser()
     parser.add_argument("--profile-path", type=str)
     parser.add_argument("--out-path", type=str)
@@ -238,30 +279,15 @@ if __name__ == "__main__":
     parser.add_argument("--gbs", type=int)
     args = parser.parse_args()
 
-    for file_name in os.listdir(args.profile_path):
+    file_names = os.listdir(args.profile_path)
 
-        # hack
-        file_name = "gpt3_1_3B-16-12-1"
-        print(f"{file_name}")
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        futures = [
+            executor.submit(process_file, file_name, args) for file_name in file_names
+        ]
+        
+        # Wait for all futures to complete
+        for future in concurrent.futures.as_completed(futures):
+            future.result()  # This will raise exceptions if any occurred
 
-        parts = file_name.split("-")
-        model = parts[0]
-        micro_batch_size = int(parts[1])
-        num_nodes = int(parts[2])
-        num_gpus_per_node = int(parts[3])
 
-        result = generate_pipeline_templates(
-            model,
-            micro_batch_size,
-            num_nodes,
-            num_gpus_per_node,
-            args.cuda_memory,
-            args.gbs,
-        )
-
-        out_file = os.path.join(args.out_path, f"{file_name}.json")
-        with open(out_file, "w") as fp:
-            json.dump(result, fp)
-        print(f"result: {result}")
-
-        break

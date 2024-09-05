@@ -6,14 +6,15 @@ import subprocess
 
 
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
-MODELS = ["gpt3_1_3B","gpt3_2_7B" ,"gpt3_6_7B" , "gpt3_350M"]
+# MODELS = ["gpt3_1_3B","gpt3_2_7B" ,"gpt3_6_7B" , "gpt3_350M"]
 
-# MODELS = ["gpt3_350M"]
+MODELS = ["gpt3_350M"]
 
 MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 20
+MAX_WORLD_SIZE = 8 
 WORLD_SIZE_INTERVAL = 1
-MAX_MBS = 32
+# MAX_MBS = 32
+MAX_MBS = 8
 TIMEOUT_SECONDS = 1200
 
 # NODE_IPS = ["172.21.0.42", "172.21.0.47", "172.21.0.90", "172.21.0.91", "172.21.0.92", "172.21.0.46"]
@@ -117,6 +118,8 @@ def monitor_logs():
                     print(f"{file} report error.")
                     runtime_error = True
                 elif 'Training is done.' in content:
+                    return 0
+                elif 'profile finish. exit.' is content:
                     return 0
         if cuda_oom:
             return -1

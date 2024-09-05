@@ -20,7 +20,7 @@ from oobleck.execution.layer import Layer
 from oobleck.execution.utils import DTYPE_TO_ID, ID_TO_DTYPE, zero_grads
 from oobleck.module.model import OobleckModel
 from oobleck.elastic.training_util import OobleckArguments, ModelArguments
-
+import time
 class OobleckPipelineSchedule(schedule.TrainSchedule):
     """A schedule for training a batch using pipeline parallelism.
 
@@ -207,9 +207,14 @@ class PipelineExecution:
             i += 1
         inputs: tuple[torch.Size | torch.Tensor] = tuple(inputs)
 
+        
+
         # Execute forward
         for layer in self._layers:
             inputs = layer(inputs)
+            for input in inputs:
+                if type(input) == torch.Tensor:
+                    print(f"type: {input.dtype}. size: {input.size()}")
         outputs = inputs
 
         # Optionally compute loss on the last stage
@@ -524,7 +529,13 @@ class OobleckPipeline:
                     )
 
                 # Equivalent to: self.[execution|communication].func(buffer_id)
+                torch.cuda.synchronize()
+                start = time.time()
                 instruction_map[type(cmd)](**cmd.kwargs)
+                torch.cuda.synchronize()
+                end = time.time()
+                print(f"{type(cmd)}: {end - start}s")
+
 
         # Cleanup buffers
         for name, pipe_buffers in self.pipe_buffers.items():
