@@ -212,9 +212,9 @@ class PipelineExecution:
         # Execute forward
         for layer in self._layers:
             inputs = layer(inputs)
-            for input in inputs:
-                if type(input) == torch.Tensor:
-                    print(f"type: {input.dtype}. size: {input.size()}")
+            # for input in inputs:
+            #     if type(input) == torch.Tensor:
+            #         print(f"type: {input.dtype}. size: {input.size()}")
         outputs = inputs
 
         # Optionally compute loss on the last stage
@@ -529,12 +529,12 @@ class OobleckPipeline:
                     )
 
                 # Equivalent to: self.[execution|communication].func(buffer_id)
-                torch.cuda.synchronize()
-                start = time.time()
+                # torch.cuda.synchronize()
+                # start = time.time()
                 instruction_map[type(cmd)](**cmd.kwargs)
-                torch.cuda.synchronize()
-                end = time.time()
-                print(f"{type(cmd)}: {end - start}s")
+                # torch.cuda.synchronize()
+                # end = time.time()
+                # print(f"{type(cmd)}: {end - start}s")
 
 
         # Cleanup buffers

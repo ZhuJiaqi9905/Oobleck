@@ -8,10 +8,10 @@ import subprocess
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
 # MODELS = ["gpt3_1_3B","gpt3_2_7B" ,"gpt3_6_7B" , "gpt3_350M"]
 
-MODELS = ["gpt3_350M"]
+MODELS = ["gpt3_1_3B"]
 
-MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 8 
+MIN_WORLD_SIZE = 14
+MAX_WORLD_SIZE = 14
 WORLD_SIZE_INTERVAL = 1
 # MAX_MBS = 32
 MAX_MBS = 8
@@ -119,7 +119,7 @@ def monitor_logs():
                     runtime_error = True
                 elif 'Training is done.' in content:
                     return 0
-                elif 'profile finish. exit.' is content:
+                elif 'profile finish. exit.' in content:
                     return 0
         if cuda_oom:
             return -1
@@ -136,7 +136,7 @@ for model in MODELS:
     elif model == "gpt3_350M":
         MAX_MBS = 8
     elif model == "gpt3_1_3B":
-        MAX_MBS = 16
+        MAX_MBS = 8
     elif model == "gpt3_2_7B":
         MAX_MBS = 8
     mbs = MAX_MBS
