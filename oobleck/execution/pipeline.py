@@ -255,6 +255,10 @@ class PipelineExecution:
             self.pipeline.pipe_buffers["outputs"][buffer_id] = outputs
 
     def backward_pass(self, buffer_id: int):
+
+
+        torch.cuda.synchronize()
+        start = time.time()
         if self.pipeline.is_last_stage():
             loss = self._loss
             self._layers[-1].backward(loss)
@@ -271,11 +275,16 @@ class PipelineExecution:
             assert len(output_tensors) == len(grad_tensors)
 
             self._layers[-1].backward((output_tensors, grad_tensors))
+        torch.cuda.synchronize()
+        end1 = time.time()
 
         # Free up memory from the output of forward()
         self.pipeline.pipe_buffers["outputs"][buffer_id] = None
         grad_tensors = None
         self._loss = None
+        torch.cuda.synchronize()
+        end2 = time.time()
+        print(f"do backward: {end1 - start}, free memory: {end2 - end1}")
 
     def optimizer_step(self, lr_kwargs=None):
         # amp enable check: gradient clipping
@@ -521,8 +530,11 @@ class OobleckPipeline:
         }   
 
         forward_time = 0
+        forward_cnt = 0
         backward_time = 0
+        backward_cnt = 0
         load_mbs_time = 0
+        load_mbs_cnt = 0
         for step_cmds in self.train_schedule:
             # For each instruction in the step
             for cmd in step_cmds:
@@ -539,13 +551,17 @@ class OobleckPipeline:
                 end = time.time()
                 if type(cmd) == schedule.ForwardPass:
                     forward_time += end - start
+                    forward_cnt += 1
                 elif type(cmd) == schedule.BackwardPass:
                     backward_time += end - start 
+                    backward_cnt += 1
                 elif type(cmd) == schedule.LoadMicroBatch:
                     load_mbs_time += end - start
+                    load_mbs_cnt += 1
                 # print(f"{type(cmd)}: {end - start}s")
 
         print(f"load_mbs: {load_mbs_time}, forward time: {forward_time}, backward time: {backward_time}")
+        print(f"load_mbs cnt: {load_mbs_cnt}, forward cnt: {forward_cnt}, backward cnt: {backward_cnt}")
 
         # Cleanup buffers
         for name, pipe_buffers in self.pipe_buffers.items():
