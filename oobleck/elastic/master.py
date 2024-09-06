@@ -73,7 +73,7 @@ class OobleckMasterDaemon:
             node_ip, node_port, username=args.dist.username, known_hosts=None
         ) as conn:
             cmd = '/bin/bash -ic "conda run --no-capture-output -n oobleck '
-            cmd += '/workspace/nsight-systems-2024.5.1/bin/nsys  profile -o /tmp/nsight_report '
+            # cmd += '/workspace/nsight-systems-2024.5.1/bin/nsys  profile -o /tmp/nsight_report '
             cmd += "python -m oobleck.elastic.agent "
             cmd += f"--master_ip {args.dist.master_ip} --master_port {args.dist.master_port} "
             cmd += f'--job_id {job_id} --agent_index {agent_index} --node_id {node_index}"'
