@@ -60,9 +60,9 @@ class Layer(torch.nn.Module):
         layer.pre_stream = existing_layer.pre_stream
         layer.post_stream = existing_layer.post_stream
 
-        layer.register_forward_pre_hook(layer.pre_forward_hook)
-        layer.register_forward_hook(layer.post_forward_hook)
-        layer.register_full_backward_pre_hook(layer.pre_backward_hook)
+        # layer.register_forward_pre_hook(layer.pre_forward_hook)
+        # layer.register_forward_hook(layer.post_forward_hook)
+        # layer.register_full_backward_pre_hook(layer.pre_backward_hook)
 
         print(f"create Layer {layer.layer_id}, rank_index {layer._rank_index}, group size {layer._group_size}")
         return layer
