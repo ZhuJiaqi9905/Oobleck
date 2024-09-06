@@ -60,9 +60,9 @@ class Layer(torch.nn.Module):
         layer.pre_stream = existing_layer.pre_stream
         layer.post_stream = existing_layer.post_stream
 
-        layer.register_forward_pre_hook(layer.pre_forward_hook)
-        layer.register_forward_hook(layer.post_forward_hook)
-        layer.register_full_backward_pre_hook(layer.pre_backward_hook)
+        # layer.register_forward_pre_hook(layer.pre_forward_hook)
+        # layer.register_forward_hook(layer.post_forward_hook)
+        # layer.register_full_backward_pre_hook(layer.pre_backward_hook)
 
         print(f"create Layer {layer.layer_id}, rank_index {layer._rank_index}, group size {layer._group_size}")
         return layer
@@ -99,8 +99,12 @@ class Layer(torch.nn.Module):
 
         layer = copy.deepcopy(layer)
         init_tensors(layer, device)
+
+
         # if is_checkpointable(layer):
         #     layer = checkpoint_wrapper(layer)
+
+        
         # 使用fsdp的flat parameter功能把layer的参数做shard
         self._param_handle = FlatParamHandle(
             params=layer.parameters(),
@@ -116,12 +120,12 @@ class Layer(torch.nn.Module):
             process_group=process_group,
             use_orig_params=False,
         )
-        self._param_handle.shard()
-        self._param_handle.init_flat_param_attributes()
+        # self._param_handle.shard()
+        # self._param_handle.init_flat_param_attributes()
 
-        self.register_forward_pre_hook(self.pre_forward_hook)
-        self.register_forward_hook(self.post_forward_hook)
-        self.register_full_backward_pre_hook(self.pre_backward_hook)
+        # self.register_forward_pre_hook(self.pre_forward_hook)
+        # self.register_forward_hook(self.post_forward_hook)
+        # self.register_full_backward_pre_hook(self.pre_backward_hook)
 
     def unshard_params(self, state: HandleTrainingState):
         assert state in [
