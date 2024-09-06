@@ -887,26 +887,47 @@ class OobleckEngine:
         # sys.exit()
 
         assert self._hf_training_args.max_steps > 0
-        with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],schedule=torch.profiler.schedule(wait=1, warmup=1,active=10,repeat=1),on_trace_ready=trace_handler) as p:
-            for step in range(self._hf_training_args.max_steps):
-                print(f"step: {step}")
-                p.step()
-                try:
-                    print(f"step in try: {step}")
-                    self._train_step()
-                    # dist.barrier()
-                    # torch.cuda.synchronize()
-                    print(f"training step: {step} done")
-                    sync_timer.log(["step"])    
-                    log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
-                    # if step == 10:
-                    #     self.fake_stop_and_reconfigure("10.20.23.91")
+        for step in range(self._hf_training_args.max_steps):
+            print(f"step: {step}")
 
-                except StopIteration:
-                    print(f"step in exception: {step}")
-                    step_timer: SynchronizedWallClockTimer.Timer = sync_timer("step")
-                    step_timer.reset()
-                    self._pipeline.reset_iterator()
+            try:
+                print(f"step in try: {step}")
+                self._train_step()
+                # dist.barrier()
+                # torch.cuda.synchronize()
+                print(f"training step: {step} done")
+                sync_timer.log(["step"])    
+                log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
+                # if step == 10:
+                #     self.fake_stop_and_reconfigure("10.20.23.91")
+
+            except StopIteration:
+                print(f"step in exception: {step}")
+                step_timer: SynchronizedWallClockTimer.Timer = sync_timer("step")
+                step_timer.reset()
+                self._pipeline.reset_iterator()
+
+
+        # with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],schedule=torch.profiler.schedule(wait=1, warmup=1,active=10,repeat=1),on_trace_ready=trace_handler) as p:
+        #     for step in range(self._hf_training_args.max_steps):
+        #         print(f"step: {step}")
+        #         p.step()
+        #         try:
+        #             print(f"step in try: {step}")
+        #             self._train_step()
+        #             # dist.barrier()
+        #             # torch.cuda.synchronize()
+        #             print(f"training step: {step} done")
+        #             sync_timer.log(["step"])    
+        #             log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
+        #             # if step == 10:
+        #             #     self.fake_stop_and_reconfigure("10.20.23.91")
+
+        #         except StopIteration:
+        #             print(f"step in exception: {step}")
+        #             step_timer: SynchronizedWallClockTimer.Timer = sync_timer("step")
+        #             step_timer.reset()
+        #             self._pipeline.reset_iterator()
 
         logger.info("Training is done. Waiting for synchronization...")
         dist.barrier()
