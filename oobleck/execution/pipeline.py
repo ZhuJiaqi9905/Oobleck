@@ -529,12 +529,12 @@ class OobleckPipeline:
                     )
 
                 # Equivalent to: self.[execution|communication].func(buffer_id)
-                # torch.cuda.synchronize()
-                # start = time.time()
+                torch.cuda.synchronize()
+                start = time.time()
                 instruction_map[type(cmd)](**cmd.kwargs)
-                # torch.cuda.synchronize()
-                # end = time.time()
-                # print(f"{type(cmd)}: {end - start}s")
+                torch.cuda.synchronize()
+                end = time.time()
+                print(f"{type(cmd)}: {end - start}s")
 
 
         # Cleanup buffers
