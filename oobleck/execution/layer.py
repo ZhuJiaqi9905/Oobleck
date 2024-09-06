@@ -99,8 +99,8 @@ class Layer(torch.nn.Module):
 
         layer = copy.deepcopy(layer)
         init_tensors(layer, device)
-        if is_checkpointable(layer):
-            layer = checkpoint_wrapper(layer)
+        # if is_checkpointable(layer):
+        #     layer = checkpoint_wrapper(layer)
         # 使用fsdp的flat parameter功能把layer的参数做shard
         self._param_handle = FlatParamHandle(
             params=layer.parameters(),

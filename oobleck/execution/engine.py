@@ -674,7 +674,7 @@ class OobleckEngine:
 
         # TODO: Calculate num_gpus_range based on profile results
         print(f"min_nodes: {min_num_nodes}, max_nodes: {max_num_nodes}, gpus: {num_gpus_per_node}, ")
-        template_generator = PipelineTemplateGenerator()
+        # template_generator = PipelineTemplateGenerator()
 
         # read pipeline_template for json file
         self._json_file = f"/workspace/Oobleck/tmp/pipeline_templates/{self._args.model.model_tag}-{self._hf_training_args.per_device_train_batch_size}-{num_gpus_per_node * num_nodes}-{num_gpus_per_node}.json"
