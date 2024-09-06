@@ -37,9 +37,13 @@ from oobleck.planning.instantiator import (
 from oobleck.utils.timer import measure_time, sync_timer
 import json
 from oobleck.csrc.planning.pipeline_template import StageExecutionResult
-
+from torch.profiler import profile, record_function, ProfilerActivity
 
 logger = LoggerFactory.create_logger("oobleck_engine", logging.DEBUG)
+def trace_handler(p):
+    output = p.key_averages().table(sort_by="self_cuda_time_total", row_limit=10)
+    print(output)
+    p.export_chrome_trace("/tmp/trace_" + str(p.step_num) + ".json")
 
 def create_pipeline_template_from_obj(obj) -> PipelineTemplate:
     stages = []
@@ -883,24 +887,26 @@ class OobleckEngine:
         # sys.exit()
 
         assert self._hf_training_args.max_steps > 0
-        for step in range(self._hf_training_args.max_steps):
-            print(f"step: {step}")
-            try:
-                print(f"step in try: {step}")
-                self._train_step()
-                # dist.barrier()
-                # torch.cuda.synchronize()
-                print(f"training step: {step} done")
-                sync_timer.log(["step"])    
-                log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
-                # if step == 10:
-                #     self.fake_stop_and_reconfigure("10.20.23.91")
+        with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],schedule=torch.profiler.schedule(wait=1, warmup=1,active=10,repeat=2),on_trace_ready=trace_handler) as p:
+            for step in range(self._hf_training_args.max_steps):
+                print(f"step: {step}")
+                p.step()
+                try:
+                    print(f"step in try: {step}")
+                    self._train_step()
+                    # dist.barrier()
+                    # torch.cuda.synchronize()
+                    print(f"training step: {step} done")
+                    sync_timer.log(["step"])    
+                    log_dist(SynchronizedWallClockTimer.memory_usage(), ranks=[0])
+                    # if step == 10:
+                    #     self.fake_stop_and_reconfigure("10.20.23.91")
 
-            except StopIteration:
-                print(f"step in exception: {step}")
-                step_timer: SynchronizedWallClockTimer.Timer = sync_timer("step")
-                step_timer.reset()
-                self._pipeline.reset_iterator()
+                except StopIteration:
+                    print(f"step in exception: {step}")
+                    step_timer: SynchronizedWallClockTimer.Timer = sync_timer("step")
+                    step_timer.reset()
+                    self._pipeline.reset_iterator()
 
         logger.info("Training is done. Waiting for synchronization...")
         dist.barrier()

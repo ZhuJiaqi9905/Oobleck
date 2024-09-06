@@ -256,9 +256,7 @@ class PipelineExecution:
 
     def backward_pass(self, buffer_id: int):
 
-
-        torch.cuda.synchronize()
-        start = time.time()
+ 
         if self.pipeline.is_last_stage():
             loss = self._loss
             self._layers[-1].backward(loss)
@@ -275,16 +273,13 @@ class PipelineExecution:
             assert len(output_tensors) == len(grad_tensors)
 
             self._layers[-1].backward((output_tensors, grad_tensors))
-        torch.cuda.synchronize()
-        end1 = time.time()
+
 
         # Free up memory from the output of forward()
         self.pipeline.pipe_buffers["outputs"][buffer_id] = None
         grad_tensors = None
         self._loss = None
-        torch.cuda.synchronize()
-        end2 = time.time()
-        print(f"do backward: {end1 - start}, free memory: {end2 - end1}")
+
 
     def optimizer_step(self, lr_kwargs=None):
         # amp enable check: gradient clipping

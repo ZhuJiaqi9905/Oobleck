@@ -15,7 +15,7 @@
   "n_embd": 1024,
   "n_head": 16,
   "n_inner": null,
-  "n_layer": 24,
+  "n_layer": 8,
   "n_positions": 1024,
   "reorder_and_upcast_attn": false,
   "resid_pdrop": 0.1,
