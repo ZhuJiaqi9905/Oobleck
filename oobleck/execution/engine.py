@@ -887,7 +887,7 @@ class OobleckEngine:
         # sys.exit()
 
         assert self._hf_training_args.max_steps > 0
-        with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],schedule=torch.profiler.schedule(wait=1, warmup=1,active=10,repeat=2),on_trace_ready=trace_handler) as p:
+        with profile(activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],schedule=torch.profiler.schedule(wait=1, warmup=1,active=10,repeat=1),on_trace_ready=trace_handler) as p:
             for step in range(self._hf_training_args.max_steps):
                 print(f"step: {step}")
                 p.step()
