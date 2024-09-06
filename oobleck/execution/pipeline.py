@@ -520,6 +520,9 @@ class OobleckPipeline:
             schedule.RecvGrad: self.communication.recv_gradients,
         }   
 
+        forward_time = 0
+        backward_time = 0
+        load_mbs_time = 0
         for step_cmds in self.train_schedule:
             # For each instruction in the step
             for cmd in step_cmds:
@@ -529,13 +532,20 @@ class OobleckPipeline:
                     )
 
                 # Equivalent to: self.[execution|communication].func(buffer_id)
-                # torch.cuda.synchronize()
-                # start = time.time()
+                torch.cuda.synchronize()
+                start = time.time()
                 instruction_map[type(cmd)](**cmd.kwargs)
-                # torch.cuda.synchronize()
-                # end = time.time()
+                torch.cuda.synchronize()
+                end = time.time()
+                if type(cmd) == schedule.ForwardPass:
+                    forward_time += end - start
+                elif type(cmd) == schedule.BackwardPass:
+                    backward_time += end - start 
+                elif type(cmd) == schedule.LoadMicroBatch:
+                    load_mbs_time += end - start
                 # print(f"{type(cmd)}: {end - start}s")
 
+        print(f"load_mbs: {load_mbs_time}, forward time: {forward_time}, backward time: {backward_time}")
 
         # Cleanup buffers
         for name, pipe_buffers in self.pipe_buffers.items():
