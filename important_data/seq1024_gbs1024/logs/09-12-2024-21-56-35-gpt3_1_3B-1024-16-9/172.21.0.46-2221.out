@@ -1,0 +1,162 @@
+[2024-09-12 21:56:41,205] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/workspace/Oobleck/oobleck/__init__.py
+node_index: 5
+[2024-09-12 21:56:44,846] [WARNING] [agent.py:154:_launch_workers] Profile data for model gpt2 not found. Exception Error parsing json file: /workspace/Oobleck/tmp/profiles/gpt3_1_3B-16-9-1/mb16.json Launching profiler...
+[2024-09-12 21:56:46,795] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-09-12 21:56:49,902] [INFO] [profiler.py:270:profile] Profiling model gpt2. rank 5, world_size 9, num_workers_per_node 1.
+Dataset: model_name: gpt2, dataset_path: wikitext, dataset_name: wikitext-2-raw-v1, max_seq_length: 1024
+[2024-09-12 21:56:51,791] [INFO] [profiler.py:276:profile] Dataset loaded
+model_name: gpt2, model_tag: gpt3_1_3B
+[2024-09-12 21:56:52,889] [INFO] [profiler.py:284:profile] model loaded
+[2024-09-12 21:57:17,121] [INFO] [profiler.py:292:profile] init pg. master_addr: 172.21.0.42, master_port: 23456
+[2024-09-12 21:57:17,895] [INFO] [profiler.py:306:profile] Profiling model execution latency.
+[2024-09-12 21:57:17,896] [INFO] [profiler.py:112:profile_execution_layers] before barrier
+[2024-09-12 21:57:28,526] [INFO] [profiler.py:114:profile_execution_layers] after barrier
+[2024-09-12 21:57:28,526] [INFO] [profiler.py:120:profile_execution_layers] before broadcast
+[2024-09-12 21:57:28,526] [INFO] [profiler.py:122:profile_execution_layers] after broadcast
+[2024-09-12 21:57:28,527] [INFO] [profiler.py:317:profile] Profiling cross-node allreduce latency.
+[2024-09-12 21:57:28,527] [INFO] [profiler.py:160:profile_allreduce_across_nodes] Profile allreduce across 9 nodes latency
+[2024-09-12 21:57:28,790] [INFO] [profiler.py:326:profile] Profiling in-node allreduce latency.
+[2024-09-12 21:57:28,790] [INFO] [profiler.py:209:profile_allreduce_in_node] Profile allreduce within a node latency
+[2024-09-12 21:57:29,877] [INFO] [agent.py:189:_launch_workers] in agent. my_ip_port 172.21.0.46:2221, node_ip_ports ['172.21.0.42:2220', '172.21.0.42:2221', '172.21.0.42:2222', '172.21.0.42:2223', '172.21.0.46:2220', '172.21.0.46:2221', '172.21.0.46:2222', '172.21.0.46:2223', '172.21.0.47:2220']
+[2024-09-12 21:57:29,877] [INFO] [agent.py:192:_launch_workers] Launching worker 0...
+[2024-09-12 21:57:31,918] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-09-12 21:57:35,179] [INFO] [worker.py:23:worker_main] Initializing Oobleck Engine...
+[2024-09-12 21:57:35,179] [INFO] [worker.py:24:worker_main] in worker main: my_ip 172.21.0.46:2221
+/root/miniconda3/envs/oobleck/lib/python3.10/site-packages/transformers/training_args.py:1281: FutureWarning: using `no_cuda` is deprecated and will be removed in version 5.0 of 🤗 Transformers. Use `use_cpu` instead
+  warnings.warn(
+Dataset: model_name: gpt2, dataset_path: wikitext, dataset_name: wikitext-2-raw-v1, max_seq_length: 1024
+[2024-09-12 21:57:36,858] [INFO] [engine.py:635:_initialize_engine] model arguments: {'n_embd': 2048, 'n_head': 32, 'n_positions': 1024, 'num_hidden_layers': 24}
+model_name: gpt2, model_tag: gpt3_1_3B
+mb size: 26, ar across: 26, ar in: 26
+Loading done. creating layer execution results...
+Returning from get_profiler_results
+[2024-09-12 21:57:37,928] [INFO] [engine.py:677:_initialize_engine] Number of nodes range: (2, 9)
+min_nodes: 2, max_nodes: 9, gpus: 1, 
+Create pipeline templates
+StageExecutionResult[0:13] with 1 devices
+StageExecutionResult[14:25] with 1 devices
+StageExecutionResult[0:9] with 1 devices
+StageExecutionResult[10:17] with 1 devices
+StageExecutionResult[18:25] with 1 devices
+StageExecutionResult[0:7] with 1 devices
+StageExecutionResult[8:13] with 1 devices
+StageExecutionResult[14:19] with 1 devices
+StageExecutionResult[20:25] with 1 devices
+StageExecutionResult[0:6] with 1 devices
+StageExecutionResult[7:11] with 1 devices
+StageExecutionResult[12:16] with 1 devices
+StageExecutionResult[17:21] with 1 devices
+StageExecutionResult[22:25] with 1 devices
+StageExecutionResult[0:5] with 1 devices
+StageExecutionResult[6:9] with 1 devices
+StageExecutionResult[10:13] with 1 devices
+StageExecutionResult[14:17] with 1 devices
+StageExecutionResult[18:21] with 1 devices
+StageExecutionResult[22:25] with 1 devices
+StageExecutionResult[0:4] with 1 devices
+StageExecutionResult[5:8] with 1 devices
+StageExecutionResult[9:12] with 1 devices
+StageExecutionResult[13:16] with 1 devices
+StageExecutionResult[17:19] with 1 devices
+StageExecutionResult[20:22] with 1 devices
+StageExecutionResult[23:25] with 1 devices
+StageExecutionResult[0:4] with 1 devices
+StageExecutionResult[5:7] with 1 devices
+StageExecutionResult[8:10] with 1 devices
+StageExecutionResult[11:13] with 1 devices
+StageExecutionResult[14:16] with 1 devices
+StageExecutionResult[17:19] with 1 devices
+StageExecutionResult[20:22] with 1 devices
+StageExecutionResult[23:25] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:6] with 1 devices
+StageExecutionResult[7:9] with 1 devices
+StageExecutionResult[10:12] with 1 devices
+StageExecutionResult[13:15] with 1 devices
+StageExecutionResult[16:18] with 1 devices
+StageExecutionResult[19:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+[2024-09-12 21:57:39,112] [INFO] [worker.py:27:worker_main] Initializing torch.distributed...
+[2024-09-12 21:57:39,112] [DEBUG] [engine.py:725:initialize_distributed] regenerate rank_map {'172.21.0.42:2220': [0], '172.21.0.42:2221': [1], '172.21.0.42:2222': [2], '172.21.0.42:2223': [3], '172.21.0.46:2220': [4], '172.21.0.46:2221': [5], '172.21.0.46:2222': [6], '172.21.0.46:2223': [7], '172.21.0.47:2220': [8]}
+[2024-09-12 21:57:39,113] [INFO] [engine.py:739:initialize_distributed] init pg: rank 5, world_size: 9, rank_map: {'172.21.0.42:2220': [0], '172.21.0.42:2221': [1], '172.21.0.42:2222': [2], '172.21.0.42:2223': [3], '172.21.0.46:2220': [4], '172.21.0.46:2221': [5], '172.21.0.46:2222': [6], '172.21.0.46:2223': [7], '172.21.0.47:2220': [8]}
+[2024-09-12 21:57:39,113] [INFO] [engine.py:755:initialize_distributed] Waiting for a port information...
+[2024-09-12 21:57:39,474] [DEBUG] [agent.py:298:on_receive_response] Receiving: (<Response.FORWARD_RANK0_PORT: 5>, <RequestType.UNDEFINED: 0>)
+[2024-09-12 21:57:39,475] [DEBUG] [agent.py:243:on_receive_worker_port] agent recv TCP Store port 39573 from master
+[2024-09-12 21:57:39,475] [INFO] [engine.py:758:initialize_distributed] Received torch master: 172.21.0.42:2220.39573
+[2024-09-12 21:57:39,638] [INFO] [comm.py:637:init_distributed] cdb=None
+[2024-09-12 21:57:39,638] [INFO] [engine.py:775:initialize_distributed] [rank: 5] Distributed initialization is done.
+[2024-09-12 21:57:39,638] [INFO] [worker.py:34:worker_main] Instantiating pipelines...
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 21:57:39,928] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+MindtPy initialization may have generated poor quality cuts.
+[2024-09-12 21:57:39,986] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+Cannot load a SolverResults object with bad status: error
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 21:57:40,529] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 21:57:40,734] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 21:57:40,982] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+[2024-09-12 21:57:41,255] [INFO] [instantiator.py:256:get_best_execution_plan] Best execution plan: 1 x <oobleck.PipelineTemplate.9nodes> pipelines (b: 64)
+B: 64
+dataloader: mbs 16
+[2024-09-12 21:57:47,466] [INFO] [engine.py:159:_reconfiguration_listener_fn] ReconfigureEngine: start reconfigure listening
+[2024-09-12 21:57:47,466] [INFO] [worker.py:36:worker_main] Begin training...
+step: 0
+step in try: 0
+load_mbs: 0, forward time: 9.58823275566101, backward time: 23.599549055099487
+load_mbs cnt: 0, forward cnt: 64, backward cnt: 64
+training step: 0 done
+/root/miniconda3/envs/oobleck/lib/python3.10/site-packages/torch/cuda/memory.py:416: FutureWarning: torch.cuda.memory_cached has been renamed to torch.cuda.memory_reserved
+  warnings.warn(
+/root/miniconda3/envs/oobleck/lib/python3.10/site-packages/torch/cuda/memory.py:424: FutureWarning: torch.cuda.max_memory_cached has been renamed to torch.cuda.max_memory_reserved
+  warnings.warn(
+step: 1
+step in try: 1
+load_mbs: 0, forward time: 9.163510084152222, backward time: 23.601574420928955
+load_mbs cnt: 0, forward cnt: 64, backward cnt: 64
+training step: 1 done
+step: 2
+step in try: 2
+load_mbs: 0, forward time: 9.16591501235962, backward time: 23.595210075378418
+load_mbs cnt: 0, forward cnt: 64, backward cnt: 64
+training step: 2 done
+step: 3
+step in try: 3
+load_mbs: 0, forward time: 9.171225786209106, backward time: 23.598668575286865
+load_mbs cnt: 0, forward cnt: 64, backward cnt: 64
+training step: 3 done
+step: 4
+step in try: 4
+load_mbs: 0, forward time: 9.170185565948486, backward time: 23.598379373550415
+load_mbs cnt: 0, forward cnt: 64, backward cnt: 64
+training step: 4 done
+step: 5
+step in try: 5
+load_mbs: 0, forward time: 9.162355661392212, backward time: 23.613765716552734
+load_mbs cnt: 0, forward cnt: 64, backward cnt: 64
+training step: 5 done
+step: 6
+step in try: 6
+load_mbs: 0, forward time: 9.175035953521729, backward time: 23.600561141967773
+load_mbs cnt: 0, forward cnt: 64, backward cnt: 64
+training step: 6 done
+step: 7
+step in try: 7
+load_mbs: 0, forward time: 9.170723676681519, backward time: 23.60065460205078
+load_mbs cnt: 0, forward cnt: 64, backward cnt: 64
+training step: 7 done
+step: 8
+step in try: 8
+load_mbs: 0, forward time: 9.170249223709106, backward time: 23.604900121688843
+load_mbs cnt: 0, forward cnt: 64, backward cnt: 64
+training step: 8 done
+step: 9
+step in try: 9
+load_mbs: 0, forward time: 9.174487829208374, backward time: 23.61441707611084
+load_mbs cnt: 0, forward cnt: 64, backward cnt: 64
+training step: 9 done
+[2024-09-12 22:04:11,059] [INFO] [engine.py:932:train] Training is done. Waiting for synchronization...
+[2024-09-12 22:04:13,375] [INFO] [engine.py:935:train] Training done.

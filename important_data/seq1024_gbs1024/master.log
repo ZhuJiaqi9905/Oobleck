@@ -1,0 +1,54 @@
+[2024-09-13 02:41:45,011] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-09-13 02:41:46,891] [INFO] [master.py:272:main] Master daemon is running on port 60000...
+[2024-09-13 02:41:53,313] [INFO] [master.py:252:on_connected] Received request: RequestType.LAUNCH_JOB
+[2024-09-13 02:41:53,478] [INFO] [master.py:80:run_node_agents] Launching an agent on 172.21.0.42: /bin/bash -ic "conda run --no-capture-output -n oobleck python -m oobleck.elastic.agent --master_ip 172.21.0.42 --master_port 60000 --job_id 0 --agent_index 0 --node_id 0"
+[2024-09-13 02:41:53,494] [INFO] [master.py:80:run_node_agents] Launching an agent on 172.21.0.42: /bin/bash -ic "conda run --no-capture-output -n oobleck python -m oobleck.elastic.agent --master_ip 172.21.0.42 --master_port 60000 --job_id 0 --agent_index 0 --node_id 2"
+[2024-09-13 02:41:53,504] [INFO] [master.py:80:run_node_agents] Launching an agent on 172.21.0.46: /bin/bash -ic "conda run --no-capture-output -n oobleck python -m oobleck.elastic.agent --master_ip 172.21.0.42 --master_port 60000 --job_id 0 --agent_index 0 --node_id 6"
+[2024-09-13 02:41:53,508] [INFO] [master.py:80:run_node_agents] Launching an agent on 172.21.0.46: /bin/bash -ic "conda run --no-capture-output -n oobleck python -m oobleck.elastic.agent --master_ip 172.21.0.42 --master_port 60000 --job_id 0 --agent_index 0 --node_id 7"
+[2024-09-13 02:41:53,513] [INFO] [master.py:80:run_node_agents] Launching an agent on 172.21.0.42: /bin/bash -ic "conda run --no-capture-output -n oobleck python -m oobleck.elastic.agent --master_ip 172.21.0.42 --master_port 60000 --job_id 0 --agent_index 0 --node_id 1"
+[2024-09-13 02:41:53,514] [INFO] [master.py:80:run_node_agents] Launching an agent on 172.21.0.42: /bin/bash -ic "conda run --no-capture-output -n oobleck python -m oobleck.elastic.agent --master_ip 172.21.0.42 --master_port 60000 --job_id 0 --agent_index 0 --node_id 3"
+[2024-09-13 02:41:53,520] [INFO] [master.py:80:run_node_agents] Launching an agent on 172.21.0.46: /bin/bash -ic "conda run --no-capture-output -n oobleck python -m oobleck.elastic.agent --master_ip 172.21.0.42 --master_port 60000 --job_id 0 --agent_index 0 --node_id 4"
+[2024-09-13 02:41:53,521] [INFO] [master.py:80:run_node_agents] Launching an agent on 172.21.0.46: /bin/bash -ic "conda run --no-capture-output -n oobleck python -m oobleck.elastic.agent --master_ip 172.21.0.42 --master_port 60000 --job_id 0 --agent_index 0 --node_id 5"
+[2024-09-13 02:41:53,529] [INFO] [master.py:89:run_node_agents] Agent 172.21.0.42-2221 output will be written at /workspace/Oobleck/tmp/logs/09-13-2024-02-41-53-gpt3_2_7B-1024-8-8/172.21.0.42-2221.out
+[2024-09-13 02:41:53,537] [INFO] [master.py:89:run_node_agents] Agent 172.21.0.42-2220 output will be written at /workspace/Oobleck/tmp/logs/09-13-2024-02-41-53-gpt3_2_7B-1024-8-8/172.21.0.42-2220.out
+[2024-09-13 02:41:53,554] [INFO] [master.py:89:run_node_agents] Agent 172.21.0.42-2222 output will be written at /workspace/Oobleck/tmp/logs/09-13-2024-02-41-53-gpt3_2_7B-1024-8-8/172.21.0.42-2222.out
+[2024-09-13 02:41:53,568] [INFO] [master.py:89:run_node_agents] Agent 172.21.0.46-2222 output will be written at /workspace/Oobleck/tmp/logs/09-13-2024-02-41-53-gpt3_2_7B-1024-8-8/172.21.0.46-2222.out
+[2024-09-13 02:41:53,572] [INFO] [master.py:89:run_node_agents] Agent 172.21.0.46-2223 output will be written at /workspace/Oobleck/tmp/logs/09-13-2024-02-41-53-gpt3_2_7B-1024-8-8/172.21.0.46-2223.out
+[2024-09-13 02:41:53,575] [INFO] [master.py:89:run_node_agents] Agent 172.21.0.42-2223 output will be written at /workspace/Oobleck/tmp/logs/09-13-2024-02-41-53-gpt3_2_7B-1024-8-8/172.21.0.42-2223.out
+[2024-09-13 02:41:53,585] [INFO] [master.py:89:run_node_agents] Agent 172.21.0.46-2220 output will be written at /workspace/Oobleck/tmp/logs/09-13-2024-02-41-53-gpt3_2_7B-1024-8-8/172.21.0.46-2220.out
+[2024-09-13 02:41:53,590] [INFO] [master.py:89:run_node_agents] Agent 172.21.0.46-2221 output will be written at /workspace/Oobleck/tmp/logs/09-13-2024-02-41-53-gpt3_2_7B-1024-8-8/172.21.0.46-2221.out
+[2024-09-13 02:42:00,408] [INFO] [master.py:252:on_connected] Received request: RequestType.REGISTER_AGENT
+[2024-09-13 02:42:00,408] [INFO] [master.py:185:register_agent_handler] Registering agent stream: ('172.21.0.42', 32802)
+[2024-09-13 02:42:00,432] [INFO] [master.py:252:on_connected] Received request: RequestType.REGISTER_AGENT
+[2024-09-13 02:42:00,433] [INFO] [master.py:185:register_agent_handler] Registering agent stream: ('172.21.0.42', 32804)
+[2024-09-13 02:42:00,503] [INFO] [master.py:252:on_connected] Received request: RequestType.REGISTER_AGENT
+[2024-09-13 02:42:00,504] [INFO] [master.py:185:register_agent_handler] Registering agent stream: ('172.21.0.42', 32818)
+[2024-09-13 02:42:00,512] [INFO] [master.py:252:on_connected] Received request: RequestType.REGISTER_AGENT
+[2024-09-13 02:42:00,512] [INFO] [master.py:185:register_agent_handler] Registering agent stream: ('172.21.0.42', 32830)
+[2024-09-13 02:42:02,996] [INFO] [master.py:252:on_connected] Received request: RequestType.REGISTER_AGENT
+[2024-09-13 02:42:02,997] [INFO] [master.py:252:on_connected] Received request: RequestType.REGISTER_AGENT
+[2024-09-13 02:42:02,998] [INFO] [master.py:185:register_agent_handler] Registering agent stream: ('172.21.0.46', 43490)
+[2024-09-13 02:42:02,999] [INFO] [master.py:185:register_agent_handler] Registering agent stream: ('172.21.0.46', 43502)
+[2024-09-13 02:42:03,061] [INFO] [master.py:252:on_connected] Received request: RequestType.REGISTER_AGENT
+[2024-09-13 02:42:03,062] [INFO] [master.py:185:register_agent_handler] Registering agent stream: ('172.21.0.46', 43514)
+[2024-09-13 02:42:03,082] [INFO] [master.py:252:on_connected] Received request: RequestType.REGISTER_AGENT
+[2024-09-13 02:42:03,082] [INFO] [master.py:185:register_agent_handler] Registering agent stream: ('172.21.0.46', 43522)
+[2024-09-13 02:43:21,381] [DEBUG] [master.py:144:forward_rank0_port_handler] master Received rank0 port: 36559
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/oobleck/lib/python3.10/runpy.py", line 196, in _run_module_as_main
+    return _run_code(code, main_globals, None,
+  File "/root/miniconda3/envs/oobleck/lib/python3.10/runpy.py", line 86, in _run_code
+    exec(code, run_globals)
+  File "/workspace/Oobleck/oobleck/elastic/master.py", line 284, in <module>
+    asyncio.run(main(args.ip, args.port))
+  File "/root/miniconda3/envs/oobleck/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/root/miniconda3/envs/oobleck/lib/python3.10/asyncio/base_events.py", line 628, in run_until_complete
+    self.run_forever()
+  File "/root/miniconda3/envs/oobleck/lib/python3.10/asyncio/base_events.py", line 595, in run_forever
+    self._run_once()
+  File "/root/miniconda3/envs/oobleck/lib/python3.10/asyncio/base_events.py", line 1845, in _run_once
+    event_list = self._selector.select(timeout)
+  File "/root/miniconda3/envs/oobleck/lib/python3.10/selectors.py", line 469, in select
+    fd_event_list = self._selector.poll(timeout, max_ev)
+KeyboardInterrupt

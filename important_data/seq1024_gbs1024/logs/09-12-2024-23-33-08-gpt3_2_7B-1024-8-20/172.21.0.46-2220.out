@@ -1,0 +1,359 @@
+[2024-09-12 23:33:14,377] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/workspace/Oobleck/oobleck/__init__.py
+node_index: 4
+[2024-09-12 23:33:18,046] [WARNING] [agent.py:154:_launch_workers] Profile data for model gpt2 not found. Exception Error parsing json file: /workspace/Oobleck/tmp/profiles/gpt3_2_7B-8-20-1/mb8.json Launching profiler...
+[2024-09-12 23:33:19,894] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-09-12 23:33:23,171] [INFO] [profiler.py:270:profile] Profiling model gpt2. rank 4, world_size 20, num_workers_per_node 1.
+Dataset: model_name: gpt2, dataset_path: wikitext, dataset_name: wikitext-2-raw-v1, max_seq_length: 1024
+[2024-09-12 23:33:25,030] [INFO] [profiler.py:276:profile] Dataset loaded
+model_name: gpt2, model_tag: gpt3_2_7B
+[2024-09-12 23:33:26,219] [INFO] [profiler.py:284:profile] model loaded
+[2024-09-12 23:34:06,011] [INFO] [profiler.py:292:profile] init pg. master_addr: 172.21.0.42, master_port: 23456
+[2024-09-12 23:34:06,970] [INFO] [profiler.py:306:profile] Profiling model execution latency.
+[2024-09-12 23:34:06,970] [INFO] [profiler.py:112:profile_execution_layers] before barrier
+[2024-09-12 23:34:20,122] [INFO] [profiler.py:114:profile_execution_layers] after barrier
+[2024-09-12 23:34:20,123] [INFO] [profiler.py:120:profile_execution_layers] before broadcast
+[2024-09-12 23:34:20,123] [INFO] [profiler.py:122:profile_execution_layers] after broadcast
+[2024-09-12 23:34:20,125] [INFO] [profiler.py:317:profile] Profiling cross-node allreduce latency.
+[2024-09-12 23:34:20,126] [INFO] [profiler.py:160:profile_allreduce_across_nodes] Profile allreduce across 20 nodes latency
+[2024-09-12 23:34:20,583] [INFO] [profiler.py:326:profile] Profiling in-node allreduce latency.
+[2024-09-12 23:34:20,584] [INFO] [profiler.py:209:profile_allreduce_in_node] Profile allreduce within a node latency
+[2024-09-12 23:34:22,034] [INFO] [agent.py:189:_launch_workers] in agent. my_ip_port 172.21.0.46:2220, node_ip_ports ['172.21.0.42:2220', '172.21.0.42:2221', '172.21.0.42:2222', '172.21.0.42:2223', '172.21.0.46:2220', '172.21.0.46:2221', '172.21.0.46:2222', '172.21.0.46:2223', '172.21.0.47:2220', '172.21.0.47:2221', '172.21.0.47:2222', '172.21.0.47:2223', '172.21.0.90:2220', '172.21.0.90:2221', '172.21.0.90:2222', '172.21.0.90:2223', '172.21.0.91:2220', '172.21.0.91:2221', '172.21.0.91:2222', '172.21.0.91:2223']
+[2024-09-12 23:34:22,034] [INFO] [agent.py:192:_launch_workers] Launching worker 0...
+[2024-09-12 23:34:23,971] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-09-12 23:34:27,018] [INFO] [worker.py:23:worker_main] Initializing Oobleck Engine...
+[2024-09-12 23:34:27,018] [INFO] [worker.py:24:worker_main] in worker main: my_ip 172.21.0.46:2220
+/root/miniconda3/envs/oobleck/lib/python3.10/site-packages/transformers/training_args.py:1281: FutureWarning: using `no_cuda` is deprecated and will be removed in version 5.0 of 🤗 Transformers. Use `use_cpu` instead
+  warnings.warn(
+Dataset: model_name: gpt2, dataset_path: wikitext, dataset_name: wikitext-2-raw-v1, max_seq_length: 1024
+[2024-09-12 23:34:28,964] [INFO] [engine.py:635:_initialize_engine] model arguments: {'n_embd': 2560, 'n_head': 32, 'n_positions': 1024, 'num_hidden_layers': 32}
+model_name: gpt2, model_tag: gpt3_2_7B
+mb size: 34, ar across: 34, ar in: 34
+Loading done. creating layer execution results...
+Returning from get_profiler_results
+[2024-09-12 23:34:30,243] [INFO] [engine.py:677:_initialize_engine] Number of nodes range: (3, 20)
+min_nodes: 3, max_nodes: 20, gpus: 1, 
+Create pipeline templates
+StageExecutionResult[0:12] with 1 devices
+StageExecutionResult[13:23] with 1 devices
+StageExecutionResult[24:33] with 1 devices
+StageExecutionResult[0:9] with 1 devices
+StageExecutionResult[10:18] with 1 devices
+StageExecutionResult[19:26] with 1 devices
+StageExecutionResult[27:33] with 1 devices
+StageExecutionResult[0:7] with 1 devices
+StageExecutionResult[8:14] with 1 devices
+StageExecutionResult[15:21] with 1 devices
+StageExecutionResult[22:27] with 1 devices
+StageExecutionResult[28:33] with 1 devices
+StageExecutionResult[0:6] with 1 devices
+StageExecutionResult[7:12] with 1 devices
+StageExecutionResult[13:18] with 1 devices
+StageExecutionResult[19:23] with 1 devices
+StageExecutionResult[24:28] with 1 devices
+StageExecutionResult[29:33] with 1 devices
+StageExecutionResult[0:5] with 1 devices
+StageExecutionResult[6:10] with 1 devices
+StageExecutionResult[11:15] with 1 devices
+StageExecutionResult[16:20] with 1 devices
+StageExecutionResult[21:25] with 1 devices
+StageExecutionResult[26:30] with 1 devices
+StageExecutionResult[31:33] with 1 devices
+StageExecutionResult[0:5] with 1 devices
+StageExecutionResult[6:10] with 1 devices
+StageExecutionResult[11:14] with 1 devices
+StageExecutionResult[15:18] with 1 devices
+StageExecutionResult[19:22] with 1 devices
+StageExecutionResult[23:26] with 1 devices
+StageExecutionResult[27:30] with 1 devices
+StageExecutionResult[31:33] with 1 devices
+StageExecutionResult[0:4] with 1 devices
+StageExecutionResult[5:8] with 1 devices
+StageExecutionResult[9:12] with 1 devices
+StageExecutionResult[13:16] with 1 devices
+StageExecutionResult[17:20] with 1 devices
+StageExecutionResult[21:24] with 1 devices
+StageExecutionResult[25:27] with 1 devices
+StageExecutionResult[28:30] with 1 devices
+StageExecutionResult[31:33] with 1 devices
+StageExecutionResult[0:4] with 1 devices
+StageExecutionResult[5:8] with 1 devices
+StageExecutionResult[9:12] with 1 devices
+StageExecutionResult[13:16] with 1 devices
+StageExecutionResult[17:19] with 1 devices
+StageExecutionResult[20:22] with 1 devices
+StageExecutionResult[23:25] with 1 devices
+StageExecutionResult[26:28] with 1 devices
+StageExecutionResult[29:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:4] with 1 devices
+StageExecutionResult[5:7] with 1 devices
+StageExecutionResult[8:10] with 1 devices
+StageExecutionResult[11:13] with 1 devices
+StageExecutionResult[14:16] with 1 devices
+StageExecutionResult[17:19] with 1 devices
+StageExecutionResult[20:22] with 1 devices
+StageExecutionResult[23:25] with 1 devices
+StageExecutionResult[26:28] with 1 devices
+StageExecutionResult[29:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:6] with 1 devices
+StageExecutionResult[7:9] with 1 devices
+StageExecutionResult[10:12] with 1 devices
+StageExecutionResult[13:15] with 1 devices
+StageExecutionResult[16:18] with 1 devices
+StageExecutionResult[19:21] with 1 devices
+StageExecutionResult[22:24] with 1 devices
+StageExecutionResult[25:27] with 1 devices
+StageExecutionResult[28:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:6] with 1 devices
+StageExecutionResult[7:9] with 1 devices
+StageExecutionResult[10:12] with 1 devices
+StageExecutionResult[13:15] with 1 devices
+StageExecutionResult[16:18] with 1 devices
+StageExecutionResult[19:21] with 1 devices
+StageExecutionResult[22:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:6] with 1 devices
+StageExecutionResult[7:9] with 1 devices
+StageExecutionResult[10:12] with 1 devices
+StageExecutionResult[13:15] with 1 devices
+StageExecutionResult[16:17] with 1 devices
+StageExecutionResult[18:19] with 1 devices
+StageExecutionResult[20:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[26:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:6] with 1 devices
+StageExecutionResult[7:9] with 1 devices
+StageExecutionResult[10:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[26:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:31] with 1 devices
+StageExecutionResult[32:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:19] with 1 devices
+StageExecutionResult[20:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[26:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:30] with 1 devices
+StageExecutionResult[31:31] with 1 devices
+StageExecutionResult[32:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:19] with 1 devices
+StageExecutionResult[20:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[26:26] with 1 devices
+StageExecutionResult[27:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:30] with 1 devices
+StageExecutionResult[31:31] with 1 devices
+StageExecutionResult[32:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+[2024-09-12 23:34:58,632] [DEBUG] [agent.py:298:on_receive_response] Receiving: (<Response.FORWARD_RANK0_PORT: 5>, <RequestType.UNDEFINED: 0>)
+[2024-09-12 23:34:58,633] [DEBUG] [agent.py:243:on_receive_worker_port] agent recv TCP Store port 38989 from master
+[2024-09-12 23:34:58,638] [INFO] [worker.py:27:worker_main] Initializing torch.distributed...
+[2024-09-12 23:34:58,639] [DEBUG] [engine.py:725:initialize_distributed] regenerate rank_map {'172.21.0.42:2220': [0], '172.21.0.42:2221': [1], '172.21.0.42:2222': [2], '172.21.0.42:2223': [3], '172.21.0.46:2220': [4], '172.21.0.46:2221': [5], '172.21.0.46:2222': [6], '172.21.0.46:2223': [7], '172.21.0.47:2220': [8], '172.21.0.47:2221': [9], '172.21.0.47:2222': [10], '172.21.0.47:2223': [11], '172.21.0.90:2220': [12], '172.21.0.90:2221': [13], '172.21.0.90:2222': [14], '172.21.0.90:2223': [15], '172.21.0.91:2220': [16], '172.21.0.91:2221': [17], '172.21.0.91:2222': [18], '172.21.0.91:2223': [19]}
+[2024-09-12 23:34:58,639] [INFO] [engine.py:739:initialize_distributed] init pg: rank 4, world_size: 20, rank_map: {'172.21.0.42:2220': [0], '172.21.0.42:2221': [1], '172.21.0.42:2222': [2], '172.21.0.42:2223': [3], '172.21.0.46:2220': [4], '172.21.0.46:2221': [5], '172.21.0.46:2222': [6], '172.21.0.46:2223': [7], '172.21.0.47:2220': [8], '172.21.0.47:2221': [9], '172.21.0.47:2222': [10], '172.21.0.47:2223': [11], '172.21.0.90:2220': [12], '172.21.0.90:2221': [13], '172.21.0.90:2222': [14], '172.21.0.90:2223': [15], '172.21.0.91:2220': [16], '172.21.0.91:2221': [17], '172.21.0.91:2222': [18], '172.21.0.91:2223': [19]}
+[2024-09-12 23:34:58,639] [INFO] [engine.py:755:initialize_distributed] Waiting for a port information...
+[2024-09-12 23:34:58,639] [INFO] [engine.py:758:initialize_distributed] Received torch master: 172.21.0.42:2220.38989
+[2024-09-12 23:34:59,429] [INFO] [comm.py:637:init_distributed] cdb=None
+[2024-09-12 23:34:59,430] [INFO] [engine.py:775:initialize_distributed] [rank: 4] Distributed initialization is done.
+[2024-09-12 23:34:59,430] [INFO] [worker.py:34:worker_main] Instantiating pipelines...
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 23:34:59,716] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+MindtPy initialization may have generated poor quality cuts.
+[2024-09-12 23:34:59,770] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 23:35:00,003] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value 2.5059E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 23:35:00,802] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 23:35:01,244] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value -7.4942E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 23:35:04,964] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 23:35:07,089] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value 2.5059E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value 2.5059E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 23:35:07,668] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value -7.4942E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 23:35:08,014] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 23:35:08,275] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value 2.5059E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value 2.5059E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4942E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 23:35:12,922] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4942E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value 2.5059E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 23:35:25,523] [INFO] [instantiator.py:256:get_best_execution_plan] Best execution plan: 1 x <oobleck.PipelineTemplate.3nodes> pipelines (b: 19)
+3 x <oobleck.PipelineTemplate.4nodes> pipelines (b: 26)
+1 x <oobleck.PipelineTemplate.5nodes> pipelines (b: 31)
+B: 128
+dataloader: mbs 8
+[2024-09-12 23:35:44,308] [INFO] [engine.py:159:_reconfiguration_listener_fn] ReconfigureEngine: start reconfigure listening
+[2024-09-12 23:35:44,308] [INFO] [worker.py:36:worker_main] Begin training...
+step: 0
+step in try: 0
+load_mbs: 0, forward time: 7.589112758636475, backward time: 18.823569774627686
+load_mbs cnt: 0, forward cnt: 26, backward cnt: 26
+training step: 0 done
+/root/miniconda3/envs/oobleck/lib/python3.10/site-packages/torch/cuda/memory.py:416: FutureWarning: torch.cuda.memory_cached has been renamed to torch.cuda.memory_reserved
+  warnings.warn(
+/root/miniconda3/envs/oobleck/lib/python3.10/site-packages/torch/cuda/memory.py:424: FutureWarning: torch.cuda.max_memory_cached has been renamed to torch.cuda.max_memory_reserved
+  warnings.warn(
+step: 1
+step in try: 1
+load_mbs: 0, forward time: 7.186442613601685, backward time: 18.818500518798828
+load_mbs cnt: 0, forward cnt: 26, backward cnt: 26
+training step: 1 done
+step: 2
+step in try: 2
+load_mbs: 0, forward time: 7.183829069137573, backward time: 18.82041573524475
+load_mbs cnt: 0, forward cnt: 26, backward cnt: 26
+training step: 2 done
+step: 3
+step in try: 3
+load_mbs: 0, forward time: 7.18254017829895, backward time: 18.81630301475525
+load_mbs cnt: 0, forward cnt: 26, backward cnt: 26
+training step: 3 done
+step: 4
+step in try: 4
+load_mbs: 0, forward time: 7.1837663650512695, backward time: 18.820047616958618
+load_mbs cnt: 0, forward cnt: 26, backward cnt: 26
+training step: 4 done
+step: 5
+step in try: 5
+load_mbs: 0, forward time: 7.181941270828247, backward time: 18.821101188659668
+load_mbs cnt: 0, forward cnt: 26, backward cnt: 26
+training step: 5 done
+step: 6
+step in try: 6
+load_mbs: 0, forward time: 7.183281183242798, backward time: 18.81945490837097
+load_mbs cnt: 0, forward cnt: 26, backward cnt: 26
+training step: 6 done
+step: 7
+step in try: 7
+load_mbs: 0, forward time: 7.182691812515259, backward time: 18.81957745552063
+load_mbs cnt: 0, forward cnt: 26, backward cnt: 26
+training step: 7 done
+step: 8
+step in try: 8
+load_mbs: 0, forward time: 7.183738946914673, backward time: 18.81514835357666
+load_mbs cnt: 0, forward cnt: 26, backward cnt: 26
+training step: 8 done
+step: 9
+step in try: 9
+load_mbs: 0, forward time: 7.1833813190460205, backward time: 18.819979190826416
+load_mbs cnt: 0, forward cnt: 26, backward cnt: 26
+training step: 9 done
+[2024-09-12 23:45:15,309] [INFO] [engine.py:932:train] Training is done. Waiting for synchronization...
+[2024-09-12 23:45:19,737] [INFO] [engine.py:935:train] Training done.

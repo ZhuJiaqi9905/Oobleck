@@ -1,0 +1,237 @@
+[2024-09-12 19:06:08,884] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/workspace/Oobleck/oobleck/__init__.py
+node_index: 9
+[2024-09-12 19:06:12,164] [WARNING] [agent.py:154:_launch_workers] Profile data for model gpt2 not found. Exception Error parsing json file: /workspace/Oobleck/tmp/profiles/gpt3_1_3B-16-19-1/mb16.json Launching profiler...
+[2024-09-12 19:06:14,110] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-09-12 19:06:17,246] [INFO] [profiler.py:270:profile] Profiling model gpt2. rank 9, world_size 19, num_workers_per_node 1.
+Dataset: model_name: gpt2, dataset_path: wikitext, dataset_name: wikitext-2-raw-v1, max_seq_length: 1024
+[2024-09-12 19:06:20,083] [INFO] [profiler.py:276:profile] Dataset loaded
+model_name: gpt2, model_tag: gpt3_1_3B
+[2024-09-12 19:06:21,143] [INFO] [profiler.py:284:profile] model loaded
+[2024-09-12 19:06:45,178] [INFO] [profiler.py:292:profile] init pg. master_addr: 172.21.0.42, master_port: 23456
+[2024-09-12 19:06:48,054] [INFO] [profiler.py:306:profile] Profiling model execution latency.
+[2024-09-12 19:06:48,056] [INFO] [profiler.py:112:profile_execution_layers] before barrier
+[2024-09-12 19:06:58,910] [INFO] [profiler.py:114:profile_execution_layers] after barrier
+[2024-09-12 19:06:58,911] [INFO] [profiler.py:120:profile_execution_layers] before broadcast
+[2024-09-12 19:06:58,911] [INFO] [profiler.py:122:profile_execution_layers] after broadcast
+[2024-09-12 19:06:58,914] [INFO] [profiler.py:317:profile] Profiling cross-node allreduce latency.
+[2024-09-12 19:06:58,914] [INFO] [profiler.py:160:profile_allreduce_across_nodes] Profile allreduce across 19 nodes latency
+[2024-09-12 19:06:59,228] [INFO] [profiler.py:326:profile] Profiling in-node allreduce latency.
+[2024-09-12 19:06:59,229] [INFO] [profiler.py:209:profile_allreduce_in_node] Profile allreduce within a node latency
+[2024-09-12 19:07:00,503] [INFO] [agent.py:189:_launch_workers] in agent. my_ip_port 172.21.0.47:2221, node_ip_ports ['172.21.0.42:2220', '172.21.0.42:2221', '172.21.0.42:2222', '172.21.0.42:2223', '172.21.0.46:2220', '172.21.0.46:2221', '172.21.0.46:2222', '172.21.0.46:2223', '172.21.0.47:2220', '172.21.0.47:2221', '172.21.0.47:2222', '172.21.0.47:2223', '172.21.0.90:2220', '172.21.0.90:2221', '172.21.0.90:2222', '172.21.0.90:2223', '172.21.0.91:2220', '172.21.0.91:2221', '172.21.0.91:2222']
+[2024-09-12 19:07:00,503] [INFO] [agent.py:192:_launch_workers] Launching worker 0...
+[2024-09-12 19:07:02,354] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-09-12 19:07:05,495] [INFO] [worker.py:23:worker_main] Initializing Oobleck Engine...
+[2024-09-12 19:07:05,495] [INFO] [worker.py:24:worker_main] in worker main: my_ip 172.21.0.47:2221
+/root/miniconda3/envs/oobleck/lib/python3.10/site-packages/transformers/training_args.py:1281: FutureWarning: using `no_cuda` is deprecated and will be removed in version 5.0 of 🤗 Transformers. Use `use_cpu` instead
+  warnings.warn(
+Dataset: model_name: gpt2, dataset_path: wikitext, dataset_name: wikitext-2-raw-v1, max_seq_length: 1024
+[2024-09-12 19:07:08,426] [INFO] [engine.py:635:_initialize_engine] model arguments: {'n_embd': 2048, 'n_head': 32, 'n_positions': 1024, 'num_hidden_layers': 24}
+model_name: gpt2, model_tag: gpt3_1_3B
+mb size: 26, ar across: 26, ar in: 26
+Loading done. creating layer execution results...
+Returning from get_profiler_results
+[2024-09-12 19:07:09,536] [INFO] [engine.py:677:_initialize_engine] Number of nodes range: (2, 19)
+min_nodes: 2, max_nodes: 19, gpus: 1, 
+Create pipeline templates
+StageExecutionResult[0:13] with 1 devices
+StageExecutionResult[14:25] with 1 devices
+StageExecutionResult[0:9] with 1 devices
+StageExecutionResult[10:17] with 1 devices
+StageExecutionResult[18:25] with 1 devices
+StageExecutionResult[0:7] with 1 devices
+StageExecutionResult[8:13] with 1 devices
+StageExecutionResult[14:19] with 1 devices
+StageExecutionResult[20:25] with 1 devices
+StageExecutionResult[0:6] with 1 devices
+StageExecutionResult[7:11] with 1 devices
+StageExecutionResult[12:16] with 1 devices
+StageExecutionResult[17:21] with 1 devices
+StageExecutionResult[22:25] with 1 devices
+StageExecutionResult[0:5] with 1 devices
+StageExecutionResult[6:9] with 1 devices
+StageExecutionResult[10:13] with 1 devices
+StageExecutionResult[14:18] with 1 devices
+StageExecutionResult[19:22] with 1 devices
+StageExecutionResult[23:25] with 1 devices
+StageExecutionResult[0:4] with 1 devices
+StageExecutionResult[5:8] with 1 devices
+StageExecutionResult[9:12] with 1 devices
+StageExecutionResult[13:16] with 1 devices
+StageExecutionResult[17:20] with 1 devices
+StageExecutionResult[21:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[0:4] with 1 devices
+StageExecutionResult[5:7] with 1 devices
+StageExecutionResult[8:10] with 1 devices
+StageExecutionResult[11:13] with 1 devices
+StageExecutionResult[14:17] with 1 devices
+StageExecutionResult[18:20] with 1 devices
+StageExecutionResult[21:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:6] with 1 devices
+StageExecutionResult[7:9] with 1 devices
+StageExecutionResult[10:12] with 1 devices
+StageExecutionResult[13:15] with 1 devices
+StageExecutionResult[16:18] with 1 devices
+StageExecutionResult[19:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:11] with 1 devices
+StageExecutionResult[12:13] with 1 devices
+StageExecutionResult[14:16] with 1 devices
+StageExecutionResult[17:19] with 1 devices
+StageExecutionResult[20:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:5] with 1 devices
+StageExecutionResult[6:7] with 1 devices
+StageExecutionResult[8:9] with 1 devices
+StageExecutionResult[10:11] with 1 devices
+StageExecutionResult[12:13] with 1 devices
+StageExecutionResult[14:16] with 1 devices
+StageExecutionResult[17:19] with 1 devices
+StageExecutionResult[20:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:5] with 1 devices
+StageExecutionResult[6:7] with 1 devices
+StageExecutionResult[8:9] with 1 devices
+StageExecutionResult[10:11] with 1 devices
+StageExecutionResult[12:13] with 1 devices
+StageExecutionResult[14:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:7] with 1 devices
+StageExecutionResult[8:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:7] with 1 devices
+StageExecutionResult[8:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:5] with 1 devices
+StageExecutionResult[6:6] with 1 devices
+StageExecutionResult[7:7] with 1 devices
+StageExecutionResult[8:8] with 1 devices
+StageExecutionResult[9:9] with 1 devices
+StageExecutionResult[10:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:5] with 1 devices
+StageExecutionResult[6:6] with 1 devices
+StageExecutionResult[7:7] with 1 devices
+StageExecutionResult[8:8] with 1 devices
+StageExecutionResult[9:9] with 1 devices
+StageExecutionResult[10:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:3] with 1 devices
+StageExecutionResult[4:5] with 1 devices
+StageExecutionResult[6:6] with 1 devices
+StageExecutionResult[7:7] with 1 devices
+StageExecutionResult[8:8] with 1 devices
+StageExecutionResult[9:9] with 1 devices
+StageExecutionResult[10:11] with 1 devices
+StageExecutionResult[12:12] with 1 devices
+StageExecutionResult[13:13] with 1 devices
+StageExecutionResult[14:15] with 1 devices
+StageExecutionResult[16:17] with 1 devices
+StageExecutionResult[18:19] with 1 devices
+StageExecutionResult[20:20] with 1 devices
+StageExecutionResult[21:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+[2024-09-12 19:07:17,907] [DEBUG] [agent.py:298:on_receive_response] Receiving: (<Response.FORWARD_RANK0_PORT: 5>, <RequestType.UNDEFINED: 0>)
+[2024-09-12 19:07:17,907] [DEBUG] [agent.py:243:on_receive_worker_port] agent recv TCP Store port 33055 from master
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:3] with 1 devices
+StageExecutionResult[4:5] with 1 devices
+StageExecutionResult[6:6] with 1 devices
+StageExecutionResult[7:7] with 1 devices
+StageExecutionResult[8:8] with 1 devices
+StageExecutionResult[9:9] with 1 devices
+StageExecutionResult[10:11] with 1 devices
+StageExecutionResult[12:12] with 1 devices
+StageExecutionResult[13:13] with 1 devices
+StageExecutionResult[14:15] with 1 devices
+StageExecutionResult[16:17] with 1 devices
+StageExecutionResult[18:18] with 1 devices
+StageExecutionResult[19:19] with 1 devices
+StageExecutionResult[20:20] with 1 devices
+StageExecutionResult[21:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+[2024-09-12 19:07:18,060] [INFO] [worker.py:27:worker_main] Initializing torch.distributed...
+[2024-09-12 19:07:18,060] [DEBUG] [engine.py:725:initialize_distributed] regenerate rank_map {'172.21.0.42:2220': [0], '172.21.0.42:2221': [1], '172.21.0.42:2222': [2], '172.21.0.42:2223': [3], '172.21.0.46:2220': [4], '172.21.0.46:2221': [5], '172.21.0.46:2222': [6], '172.21.0.46:2223': [7], '172.21.0.47:2220': [8], '172.21.0.47:2221': [9], '172.21.0.47:2222': [10], '172.21.0.47:2223': [11], '172.21.0.90:2220': [12], '172.21.0.90:2221': [13], '172.21.0.90:2222': [14], '172.21.0.90:2223': [15], '172.21.0.91:2220': [16], '172.21.0.91:2221': [17], '172.21.0.91:2222': [18]}
+[2024-09-12 19:07:18,061] [INFO] [engine.py:739:initialize_distributed] init pg: rank 9, world_size: 19, rank_map: {'172.21.0.42:2220': [0], '172.21.0.42:2221': [1], '172.21.0.42:2222': [2], '172.21.0.42:2223': [3], '172.21.0.46:2220': [4], '172.21.0.46:2221': [5], '172.21.0.46:2222': [6], '172.21.0.46:2223': [7], '172.21.0.47:2220': [8], '172.21.0.47:2221': [9], '172.21.0.47:2222': [10], '172.21.0.47:2223': [11], '172.21.0.90:2220': [12], '172.21.0.90:2221': [13], '172.21.0.90:2222': [14], '172.21.0.90:2223': [15], '172.21.0.91:2220': [16], '172.21.0.91:2221': [17], '172.21.0.91:2222': [18]}
+[2024-09-12 19:07:18,061] [INFO] [engine.py:755:initialize_distributed] Waiting for a port information...
+[2024-09-12 19:07:18,061] [INFO] [engine.py:758:initialize_distributed] Received torch master: 172.21.0.42:2220.33055
+[2024-09-12 19:07:18,685] [INFO] [comm.py:637:init_distributed] cdb=None
+[2024-09-12 19:07:18,685] [INFO] [engine.py:775:initialize_distributed] [rank: 9] Distributed initialization is done.
+[2024-09-12 19:07:18,686] [INFO] [worker.py:34:worker_main] Instantiating pipelines...
+The objective value -7.4941E-09 of feasibility problem is less than zero_tolerance. This indicates that the nlp subproblem is feasible, although it is found infeasible in the previous step. Check the nlp solver output
+[2024-09-12 19:07:19,003] [INFO] [instantiator.py:382:_distribute_batch] Batch distribution find no results. return None

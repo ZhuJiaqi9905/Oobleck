@@ -1,0 +1,28 @@
+[2024-09-12 22:11:36,938] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/workspace/Oobleck/oobleck/__init__.py
+node_index: 11
+[2024-09-12 22:11:40,220] [WARNING] [agent.py:154:_launch_workers] Profile data for model gpt2 not found. Exception Error parsing json file: /workspace/Oobleck/tmp/profiles/gpt3_2_7B-32-24-1/mb32.json Launching profiler...
+[2024-09-12 22:11:42,019] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2024-09-12 22:11:45,206] [INFO] [profiler.py:270:profile] Profiling model gpt2. rank 11, world_size 24, num_workers_per_node 1.
+Dataset: model_name: gpt2, dataset_path: wikitext, dataset_name: wikitext-2-raw-v1, max_seq_length: 1024
+[2024-09-12 22:11:47,483] [INFO] [profiler.py:276:profile] Dataset loaded
+model_name: gpt2, model_tag: gpt3_2_7B
+[2024-09-12 22:11:48,735] [INFO] [profiler.py:284:profile] model loaded
+[2024-09-12 22:12:28,876] [INFO] [profiler.py:292:profile] init pg. master_addr: 172.21.0.42, master_port: 23456
+[2024-09-12 22:12:31,199] [INFO] [profiler.py:306:profile] Profiling model execution latency.
+[2024-09-12 22:12:31,200] [INFO] [profiler.py:112:profile_execution_layers] before barrier
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/root/miniconda3/envs/oobleck/lib/python3.10/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/root/miniconda3/envs/oobleck/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/workspace/Oobleck/oobleck/planning/profiler.py", line 307, in profile
+    layer_execution_result = profiler.profile_execution_layers(args.job.microbatch_size)
+  File "/workspace/Oobleck/oobleck/planning/profiler.py", line 113, in profile_execution_layers
+    dist.barrier()
+  File "/root/miniconda3/envs/oobleck/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py", line 3313, in barrier
+    work = default_pg.barrier(opts=opts)
+RuntimeError: [11] is setting up NCCL communicator and retrieving ncclUniqueId from [0] via c10d key-value store by key '0', but store->get('0') got error: Connection reset by peer. This may indicate a possible application crash on rank 0 or a network set up issue.
+[2024-09-12 22:12:47,444] [INFO] [agent.py:189:_launch_workers] in agent. my_ip_port 172.21.0.47:2223, node_ip_ports ['172.21.0.42:2220', '172.21.0.42:2221', '172.21.0.42:2222', '172.21.0.42:2223', '172.21.0.46:2220', '172.21.0.46:2221', '172.21.0.46:2222', '172.21.0.46:2223', '172.21.0.47:2220', '172.21.0.47:2221', '172.21.0.47:2222', '172.21.0.47:2223', '172.21.0.90:2220', '172.21.0.90:2221', '172.21.0.90:2222', '172.21.0.90:2223', '172.21.0.91:2220', '172.21.0.91:2221', '172.21.0.91:2222', '172.21.0.91:2223', '172.21.0.92:2220', '172.21.0.92:2221', '172.21.0.92:2222', '172.21.0.92:2223']
+[2024-09-12 22:12:47,444] [INFO] [agent.py:192:_launch_workers] Launching worker 0...

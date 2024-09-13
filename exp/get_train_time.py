@@ -20,8 +20,7 @@ def get_times(file_path):
     with open(file_path, 'r') as file:
         lines = file.readlines()
     total_times = [extract_total_time(line) for line in lines if extract_total_time(line) is not None]
-    compute_times = [extract_compute_time(line) for line in lines if extract_compute_time(line) is not None]
-    return total_times, compute_times
+    return total_times 
 
 def calculate_average(times):
     if len(times) != 3:
@@ -38,10 +37,14 @@ def main():
     for dir_name in dir_names:
         file_path = os.path.join(logs_dir, dir_name, '172.21.0.42-2220.out')
         
+
         if os.path.exists(file_path):
-            total_times, compute_times = get_times(file_path)
+            model_name = dir_name.split('-')[6]
+        
+            nodes = dir_name.split('-')[9]
+            total_times = get_times(file_path)
             if len(total_times) > 1:
-                print(f"Folder: {dir_name}, Average total time: {sum(total_times[1:]) / len(total_times[1:])}, Average compute times: {sum(compute_times[1:]) / len(compute_times[1:])}")
+                print(f"Folder: {dir_name}. model: {model_name}. nodes: {nodes} .Average total time: {sum(total_times[1:]) / len(total_times[1:])}")
                 # exit()
 
 if __name__ == "__main__":

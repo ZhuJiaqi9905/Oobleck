@@ -7,19 +7,17 @@ import subprocess
 
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
 # MODELS = ["gpt3_1_3B","gpt3_2_7B" ,"gpt3_6_7B" , "gpt3_350M"]
+MODELS = ["gpt3_6_7B"]
 
-MODELS = ["gpt3_350M"]
 
 MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 8
+MAX_WORLD_SIZE = 24
 WORLD_SIZE_INTERVAL = 1
-# MAX_MBS = 32
 MAX_MBS = 8
 TIMEOUT_SECONDS = 1200
 
-# NODE_IPS = ["172.21.0.42", "172.21.0.47", "172.21.0.90", "172.21.0.91", "172.21.0.92", "172.21.0.46"]
+NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.47", "172.21.0.90", "172.21.0.91", "172.21.0.92" ]
 
-NODE_IPS = [ "172.21.0.90", "172.21.0.91", "172.21.0.92", "172.21.0.42",  "172.21.0.46"]
 
 NODE_PORTS = ["2220", "2221", "2222", "2223"]
 MASTER_IP = "172.21.0.42"
@@ -40,8 +38,6 @@ MONITOR_INTERVAL = 15
 def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[str]]:
     nodes = []
     ports = []
-    # ports = []
-
 
     node_nums = len(NODE_IPS)
 
@@ -131,20 +127,20 @@ def kill_processes():
     subprocess.run("./exp/kill.sh", shell=True, capture_output=True, text=True)
 
 for model in MODELS:
-    if model == "gpt3_6_7B":
-        MAX_MBS = 4
-    elif model == "gpt3_350M":
-        MAX_MBS = 8
-    elif model == "gpt3_1_3B":
-        MAX_MBS = 8
-    elif model == "gpt3_2_7B":
-        MAX_MBS = 8
+    # if model == "gpt3_6_7B":
+    #     MAX_MBS = 4
+    # elif model == "gpt3_350M":
+    #     MAX_MBS = 8
+    # elif model == "gpt3_1_3B":
+    #     MAX_MBS = 8
+    # elif model == "gpt3_2_7B":
+    #     MAX_MBS = 8
     mbs = MAX_MBS
     for world_size in range(MAX_WORLD_SIZE, MIN_WORLD_SIZE - 1, -WORLD_SIZE_INTERVAL):
         while mbs > 0:
-            
-            if not os.path.exists(f"/workspace/Oobleck/tmp/pipeline_templates/{model}-{mbs}-{world_size}-1.json"):
-                break
+            # 用pipeline模板
+            # if not os.path.exists(f"/workspace/Oobleck/tmp/pipeline_templates/{model}-{mbs}-{world_size}-1.json"):
+            #     break
 
             print(f"start exp: {model}-{mbs}-{world_size}.")
             master_cmd = f"python -m oobleck.elastic.master  --ip {MASTER_IP} --port {MASTER_PORT}  > ./tmp/logs/master.log 2>&1 "
