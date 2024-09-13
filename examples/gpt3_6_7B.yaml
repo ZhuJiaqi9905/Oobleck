@@ -9,7 +9,7 @@ dist:
 job:
   fault_threshold: 1
   microbatch_size: 2
-  global_microbatch_size: 1024
+  global_microbatch_size: 2048
   steps: 20
 
 model:
