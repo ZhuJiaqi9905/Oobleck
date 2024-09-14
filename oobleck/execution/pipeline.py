@@ -539,24 +539,24 @@ class OobleckPipeline:
                     )
 
                 # Equivalent to: self.[execution|communication].func(buffer_id)
-                torch.cuda.synchronize()
-                start = time.time()
+                # torch.cuda.synchronize()
+                # start = time.time()
                 instruction_map[type(cmd)](**cmd.kwargs)
-                torch.cuda.synchronize()
-                end = time.time()
-                if type(cmd) == schedule.ForwardPass:
-                    forward_time += end - start
-                    forward_cnt += 1
-                elif type(cmd) == schedule.BackwardPass:
-                    backward_time += end - start 
-                    backward_cnt += 1
-                elif type(cmd) == schedule.LoadMicroBatch:
-                    load_mbs_time += end - start
-                    load_mbs_cnt += 1
+                # torch.cuda.synchronize()
+                # end = time.time()
+                # if type(cmd) == schedule.ForwardPass:
+                #     forward_time += end - start
+                #     forward_cnt += 1
+                # elif type(cmd) == schedule.BackwardPass:
+                #     backward_time += end - start 
+                #     backward_cnt += 1
+                # elif type(cmd) == schedule.LoadMicroBatch:
+                #     load_mbs_time += end - start
+                #     load_mbs_cnt += 1
                 # print(f"{type(cmd)}: {end - start}s")
 
-        print(f"load_mbs: {load_mbs_time}, forward time: {forward_time}, backward time: {backward_time}")
-        print(f"load_mbs cnt: {load_mbs_cnt}, forward cnt: {forward_cnt}, backward cnt: {backward_cnt}")
+        # print(f"load_mbs: {load_mbs_time}, forward time: {forward_time}, backward time: {backward_time}")
+        # print(f"load_mbs cnt: {load_mbs_cnt}, forward cnt: {forward_cnt}, backward cnt: {backward_cnt}")
 
         # Cleanup buffers
         for name, pipe_buffers in self.pipe_buffers.items():

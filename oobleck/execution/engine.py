@@ -680,15 +680,15 @@ class OobleckEngine:
         print(f"min_nodes: {min_num_nodes}, max_nodes: {max_num_nodes}, gpus: {num_gpus_per_node}, ")
 
         # read pipeline_template for json file
-        # self._json_file = f"/workspace/Oobleck/tmp/pipeline_templates/{self._args.model.model_tag}-{self._hf_training_args.per_device_train_batch_size}-{num_gpus_per_node * num_nodes}-{num_gpus_per_node}.json"
-        # pipeline_templates: list[PipelineTemplate] = create_pipeline_templates_from_json_file(self._json_file)
+        self._json_file = f"/workspace/Oobleck/planning/pipeline_templates/{self._args.model.model_tag}-{self._hf_training_args.per_device_train_batch_size}-{num_gpus_per_node * num_nodes}-{num_gpus_per_node}.json"
+        pipeline_templates: list[PipelineTemplate] = create_pipeline_templates_from_json_file(self._json_file)
 
-        template_generator = PipelineTemplateGenerator()
-        pipeline_templates: list[
-            PipelineTemplate
-        ] = template_generator.create_pipeline_templates(
-            profile_results, (min_num_nodes, max_num_nodes), num_gpus_per_node
-        )
+        # template_generator = PipelineTemplateGenerator()
+        # pipeline_templates: list[
+        #     PipelineTemplate
+        # ] = template_generator.create_pipeline_templates(
+        #     profile_results, (min_num_nodes, max_num_nodes), num_gpus_per_node
+        # )
 
 
         return dataset, model, profile_results, pipeline_templates
@@ -779,20 +779,20 @@ class OobleckEngine:
     def instantiate_pipelines(self, global_num_microbatch: int):
         # 这里获取最佳的pipeline
 
-        instantiator = PipelineInstantiator()
-        execution_plan: HeterogeneousPipelinesExecutionPlan = (
-            instantiator.get_best_execution_plan(
-                self._pipeline_templates,
-                [
-                    layer._allreduce_across_nodes
-                    for layer in self._profile_results.get()
-                ],
-                self._num_nodes,
-                global_num_microbatch,
-            )
-        )
+        # instantiator = PipelineInstantiator()
+        # execution_plan: HeterogeneousPipelinesExecutionPlan = (
+        #     instantiator.get_best_execution_plan(
+        #         self._pipeline_templates,
+        #         [
+        #             layer._allreduce_across_nodes
+        #             for layer in self._profile_results.get()
+        #         ],
+        #         self._num_nodes,
+        #         global_num_microbatch,
+        #     )
+        # )
 
-        # execution_plan: HeterogeneousPipelinesExecutionPlan = create_heterogeneous_plan_from_json_file(self._json_file, self._pipeline_templates)
+        execution_plan: HeterogeneousPipelinesExecutionPlan = create_heterogeneous_plan_from_json_file(self._json_file, self._pipeline_templates)
 
 
         # TODO: get current iteration progress
@@ -832,20 +832,21 @@ class OobleckEngine:
 
     @measure_time("step")
     def _train_step(self):
-        # torch.cuda.synchronize()
-        # begin = time.time()
+        torch.cuda.synchronize()
+        begin = time.time()
         self._pipeline.train()
-        # torch.cuda.synchronize()
-        # end_forward_backward = time.time()
-        # print(f"forward_backward: {end_forward_backward - begin}s")
+        torch.cuda.synchronize()
+        end_forward_backward = time.time()
+        print(f"forward_backward: {end_forward_backward - begin}s")
         self._dp_engine.do_allreduce()
-        # torch.cuda.synchronize()
-        # end_do_allreduce = time.time() 
-        # print(f"dp allreduce: {end_do_allreduce - end_forward_backward}s")
+        torch.cuda.synchronize()
+        end_do_allreduce = time.time() 
+        print(f"dp allreduce: {end_do_allreduce - end_forward_backward}s")
         self._pipeline.execution.optimizer_step()
-        # torch.cuda.synchronize()
-        # end = time.time()
-        # print(f"train step time: {end - begin}s")
+        torch.cuda.synchronize()
+        end = time.time()
+        print(f"optimizer time: {end - end_do_allreduce}s")
+        print(f"train step time: {end - begin}s")
     
     # TODO: reconfigure need ip and port
     def fake_stop_and_reconfigure(self, lost_ip: str):
