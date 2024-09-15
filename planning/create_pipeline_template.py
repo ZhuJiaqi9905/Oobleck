@@ -279,8 +279,11 @@ if __name__ == "__main__":
     parser.add_argument("--gbs", type=int)
     args = parser.parse_args()
 
-    file_names = os.listdir(args.profile_path)
-    # file_names = ["gpt3_2_7B-8-10-1"]
+    # file_names = os.listdir(args.profile_path)
+    file_names = []
+    for i in range(8, 21):
+        file_names.append(f"gpt3_350M-32-{i}-1")
+
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = [
             executor.submit(process_file, file_name, args) for file_name in file_names
