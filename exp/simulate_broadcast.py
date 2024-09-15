@@ -6,7 +6,7 @@ import subprocess
 import time
 import numpy as np
 
-NODE_IPS = ["172.21.0.42", "172.21.0.46","172.21.0.47", "172.21.0.90", "172.21.0.91", "172.21.0.92"]
+NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.91", "172.21.0.92"]
 NODE_PORTS = [2220, 2221, 2222, 2223]
 
 
@@ -25,9 +25,11 @@ def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[int]]:
     node_nums = len(NODE_IPS)
 
     batch = world_size // node_nums
-    
+
     if world_size % node_nums != 0:
         batch += 1
+
+    batch = 4
     port_idx = 0
     i = 0
     for node_idx in range(node_nums):

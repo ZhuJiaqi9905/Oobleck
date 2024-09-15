@@ -27,7 +27,7 @@ class Layer:
         if global_rank not in self._ranks:
             return
         for size in self._sizes:
-            self._parameters.append(torch.randn(size, dtype=torch.float16).cuda())
+            # self._parameters.append(torch.randn(size, dtype=torch.float16).cuda())
             self._optimizer_parameters.append(
                 torch.randn(size, dtype=torch.float32).cuda()
             )
@@ -42,8 +42,8 @@ class Layer:
         src = self._ranks[0]
         pg = pgs[tuple(sorted(self._ranks))]
 
-        for param in self._parameters:
-            dist.broadcast(param, src, pg)
+        # for param in self._parameters:
+        #     dist.broadcast(param, src, pg)
         for op_param in self._optimizer_parameters:
             dist.broadcast(op_param, src, pg)
         for op_mom in self._optimizer_momentums:
