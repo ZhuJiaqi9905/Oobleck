@@ -24,9 +24,98 @@ import argparse
 import json
 import random
 from argparse import Namespace
+from oobleck.csrc.planning.pipeline_template import StageExecutionResult
+
 logger = LoggerFactory.create_logger("oobleck_engine", logging.DEBUG)
 CUDA_MEMORY = None
 
+
+def create_pipeline_template_from_obj(obj) -> PipelineTemplate:
+    stages = []
+    num_layers = 0
+    for json_stage in obj["stages"]:
+        num_layers += len(json_stage["layer_indices"])
+        stages.append(
+            StageExecutionResult(json_stage["layer_indices"], json_stage["num_gpus"])
+        )
+    return PipelineTemplate(
+        stages,
+        obj["iteration_time"],
+        num_layers,
+        obj["num_nodes"],
+        obj["num_gpus_per_node"],
+    )
+
+
+def create_pipeline_templates_from_json_file(file_path: str):
+    obj = None
+    with open(file_path, "r") as fp:
+        obj = json.load(fp)
+    json_pipeline_templates = obj["pipeline_template"]
+    pipeline_templates: list[PipelineTemplate] = []
+    for json_template in json_pipeline_templates:
+        template = create_pipeline_template_from_obj(json_template)
+        pipeline_templates.append(template)
+    return pipeline_templates
+
+def find_equal_pipeline_template(
+    pipeline_templates: list[PipelineTemplate], json_pipeline
+) -> PipelineTemplate:
+    for pipeline_template in pipeline_templates:
+        if len(pipeline_template.get_stages()) != len(json_pipeline["stages"]) or pipeline_template._num_nodes != json_pipeline["num_nodes"] or pipeline_template._num_gpus_per_node != json_pipeline["num_gpus_per_node"]:
+            continue
+        is_same = True
+        for i in range(len(json_pipeline["stages"])):
+            stage = pipeline_template.get_stages()[i]
+            json_stage = json_pipeline["stages"][i]
+            layer_indices = stage._layer_indices
+            json_layer_indices = json_stage["layer_indices"]
+            if stage._num_gpus != json_stage["num_gpus"] or len(layer_indices) != len(json_layer_indices): 
+                is_same = False
+                break 
+            for j in range(len(layer_indices)):
+                if layer_indices[j] != json_layer_indices[j]:
+                    is_same = False
+                    break
+            if not is_same:
+                break
+        if is_same:
+            return pipeline_template
+    
+    raise Exception("Need to be a template in pipeline templates")
+
+
+
+def create_heterogeneous_plan_from_json_file(
+    file_path: str, pipeline_templates: list[PipelineTemplate]
+) -> HeterogeneousPipelinesExecutionPlan:
+    obj = None
+    with open(file_path, "r") as fp:
+        obj = json.load(fp)
+    json_execution_plan = obj["execution_plan"]
+
+
+    plan_pipeline_templates = [
+        find_equal_pipeline_template(pipeline_templates, json_pipeline)
+        for json_pipeline in json_execution_plan["pipeline_templates"]
+    ]
+
+    num_instances_set = {
+        find_equal_pipeline_template(pipeline_templates, kv[0]): kv[1]
+        for kv in json_execution_plan["num_instances_set"]
+    }
+
+    num_microbatches_set = {
+        find_equal_pipeline_template(pipeline_templates, kv[0]): kv[1]
+        for kv in json_execution_plan["num_microbatches_set"]
+    }
+
+    return HeterogeneousPipelinesExecutionPlan(
+        plan_pipeline_templates,
+        num_instances_set,
+        num_microbatches_set,
+        json_execution_plan["allreduce_across_nodes"],
+    )
 
 class SimulatorEngine:
     def __init__(self, num_nodes, num_gpus_per_node, args: OobleckArguments, microbatch: int, world_size: int) -> None:
@@ -116,34 +205,34 @@ class SimulatorEngine:
 
         # TODO: Calculate num_gpus_range based on profile results
         print(f"min_nodes: {min_num_nodes}, max_nodes: {max_num_nodes}, gpus: {self._num_gpus_per_node}, ")
-        template_generator = PipelineTemplateGenerator()
+        # template_generator = PipelineTemplateGenerator()
+
         # pipeline_templates: list[
         #     PipelineTemplate
-        # ] = template_generator.create_pipeline_templates_serial(
+        # ] = template_generator.create_pipeline_templates(
         #     profile_results, (min_num_nodes, max_num_nodes), self._num_gpus_per_node
         # )
-        pipeline_templates: list[
-            PipelineTemplate
-        ] = template_generator.create_pipeline_templates(
-            profile_results, (min_num_nodes, max_num_nodes), self._num_gpus_per_node
-        )
+        self._json_file = f"/workspace/Oobleck/planning/pipeline_templates/{self._args.model.model_tag}-{self._hf_training_args.per_device_train_batch_size}-{self._num_gpus_per_node * self._num_nodes}-{self._num_gpus_per_node}.json"
+
+        pipeline_templates: list[PipelineTemplate] = create_pipeline_templates_from_json_file(self._json_file)
         return dataset, model, profile_results, pipeline_templates
     
 
     def instantiate_pipelines(self, global_num_microbatch: int):
         # 这里获取最佳的pipeline
-        instantiator = PipelineInstantiator()
-        execution_plan: HeterogeneousPipelinesExecutionPlan = (
-            instantiator.get_best_execution_plan(
-                self._pipeline_templates,
-                [
-                    layer._allreduce_across_nodes
-                    for layer in self._profile_results.get()
-                ],
-                self._num_nodes,
-                global_num_microbatch,
-            )
-        )
+        # instantiator = PipelineInstantiator()
+        # execution_plan: HeterogeneousPipelinesExecutionPlan = (
+        #     instantiator.get_best_execution_plan(
+        #         self._pipeline_templates,
+        #         [
+        #             layer._allreduce_across_nodes
+        #             for layer in self._profile_results.get()
+        #         ],
+        #         self._num_nodes,
+        #         global_num_microbatch,
+        #     )
+        # )
+        execution_plan: HeterogeneousPipelinesExecutionPlan = create_heterogeneous_plan_from_json_file(self._json_file, self._pipeline_templates)
 
         # TODO: get current iteration progress
         dataloader: OobleckDataLoader = OobleckDataLoader(
@@ -376,8 +465,8 @@ if __name__ == "__main__":
     parser.add_argument('--cuda-memory', type=int)
     # if use config-file, all arguments are read in config-file
     parser.add_argument('--config-file', type=str, help="The path to the JSON file of layer")
-
     args = parser.parse_args()
+    args.lost_ranks = None
     if args.config_file is not None:
         args = parse_config_file(args.config_file)
 

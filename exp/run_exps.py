@@ -7,10 +7,10 @@ import subprocess
 
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
 # MODELS = ["gpt3_2_7B", "gpt3_1_3B", "gpt3_6_7B" , "gpt3_350M"]
-MODELS = ["gpt3_1_3B","gpt3_6_7B", "gpt3_350M"]
+MODELS = ["gpt3_2_7B"]
 
 
-MIN_WORLD_SIZE = 8
+MIN_WORLD_SIZE = 17
 MAX_WORLD_SIZE = 20
 WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 0

@@ -2,6 +2,7 @@ import subprocess
 import itertools
 import threading
 import time
+import os
 
 # 定义模型、microbatch 和 worldsize 的参数列表
 models = ["gpt3_1_3B", "gpt3_2_7B", "gpt3_6_7B", "gpt3_350M"]
@@ -41,7 +42,7 @@ def run_with_timeout(command, timeout):
         timer.cancel()
 
 
-# 生成所有参数组合
+# 生成
 # for model, config in model_configs.items():
 #     microbatch = config["microbatch"]
 #     for world_size in config["world_sizes"]:
@@ -49,9 +50,13 @@ def run_with_timeout(command, timeout):
 #         print(f"Running command: {command}")
 #         run_with_timeout(command, timeout_seconds)
 
+
+# 模拟丢失节点时的传输方式。生成一个json文件
 for model, config in model_configs.items():
     microbatch = config["microbatch"]
     for world_size in config["world_sizes"]:
+        if not os.path.exists(f"/workspace/Oobleck/planning/pipeline_templates/{model}-{microbatch}-{world_size}-1.json"):
+            continue
         command = lost_command_template.format(model, microbatch, world_size, 1)
         print(f"Running command: {command}")
         run_with_timeout(command, timeout_seconds)
