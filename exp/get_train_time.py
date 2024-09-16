@@ -44,7 +44,7 @@ def main():
             nodes = dir_name.split('-')[9]
             total_times = get_times(file_path)
             if len(total_times) > 1:
-                print(f"Folder: {dir_name}. model: {model_name}. nodes: {nodes} .Average total time: {sum(total_times[1:]) / len(total_times[1:])}")
+                print(f"Folder: {dir_name}. model: {model_name}. nodes: {nodes} .Average total time: {sum(total_times[1:6]) / len(total_times[1:6])}")
                 # exit()
 
 if __name__ == "__main__":

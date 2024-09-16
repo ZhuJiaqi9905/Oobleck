@@ -103,6 +103,8 @@ async def main():
     for filename in os.listdir(DIR):
         if not filename.endswith(".json"):
             continue
+        if "gpt3_6_7B" in filename:
+            continue
         prefix = filename.split('.')[0]
         metadatas = prefix.split('-')
         world_size = int(metadatas[1])
