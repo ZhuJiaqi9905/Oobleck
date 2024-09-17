@@ -78,8 +78,8 @@ MODEL_CONFIGS = {
 # 超时时间（秒）
 TIMEOUT_SECONDS = 600
 CUDA_MEMORY = 16945709056
-OUT_DIR = "/workspace/Oobleck/important_data/nsdi/lost_nodes/oobleck/"
-COMMAND_TEMPLATE = "python /workspace/Oobleck/simulate/oobleck_simulate.py --model {} --microbatch {} --worldsize {}  --lost-nodes {} --out-dir {} --cuda-memory {}"
+OUT_DIR = "/workspace/Oobleck/important_data/nsdi/lost_nodes/bamboo/"
+COMMAND_TEMPLATE = "python /workspace/Oobleck/simulate/bamboo_simulate.py --model {} --microbatch {} --worldsize {}  --pp {} --out-dir {} --cuda-memory {}"
 
 
 def run_command(command):
@@ -100,17 +100,17 @@ def run_with_timeout(command, timeout):
 
 
 # 生成所有参数组合
-for model, config in MODEL_CONFIGS.items():
-    microbatch = config["microbatch"]
-    nodes_change = config["world_sizes"]
-    for ori_world_size, curr_world_sizes in nodes_change.items():
-        for curr_world_size in curr_world_sizes:
-            if not os.path.exists(
-                f"/workspace/Oobleck/planning/pipeline_templates/{model}-{microbatch}-{ori_world_size}-1.json"
-            ):
-                continue 
-            command = COMMAND_TEMPLATE.format(
-                model, microbatch, ori_world_size, ori_world_size - curr_world_size, OUT_DIR, CUDA_MEMORY
-            )
-            print(f"Running command: {command}")
-            run_with_timeout(command, TIMEOUT_SECONDS)
+# for model, config in MODEL_CONFIGS.items():
+#     microbatch = config["microbatch"]
+#     nodes_change = config["world_sizes"]
+#     for ori_world_size, curr_world_sizes in nodes_change.items():
+#         for curr_world_size in curr_world_sizes:
+#             if not os.path.exists(
+#                 f"/workspace/Oobleck/planning/pipeline_templates/{model}-{microbatch}-{ori_world_size}-1.json"
+#             ):
+#                 continue 
+#             command = COMMAND_TEMPLATE.format(
+#                 model, microbatch, ori_world_size, ori_world_size - curr_world_size, OUT_DIR, CUDA_MEMORY
+#             )
+#             print(f"Running command: {command}")
+#             run_with_timeout(command, TIMEOUT_SECONDS)

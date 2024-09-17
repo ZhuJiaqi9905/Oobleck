@@ -10,7 +10,7 @@ NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.91", "172.21.
 NODE_PORTS = [2220, 2221, 2222, 2223]
 
 
-DIR = "/workspace/Oobleck/important_data/nsdi/lost_nodes/"
+DIR = "/workspace/Oobleck/important_data/nsdi/lost_nodes/oobleck"
 LOG_DIR = "/workspace/Oobleck/tmp/simulate_broadcast_logs/"
 COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/broadcast_test.py --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 --warmup-times 2 --repeat-times 10 --node-rank {} --layer-file {}"'''
 

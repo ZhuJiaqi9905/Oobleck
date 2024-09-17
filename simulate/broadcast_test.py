@@ -27,7 +27,7 @@ class Layer:
         if global_rank not in self._ranks:
             return
         for size in self._sizes:
-            # self._parameters.append(torch.randn(size, dtype=torch.float16).cuda())
+            self._parameters.append(torch.randn(size, dtype=torch.float16).cuda())
             self._optimizer_parameters.append(
                 torch.randn(size, dtype=torch.float32).cuda()
             )
