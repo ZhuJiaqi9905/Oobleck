@@ -10,11 +10,8 @@ Oobleck is a large-model training framework with fast fault recovery support uti
 Oobleck relies on `conda` for both installation and **running**. Pleasae install `conda` from Anaconda website. Then, install the Oobleck environment and package.
 
 ```bash
-conda env create -f environment.yml
-conda activate oobleck
-(oobleck) pip install .
-...
-Successfully installed oobleck-0.1.0
+chmod +x install.sh
+./install.sh
 ```
 
 ### Run

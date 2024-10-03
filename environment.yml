@@ -8,35 +8,11 @@ channels:
   # be listed explicitly here.
   - nodefaults
 dependencies:
+  # CUDA: 11.7
   - python==3.10
-  - python-devtools
-  - pip
-  - pytorch==2.0.0
-  - torchvision==0.15.0
-  - torchaudio==2.0.0
-  - pytorch-cuda=11.7
-  - cyipopt
-  - glpk
-  - setuptools
-  - pyomo
-  - pybind11
-  - ninja
-  - cmake
-  - cxx-compiler
-  - tbb-devel
-  - pip:
-    - transformers>=4.29.0
-    - deepspeed>=0.8.1
-    - accelerate
-    - datasets
-    - psutil
-    - tensorboard
-    - evaluate
-    - scikit-learn
-    - numpy
-    - pytest
-    - pytest-asyncio
-    - pytest-mock
-    - simple-parsing
-    - asyncssh
-    - aiofiles
+  - python-devtools==0.12.2
+  - pip==23.3.1
+  - wheel==0.41.3
+  - Pygments==2.17.1
+  - executing==2.0.1
+  - setuptools==68.2.2
