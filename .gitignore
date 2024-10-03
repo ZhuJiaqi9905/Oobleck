@@ -19,3 +19,4 @@ data/
 .cache
 
 *.lock
+*.tar.gz
