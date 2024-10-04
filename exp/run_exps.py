@@ -141,8 +141,8 @@ for model in MODELS:
     for world_size in range(MAX_WORLD_SIZE, MIN_WORLD_SIZE - 1, -WORLD_SIZE_INTERVAL):
         while mbs > 0:
             # 用pipeline模板
-            if not os.path.exists(f"/workspace/Oobleck/planning/pipeline_templates/{model}-{mbs}-{world_size}-1.json"):
-                break
+            # if not os.path.exists(f"/workspace/Oobleck/planning/pipeline_templates/{model}-{mbs}-{world_size}-1.json"):
+            #     break
 
             print(f"start exp: {model}-{mbs}-{world_size}.")
             master_cmd = f"python -m oobleck.elastic.master  --ip {MASTER_IP} --port {MASTER_PORT}  > ./tmp/logs/master.log 2>&1 "

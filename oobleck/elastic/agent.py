@@ -140,6 +140,7 @@ class OobleckAgent:
         # Test if profile data exists
         # 如果有profile数据就读出来
         try:
+            raise Exception("force profile")
             get_profile_results(
                 args.model.model_tag,
                 args.job.microbatch_size,
