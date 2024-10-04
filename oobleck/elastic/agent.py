@@ -101,10 +101,16 @@ class OobleckAgent:
     def _run_profiler(self, args: OobleckArguments):
         ctx = multiprocessing.get_context("spawn")
         profiler_processes: list[multiprocessing.Process] = []
-       
+        gpu_idx = 0
+        for i in range(self._node_index):
+            if args.dist.node_ips[self._node_index] == args.dist.node_ips[i]:
+                gpu_idx += 1
+        print(f"in profiler. gpu_idx: {gpu_idx}")
+
         for index in range(args.dist.num_workers):
+            assert index == 0, "index is 0"
             # use CUDA_VISIBLE_DEVICES environment variable 
-            os.environ["CUDA_VISIBLE_DEVICES"] = str(index)
+            os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_idx)
             
             master_ip = args.dist.node_ips[0]
             master_port = 23456
@@ -196,10 +202,11 @@ class OobleckAgent:
 
         for gpu_index in gpu_indices:
             logger.info(f"Launching worker {gpu_index}...")
+            assert gpu_index == 0
             # TODO: add all arguments. Arguments should be passed from the master
             # via command line arguments.
             pipe, child_pipe = ctx.Pipe()
-            os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_index)
+            os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_idx)
             # each worker run worker_main() in a new process
             process = ctx.Process(
                 target=worker_main,
@@ -222,6 +229,36 @@ class OobleckAgent:
             # For now only consider node failure, thus training will go stuck
             # if a worker fails.
         os.environ.pop("CUDA_VISIBLE_DEVICES")
+
+
+        # for gpu_index in gpu_indices:
+        #     logger.info(f"Launching worker {gpu_index}...")
+        #     # TODO: add all arguments. Arguments should be passed from the master
+        #     # via command line arguments.
+        #     pipe, child_pipe = ctx.Pipe()
+        #     os.environ["CUDA_VISIBLE_DEVICES"] = str(gpu_index)
+        #     # each worker run worker_main() in a new process
+        #     process = ctx.Process(
+        #         target=worker_main,
+        #         args=(
+        #             gpu_index,
+        #             len(args.dist.node_ips),
+        #             args.dist.num_workers,
+        #             child_pipe,
+        #             node_ip_ports[self._node_index],
+        #             args,
+        #         ),
+        #         daemon=True,
+        #     )
+        #     process.start()
+
+        #     self._workers.append(Worker(pipe, process))
+        #     pipe.send(dist_info)
+
+        #     # TODO: detect worker failure and report it to the master.
+        #     # For now only consider node failure, thus training will go stuck
+        #     # if a worker fails.
+        # os.environ.pop("CUDA_VISIBLE_DEVICES")
 
 
         # If a worker has rank 0, it should forward its port to the master
