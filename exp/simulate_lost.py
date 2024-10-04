@@ -11,6 +11,7 @@ MODEL_CONFIGS = {
     "gpt3_1_3B": {
         "microbatch": 16,
         "world_sizes": {
+            9: [8],
             10: [8, 9],
             11: [10],
             12: [10, 11],

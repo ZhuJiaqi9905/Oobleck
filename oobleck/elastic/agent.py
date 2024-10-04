@@ -188,6 +188,12 @@ class OobleckAgent:
 
         logger.info(f"in agent. my_ip_port {my_ip_port}, node_ip_ports {node_ip_ports}")
 
+        gpu_idx = 0
+        for i in range(self._node_index):
+            if args.dist.node_ips[self._node_index] == args.dist.node_ips[i]:
+                gpu_idx += 1
+        print(f"gpu_idx: {gpu_idx}")
+
         for gpu_index in gpu_indices:
             logger.info(f"Launching worker {gpu_index}...")
             # TODO: add all arguments. Arguments should be passed from the master
