@@ -1,7 +1,7 @@
 #ifndef _OOBLECK_PLANNING_PIPELINE_TEMPLATE_H_
 #define _OOBLECK_PLANNING_PIPELINE_TEMPLATE_H_
 
-#include <oneapi/tbb/concurrent_hash_map.h>
+#include <tbb/concurrent_hash_map.h>
 #include <pybind11/pybind11.h>
 #include <atomic>
 #include <cppcoro/static_thread_pool.hpp>

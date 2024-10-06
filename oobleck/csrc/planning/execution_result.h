@@ -2,7 +2,7 @@
 #define _OOBLECK_PLANNING_EXECUTION_RESULT_H_
 
 
-#include <oneapi/tbb/concurrent_unordered_map.h>
+#include <tbb/concurrent_unordered_map.h>
 #include <map>
 #include <memory>
 #include <tuple>
@@ -214,7 +214,7 @@ class DCExecutionResult {
 
 }  // namespace oobleck
 
-using CacheMap = oneapi::tbb::concurrent_unordered_map<
+using CacheMap = tbb::concurrent_unordered_map<
     oobleck::DCExecutionResult::key,
     std::shared_ptr<oobleck::DCExecutionResult>,
     oobleck::DCExecutionResult::KeyHash,

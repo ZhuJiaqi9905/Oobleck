@@ -11,6 +11,10 @@ from oobleck.execution.dataloader import OobleckDataLoader
 from oobleck.execution.pipeline import OobleckPipeline
 from oobleck.module.model import OobleckModel
 from oobleck.elastic.training_util import OobleckArguments
+from pyomo.environ import SolverFactory
+
+print(f"glpk: {SolverFactory('glpk').available()}")
+print(f"cbc: {SolverFactory('cbc').available()}")
 
 class HeterogeneousPipelinesExecutionPlan:
     def __init__(
@@ -225,6 +229,7 @@ class PipelineInstantiator:
         ] = self._enumerate_instantiation_options(pipeline_templates, num_nodes)
 
         num_microbatches_set_list: list[dict[PipelineTemplate, int]] = []
+        print(f"num_instances_set_list: {num_instances_set_list}")
         for num_instances_set in num_instances_set_list:
             try:
                 num_microbatches_set = self._distribute_batch(
@@ -233,7 +238,9 @@ class PipelineInstantiator:
                 num_microbatches_set_list.append(num_microbatches_set)
             except ValueError:
                 num_microbatches_set_list.append(None)
-
+            except Exception(e):
+                print(f"_distribute_batch exception: {e}")
+        print(f"num_microbatches_set_list: {num_microbatches_set_list}")
         execution_plans: list[HeterogeneousPipelinesExecutionPlan] = [
             HeterogeneousPipelinesExecutionPlan(
                 pipeline_templates,
@@ -335,7 +342,7 @@ class PipelineInstantiator:
         """
 
         model = pyomo.ConcreteModel()
-
+        print(f"global_num_microbatch: {global_num_microbatch}. model: {model}")
         model.I = pyomo.Set(initialize=list(range(len(num_instances_set))))
 
         T = {
@@ -378,6 +385,8 @@ class PipelineInstantiator:
 
         # check for all i model.nb[i].value is integer, otherwise return None
         # 这里返回了None
+        for i in model.I:
+            print(f"model nb value: {model.nb[i].value}")
         if not all(model.nb[i].value for i in model.I):
             logger.info("Batch distribution find no results. return None")
             return None

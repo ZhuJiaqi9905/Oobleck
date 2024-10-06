@@ -20,14 +20,14 @@
 # sudo make install
 # cd ..
 
-git clone https://github.com/coin-or/Ipopt.git
-cd Ipopt
-mkdir build
-cd build
-../configure
-make
-sudo make install
-cd ../..
+# git clone https://github.com/coin-or/Ipopt.git
+# cd Ipopt
+# mkdir build
+# cd build
+# ../configure
+# make
+# sudo make install
+# cd ../..
 
 # oobleck env
 CONDA_BASE=$(conda info --base)
@@ -39,6 +39,9 @@ conda create -n oobleck python==3.10.0
 
 conda activate oobleck
 conda install cmake==3.27.8
+conda install pyomo==6.6.2
+conda install glpk==5.0
+conda install ipopt==3.14.13
 # pip install -r requirements.txt
 
 conda clean --yes --all

@@ -662,8 +662,7 @@ class OobleckEngine:
             math.ceil(
                 total_memory_consumption
                 / (
-                    # torch.cuda.get_device_properties("cuda:0").total_memory
-                    16945709056
+                    torch.cuda.get_device_properties("cuda:0").total_memory
                     * self._num_gpus_per_node
                 )
             ),
