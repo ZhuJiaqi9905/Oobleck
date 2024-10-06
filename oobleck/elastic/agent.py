@@ -159,7 +159,7 @@ class OobleckAgent:
         except Exception as e:
             # Run profiler
             logger.warning(
-                f"Profile data for model {args.model.model_name} not found. Exception {e} Launching profiler..."
+                f"Profile data for model {args.model.model_name} not found. Exception {e}. Launching profiler..."
             )
             self._run_profiler(args)
 
