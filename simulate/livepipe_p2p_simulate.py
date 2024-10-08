@@ -108,7 +108,9 @@ def test_p2p(
         for op_var in layer._optimizer_variants:
             t = op_var.to('cuda')
             local_layers.append(t)
-
+        for op_grad in layer._gradients:
+            t = op_var.to('cuda')
+            local_layers.append(t)   
     dist.barrier()
     torch.cuda.synchronize()
     end = time.time()
