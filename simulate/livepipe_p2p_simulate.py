@@ -295,7 +295,7 @@ if __name__ == "__main__":
     parser.add_argument("--repeat-times", type=int)
     parser.add_argument("--model", type=str)
     args = parser.parse_args()
-    print(args.layer_file)
+    print(args.info_file)
     info = parse_info_file(args.info_file)
     if not info:
         print("parse json error")
