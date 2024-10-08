@@ -83,28 +83,25 @@ def test_p2p(
 
     requests = []
     
-    # for recv
-    for layer in recv_layers:
-        for op_param in layer._optimizer_parameters:
-            req = dist.irecv(op_param, src=layer._send_rank)
-            requests.append(req)
-        for op_mom in layer._optimizer_momentums:
-            req = dist.irecv(op_mom, src=layer._send_rank)
-            requests.append(req)
-        for op_var in layer._optimizer_variants:
-            req = dist.irecv(op_var, src=layer._send_rank)
-            requests.append(req)
-    # for send 
-    for layer in send_layers:
-        for op_param in layer._optimizer_parameters:
-            req = dist.isend(op_param, dst=layer._recv_rank)
-            requests.append(req)
-        for op_mom in layer._optimizer_momentums:
-            req = dist.isend(op_mom, dst=layer._recv_rank)
-            requests.append(req)
-        for op_var in layer._optimizer_variants:
-            req = dist.isend(op_var, dst=layer._recv_rank)
-            requests.append(req)    
+    for layer_idx in sorted(send_recv_layers.keys()):
+        layers = send_recv_layers[layer_idx]
+        for layer in layers:
+            if layer._send_rank == global_rank:
+                print(f"send layer {layer_idx}. {layer._send_rank} -> {layer._recv_rank}")
+                for op_param in layer._optimizer_parameters:
+                    dist.send(op_param, dst=layer._recv_rank)
+                for op_mom in layer._optimizer_momentums:
+                    dist.send(op_mom, dst=layer._recv_rank)
+                for op_var in layer._optimizer_variants:
+                    dist.send(op_var, dst=layer._recv_rank)
+            else:
+                print(f"recv layer {layer_idx}. {layer._recv_rank} <- {layer._send_rank}")
+                for op_param in layer._optimizer_parameters:
+                    dist.recv(op_param, src=layer._send_rank)
+                for op_mom in layer._optimizer_momentums:
+                    dist.recv(op_mom, src=layer._send_rank)
+                for op_var in layer._optimizer_variants:
+                    dist.recv(op_var, src=layer._send_rank)  
     # for cpu copy
     local_layers = []
     for layer in cpu_layers:
@@ -117,9 +114,6 @@ def test_p2p(
         for op_var in layer._optimizer_variants:
             t = op_var.to('cuda')
             local_layers.append(t)
-
-    for req in requests:
-        req.wait()
 
     dist.barrier()
     torch.cuda.synchronize()
