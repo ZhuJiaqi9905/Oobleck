@@ -10,9 +10,9 @@ NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.91", "172.21.
 NODE_PORTS = [2220, 2221, 2222, 2223]
 
 
-DIR = "/workspace/Oobleck/simulate/livepipe/"
+DIR = "/workspace/Oobleck/simulate/livepipe/reconfig_comm"
 LOG_DIR = "/workspace/Oobleck/tmp/simulate_livepipe_logs/"
-COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/livepipe_p2p_simulate.py --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 --warmup-times 2 --repeat-times 10 --node-rank {} --info-file {} --model {}"'''
+COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/livepipe_p2p_simulate.py --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 --warmup-times 2 --repeat-times 10 --node-rank {} --info-file {} "'''
 
 
 def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[int]]:
@@ -70,7 +70,7 @@ async def run_command_on_node(node_ip: str, node_port: int, command: str, prefix
         print(f"Error connecting to {node_ip}-{node_port}: {exc}")
 
 
-async def run_model_tasks(world_size: int, model, layer_file: str, prefix: str):
+async def run_model_tasks(world_size: int, layer_file: str, prefix: str):
     '''
     prefix: 存储log文件的文件夹前缀
     '''
@@ -88,7 +88,7 @@ async def run_model_tasks(world_size: int, model, layer_file: str, prefix: str):
     for i in range(len(ips)):
         ip = ips[i]
         port = ports[i]
-        command = COMMAND_TEMPLATE.format(node_rank, layer_file, model)
+        command = COMMAND_TEMPLATE.format(node_rank, layer_file)
         node_rank += 1
         task = asyncio.create_task(run_command_on_node(ip, port, command, prefix))
         tasks.append(task)
@@ -99,18 +99,17 @@ async def run_model_tasks(world_size: int, model, layer_file: str, prefix: str):
 
 
 async def main():
-    # 遍历DIR文件夹下所有的文件。都是.json文件，并且文件命名方式为${MODEL}-{}-to-{world_size}.json
+    # 遍历DIR文件夹下所有的文件。都是.json文件，并且文件命名方式为${MODEL}_{}_{}_to_{world_size}.json
     for filename in os.listdir(DIR):
         if not filename.endswith(".json"):
             continue
-        if "gpt3_6_7B" in filename:
+        if "vanilla" in filename:
             continue
         prefix = filename.split('.')[0]
-        metadatas = prefix.split('-')
-        world_size = int(metadatas[3])
-        model = metadatas[0]
-        # print(f"{prefix}, {world_size}")
-        await run_model_tasks(world_size, model,  f"{DIR}/{filename}", prefix)
+        metadatas = prefix.split('_')
+        world_size = int(metadatas[-1])
+        
+        await run_model_tasks(world_size, f"{DIR}/{filename}", prefix)
         await asyncio.sleep(15)
 if __name__ == "__main__":
     asyncio.run(main())

@@ -241,13 +241,13 @@ def init_process(
 
 
 def get_model_transformer_layer(model: str) -> Layer:
-    if model == "gpt3_2_7B":
+    if model == "2_6B":
         config_path = "/workspace/Oobleck/examples/gpt3_2_7B.yaml"
-    elif model == "gpt3_1_3B":
+    elif model == "1_3B":
         config_path = "/workspace/Oobleck/examples/gpt3_1_3B.yaml"
-    elif model == "gpt3_6_7B":
+    elif model == "6_7B":
         config_path = "/workspace/Oobleck/examples/gpt3_6_7B.yaml"
-    elif model == "gpt3_350M":
+    elif model == "350M":
         config_path = "/workspace/Oobleck/examples/gpt3_350M.yaml"
     elif model == "gpt3_13B":
         config_path = "/workspace/Oobleck/examples/gpt3_13B.yaml"
@@ -299,7 +299,6 @@ if __name__ == "__main__":
     parser.add_argument("--master-port", type=str)
     parser.add_argument("--warmup-times", type=int)
     parser.add_argument("--repeat-times", type=int)
-    parser.add_argument("--model", type=str)
     args = parser.parse_args()
     print(args.info_file)
     info = parse_info_file(args.info_file)
@@ -329,7 +328,7 @@ if __name__ == "__main__":
                 args.warmup_times,
                 args.repeat_times,
                 info,
-                args.model,
+                info["model_size"],
                 run,
             ),
         )
