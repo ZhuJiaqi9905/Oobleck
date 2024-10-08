@@ -74,7 +74,32 @@ MODEL_CONFIGS = {
     #     },
     # },
 }
-
+MODEL_CONFIGS = {
+    "gpt3_1_3B": {
+        "microbatch": 16,
+        "world_sizes": {
+            15: [13],
+            16: [13],
+            20: [15],
+        },
+    },
+    "gpt3_2_7B": {
+        "microbatch": 8,
+        "world_sizes": {
+            15: [13],
+            16: [13],
+            20: [15],
+        },
+    },
+    "gpt3_6_7B": {
+        "microbatch": 2,
+        "world_sizes": {
+            15: [13],
+            16: [13],
+            20: [15],
+        },
+    }
+}
 
 # 超时时间（秒）
 TIMEOUT_SECONDS = 600

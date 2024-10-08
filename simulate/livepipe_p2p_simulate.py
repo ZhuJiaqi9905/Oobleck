@@ -143,62 +143,63 @@ def run(
     recv_info = info["recv_info"]
     send_chunk_sizes = info["send_chunk_sizes"]
     recv_chunk_sizes = info["recv_chunk_sizes"]
-    send_layers: list[Layer] = []
 
     total_send_size = 0
     total_recv_size = 0
+
+    send_recv_layers: dict[int, list[Layer]] = {}
     for i in range(len(send_info[global_rank])):
         if i == global_rank:
             continue
+        if len(send_info[global_rank][i] == 0):
+            continue
         sizes = copy.deepcopy(transformer_layer._sizes)
-        print(f"sizes: {sizes}")
 
         for s in sizes:
             s = list(s)
             s[-1] = s[-1] // send_chunk_sizes[global_rank][i]
+        
+        for layer_idx in send_info[global_rank][i]:
+            layer = Layer(sizes, transformer_layer._names, global_rank, i)
+            layer.init_tensors()
+            send_recv_layers.setdefault(layer_idx, []).append(layer)
             total_send_size += reduce(operator.mul, s, 1)
-        for _ in range(send_info[global_rank][i]):
-            send_layers.append(Layer(sizes, transformer_layer._names, global_rank, i))
-            send_layers[-1].init_tensors()
 
-    recv_layers: list[Layer] = []
+
     for i in range(len(recv_info[global_rank])):
         if i == global_rank:
+            continue
+        if len(recv_info[global_rank][i] == 0):
             continue
         sizes = copy.deepcopy(transformer_layer._sizes)
         for s in sizes:
             s = list(s)
             s[-1] = s[-1] // recv_chunk_sizes[global_rank][i]
-            total_recv_size += reduce(operator.mul, s, 1) 
-        for _ in range(recv_info[global_rank][i]):
-            recv_layers.append(Layer(sizes, transformer_layer._names, i, global_rank))
-            recv_layers[-1].init_tensors()
+        for layer_idx in recv_info[global_rank][i]:
+            layer = Layer(sizes, transformer_layer._names, i, global_rank)
+            layer.init_tensors()
+            send_recv_layers.setdefault(layer_idx, []).append(layer)
+            total_recv_size += reduce(operator.mul, s, 1)
+
+            
 
     cpu_layers: list[Layer] = []
     if send_info[global_rank][global_rank] != 0:
         for _ in range(send_info[global_rank][global_rank]):
             cpu_layers.append(Layer(transformer_layer._sizes, transformer_layer._names))
             cpu_layers[-1].init_tensors(device="cpu")
-
-    print(f"send layers")
-    for layer in send_layers:
-        for i in range(len(layer._sizes)):
-            print(f"{layer._names[i]}: {layer._sizes[i]}")
-    print(f"recv layers")
-    for layer in recv_layers:
-        for i in range(len(layer._sizes)):
-            print(f"{layer._names[i]}: {layer._sizes[i]}")    
+ 
 
     print("init tensor success")
 
     for _ in range(warmup_times):
         _ = test_p2p(
-            global_rank, info, send_layers, recv_layers, cpu_layers
+            global_rank, info, send_recv_layers, cpu_layers
         )
     total_time = 0
     for _ in range(repeat_times):
         total_time += test_p2p(
-            global_rank, info, send_layers, recv_layers, cpu_layers
+            global_rank, info, send_recv_layers, cpu_layers
         )
     avg_time_result_in_ms = total_time / repeat_times
     total_send_size *= 12
