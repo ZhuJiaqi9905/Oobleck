@@ -88,7 +88,8 @@ def run(
     repeat_times: int,
     layers: Sequence[Layer],
 ):
-    torch.cuda.set_device(local_rank)
+    
+    torch.cuda.set_device(global_rank % torch.cuda.device_count())
     print(f"local_rank: {local_rank}")
     # init tensors
     for layer in layers:
