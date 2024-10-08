@@ -35,17 +35,28 @@ class Layer:
 
     def init_tensors(self, device: str = "cuda"):
         for size in self._sizes:
-            self._optimizer_parameters.append(
-                torch.randn(size, dtype=torch.float32, device=device)
-            )
-            self._optimizer_momentums.append(
-                torch.randn(size, dtype=torch.float32, device=device)
-            )
-            self._optimizer_variants.append(
-                torch.randn(size, dtype=torch.float32, device=device)
-            )
-            self._gradients.append(torch.randn(size, dtype=torch.float16, device=device))
-
+            if device == "cpu":
+                self._optimizer_parameters.append(
+                    torch.randn(size, dtype=torch.float32, device=device, pin_memory=True)
+                )
+                self._optimizer_momentums.append(
+                    torch.randn(size, dtype=torch.float32, device=device, pin_memory=True)
+                )
+                self._optimizer_variants.append(
+                    torch.randn(size, dtype=torch.float32, device=device, pin_memory=True)
+                )
+                self._gradients.append(torch.randn(size, dtype=torch.float16, device=device, pin_memory=True))
+            else:
+                self._optimizer_parameters.append(
+                    torch.randn(size, dtype=torch.float32, device=device)
+                )
+                self._optimizer_momentums.append(
+                    torch.randn(size, dtype=torch.float32, device=device)
+                )
+                self._optimizer_variants.append(
+                    torch.randn(size, dtype=torch.float32, device=device)
+                )
+                self._gradients.append(torch.randn(size, dtype=torch.float16, device=device))
 
 
 def parse_info_file(file_path) -> dict:
@@ -97,6 +108,7 @@ def test_p2p(
                 for op_grad in layer._gradients:
                     dist.recv(op_grad, src=layer._send_rank)
     # for cpu copy
+    
     local_layers = []
     for layer in cpu_layers:
         for op_param in layer._optimizer_parameters:
@@ -111,6 +123,7 @@ def test_p2p(
         for op_grad in layer._gradients:
             t = op_var.to('cuda')
             local_layers.append(t)   
+    
     dist.barrier()
     torch.cuda.synchronize()
     end = time.time()
