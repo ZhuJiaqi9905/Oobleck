@@ -196,7 +196,7 @@ def run(
     total_send_size *= 14
     total_recv_size *= 14
 
-    tensor_sizes = torch.tensor([total_send_size, total_recv_size], dtype=torch.int32)
+    tensor_sizes = torch.tensor([total_send_size, total_recv_size], dtype=torch.int32, device="cuda")
 
     # 使用 all_reduce 获取所有 ranks 中的最大值
     dist.all_reduce(tensor_sizes, op=dist.ReduceOp.MAX)
