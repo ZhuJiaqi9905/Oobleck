@@ -29,6 +29,7 @@ class Layer:
         self._optimizer_parameters: list[torch.Tensor] = []
         self._optimizer_momentums: list[torch.Tensor] = []
         self._optimizer_variants: list[torch.Tensor] = []
+        self._gradients: list[torch.Tensor] = []
         self._send_rank = send_rank
         self._recv_rank = recv_rank
 
@@ -37,25 +38,14 @@ class Layer:
             self._optimizer_parameters.append(
                 torch.randn(size, dtype=torch.float32, device=device)
             )
-            # self._optimizer_momentums.append(
-            #     torch.randn(size, dtype=torch.float32, device=device)
-            # )
-            # self._optimizer_variants.append(
-            #     torch.randn(size, dtype=torch.float32, device=device)
-            # )
+            self._optimizer_momentums.append(
+                torch.randn(size, dtype=torch.float32, device=device)
+            )
+            self._optimizer_variants.append(
+                torch.randn(size, dtype=torch.float32, device=device)
+            )
+            self._gradients.append(torch.randn(size, dtype=torch.float16, device=device))
 
-    def broadcast(self, pgs):
-        src = self._ranks[0]
-        pg = pgs[tuple(sorted(self._ranks))]
-
-        # for param in self._parameters:
-        #     dist.broadcast(param, src, pg)
-        for op_param in self._optimizer_parameters:
-            dist.broadcast(op_param, src, pg)
-        for op_mom in self._optimizer_momentums:
-            dist.broadcast(op_mom, src, pg)
-        for op_var in self._optimizer_variants:
-            dist.broadcast(op_var, src, pg)
 
 
 def parse_info_file(file_path) -> dict:
@@ -94,6 +84,8 @@ def test_p2p(
                     dist.send(op_mom, dst=layer._recv_rank)
                 for op_var in layer._optimizer_variants:
                     dist.send(op_var, dst=layer._recv_rank)
+                for op_grad in layer._gradients:
+                    dist.send(op_grad, dst=layer._recv_rank)
             else:
                 print(f"recv layer {layer_idx}. {layer._recv_rank} <- {layer._send_rank}")
                 for op_param in layer._optimizer_parameters:
@@ -102,6 +94,8 @@ def test_p2p(
                     dist.recv(op_mom, src=layer._send_rank)
                 for op_var in layer._optimizer_variants:
                     dist.recv(op_var, src=layer._send_rank)  
+                for op_grad in layer._gradients:
+                    dist.recv(op_grad, src=layer._send_rank)
     # for cpu copy
     local_layers = []
     for layer in cpu_layers:
@@ -199,11 +193,19 @@ def run(
             global_rank, info, send_recv_layers, cpu_layers
         )
     avg_time_result_in_ms = total_time / repeat_times
-    total_send_size *= 12
-    total_recv_size *= 12
+    total_send_size *= 14
+    total_recv_size *= 14
+
+    tensor_sizes = torch.tensor([total_send_size, total_recv_size], dtype=torch.int32)
+
+    # 使用 all_reduce 获取所有 ranks 中的最大值
+    dist.all_reduce(tensor_sizes, op=dist.ReduceOp.MAX)
+
+
+
     if global_rank == 0:
         print(
-            f"(GPU, Rank {global_rank} | Time(averaged {repeat_times} times) = {avg_time_result_in_ms:.2f} ms | send_size = {total_send_size} B | recv_size = {total_recv_size} B"
+            f"(GPU, Rank {global_rank} | Time(averaged {repeat_times} times) = {avg_time_result_in_ms:.2f} ms | send_size = {tensor_sizes[0]} B | recv_size = {tensor_sizes[1]} B"
         )
 
 

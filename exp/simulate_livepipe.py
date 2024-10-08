@@ -12,7 +12,7 @@ NODE_PORTS = [2220, 2221, 2222, 2223]
 
 DIR = "/workspace/Oobleck/simulate/livepipe/"
 LOG_DIR = "/workspace/Oobleck/tmp/simulate_livepipe_logs/"
-COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/livepipe_p2p_simulate.py --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 --warmup-times 0 --repeat-times 1 --node-rank {} --info-file {} --model {}"'''
+COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/livepipe_p2p_simulate.py --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 --warmup-times 2 --repeat-times 10 --node-rank {} --info-file {} --model {}"'''
 
 
 def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[int]]:
