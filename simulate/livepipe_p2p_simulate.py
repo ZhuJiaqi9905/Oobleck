@@ -144,7 +144,7 @@ def run(
     for i in range(len(send_info[global_rank])):
         if i == global_rank:
             continue
-        if len(send_info[global_rank][i] == 0):
+        if len(send_info[global_rank][i]) == 0:
             continue
         sizes = copy.deepcopy(transformer_layer._sizes)
 
