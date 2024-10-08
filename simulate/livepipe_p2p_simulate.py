@@ -151,8 +151,9 @@ def run(
         if i == global_rank:
             continue
         sizes = copy.deepcopy(transformer_layer._sizes)
-        sizes[-1] = sizes[-1] // send_chunk_sizes[global_rank][i]
-        total_send_size += reduce(operator.mul, sizes, 1)
+        for s in sizes:
+            s[-1] = s[-1] // send_chunk_sizes[global_rank][i]
+            total_send_size += reduce(operator.mul, s, 1)
         for _ in range(send_info[global_rank][i]):
             send_layers.append(Layer(sizes, transformer_layer._names, global_rank, i))
             send_layers[-1].init_tensors()
@@ -162,8 +163,9 @@ def run(
         if i == global_rank:
             continue
         sizes = copy.deepcopy(transformer_layer._sizes)
-        sizes[-1] = sizes[-1] // recv_chunk_sizes[global_rank][i]
-        total_recv_size += reduce(operator.mul, sizes, 1)
+        for s in sizes:
+            s[-1] = s[-1] // recv_chunk_sizes[global_rank][i]
+            total_recv_size += reduce(operator.mul, s, 1) 
         for _ in range(recv_info[global_rank][i]):
             recv_layers.append(Layer(sizes, transformer_layer._names, i, global_rank))
             recv_layers[-1].init_tensors()
