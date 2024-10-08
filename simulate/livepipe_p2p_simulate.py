@@ -26,8 +26,8 @@ class Layer:
         self._sizes = sizes
         self._names = names
         self._optimizer_parameters: list[torch.Tensor] = []
-        # self._optimizer_momentums: list[torch.Tensor] = []
-        # self._optimizer_variants: list[torch.Tensor] = []
+        self._optimizer_momentums: list[torch.Tensor] = []
+        self._optimizer_variants: list[torch.Tensor] = []
         self._gradients: list[torch.Tensor] = []
         self._send_rank = send_rank
         self._recv_rank = recv_rank
