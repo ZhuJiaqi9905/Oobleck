@@ -147,7 +147,7 @@ def run(
 
     total_send_size = 0
     total_recv_size = 0
-    for i in range(send_info[global_rank]):
+    for i in range(len(send_info[global_rank])):
         if i == global_rank:
             continue
         sizes = copy.deepcopy(transformer_layer._sizes)
@@ -158,7 +158,7 @@ def run(
             send_layers[-1].init_tensors()
 
     recv_layers: list[Layer] = []
-    for i in range(recv_info[global_rank]):
+    for i in range(len(recv_info[global_rank])):
         if i == global_rank:
             continue
         sizes = copy.deepcopy(transformer_layer._sizes)
