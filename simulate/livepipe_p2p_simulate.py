@@ -76,8 +76,7 @@ def parse_info_file(file_path) -> dict:
 def test_p2p(
     global_rank: int,
     info: dict,
-    send_layers: list[Layer],
-    recv_layers: list[Layer],
+    send_recv_layers: dict[int, list[Layer]],
     cpu_layers: list[Layer],
 ):
     start = time.time()
@@ -136,7 +135,7 @@ def run(
     info: dict,
     transformer_layer: Layer,
 ):
-    torch.cuda.set_device(local_rank)
+    torch.cuda.set_device(global_rank % torch.cuda.device_count())
     print(f"local_rank: {local_rank}")
     # init tensors
     send_info = info["send_info"]
