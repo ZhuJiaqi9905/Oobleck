@@ -35,13 +35,13 @@ class Layer:
     def init_tensors(self, device: str = "cuda"):
         for size in self._sizes:
             self._optimizer_parameters.append(
-                torch.randn(size, dtype=torch.float32).device(device)
+                torch.randn(size, dtype=torch.float32, device=device)
             )
             self._optimizer_momentums.append(
-                torch.randn(size, dtype=torch.float32).device(device)
+                torch.randn(size, dtype=torch.float32, device=device)
             )
             self._optimizer_variants.append(
-                torch.randn(size, dtype=torch.float32).device(device)
+                torch.randn(size, dtype=torch.float32, device=device)
             )
 
     def broadcast(self, pgs):
@@ -151,7 +151,10 @@ def run(
         if i == global_rank:
             continue
         sizes = copy.deepcopy(transformer_layer._sizes)
+        print(f"sizes: {sizes}")
+
         for s in sizes:
+            s = list(s)
             s[-1] = s[-1] // send_chunk_sizes[global_rank][i]
             total_send_size += reduce(operator.mul, s, 1)
         for _ in range(send_info[global_rank][i]):
@@ -164,6 +167,7 @@ def run(
             continue
         sizes = copy.deepcopy(transformer_layer._sizes)
         for s in sizes:
+            s = list(s)
             s[-1] = s[-1] // recv_chunk_sizes[global_rank][i]
             total_recv_size += reduce(operator.mul, s, 1) 
         for _ in range(recv_info[global_rank][i]):
