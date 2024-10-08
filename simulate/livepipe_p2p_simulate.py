@@ -25,10 +25,9 @@ class Layer:
     ) -> None:
         self._sizes = sizes
         self._names = names
-        # self._parameters = []
         self._optimizer_parameters: list[torch.Tensor] = []
-        self._optimizer_momentums: list[torch.Tensor] = []
-        self._optimizer_variants: list[torch.Tensor] = []
+        # self._optimizer_momentums: list[torch.Tensor] = []
+        # self._optimizer_variants: list[torch.Tensor] = []
         self._gradients: list[torch.Tensor] = []
         self._send_rank = send_rank
         self._recv_rank = recv_rank
@@ -50,14 +49,19 @@ class Layer:
                 self._optimizer_parameters.append(
                     torch.randn(size, dtype=torch.float32, device=device)
                 )
-                self._optimizer_momentums.append(
-                    torch.randn(size, dtype=torch.float32, device=device)
-                )
-                self._optimizer_variants.append(
-                    torch.randn(size, dtype=torch.float32, device=device)
-                )
+                # self._optimizer_momentums.append(
+                #     torch.randn(size, dtype=torch.float32, device=device)
+                # )
+                # self._optimizer_variants.append(
+                #     torch.randn(size, dtype=torch.float32, device=device)
+                # )
                 self._gradients.append(torch.randn(size, dtype=torch.float16, device=device))
 
+    def free_tensors(self):
+        self._optimizer_parameters: list[torch.Tensor] = []
+        self._optimizer_momentums: list[torch.Tensor] = []
+        self._optimizer_variants: list[torch.Tensor] = []
+        self._gradients: list[torch.Tensor] = []      
 
 def parse_info_file(file_path) -> dict:
     try:
@@ -89,22 +93,28 @@ def test_p2p(
         for layer in layers:
             if layer._send_rank == global_rank:
                 print(f"send layer {layer_idx}. {layer._send_rank} -> {layer._recv_rank}")
-                for op_param in layer._optimizer_parameters:
-                    dist.send(op_param, dst=layer._recv_rank)
-                for op_mom in layer._optimizer_momentums:
-                    dist.send(op_mom, dst=layer._recv_rank)
-                for op_var in layer._optimizer_variants:
-                    dist.send(op_var, dst=layer._recv_rank)
+                # for op_param in layer._optimizer_parameters:
+                #     dist.send(op_param, dst=layer._recv_rank)
+                # for op_mom in layer._optimizer_momentums:
+                #     dist.send(op_mom, dst=layer._recv_rank)
+                # for op_var in layer._optimizer_variants:
+                #     dist.send(op_var, dst=layer._recv_rank)
+                for i in range(3):
+                    for op_param in layer._optimizer_parameters:
+                        dist.send(op_param, dst=layer._recv_rank)                    
                 for op_grad in layer._gradients:
                     dist.send(op_grad, dst=layer._recv_rank)
             else:
                 print(f"recv layer {layer_idx}. {layer._recv_rank} <- {layer._send_rank}")
-                for op_param in layer._optimizer_parameters:
-                    dist.recv(op_param, src=layer._send_rank)
-                for op_mom in layer._optimizer_momentums:
-                    dist.recv(op_mom, src=layer._send_rank)
-                for op_var in layer._optimizer_variants:
-                    dist.recv(op_var, src=layer._send_rank)  
+                # for op_param in layer._optimizer_parameters:
+                #     dist.recv(op_param, src=layer._send_rank)
+                # for op_mom in layer._optimizer_momentums:
+                #     dist.recv(op_mom, src=layer._send_rank)
+                # for op_var in layer._optimizer_variants:
+                #     dist.recv(op_var, src=layer._send_rank)  
+                for i in range(3):
+                    for op_param in layer._optimizer_parameters:
+                        dist.recv(op_param, src=layer._send_rank)                    
                 for op_grad in layer._gradients:
                     dist.recv(op_grad, src=layer._send_rank)
     # for cpu copy

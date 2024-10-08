@@ -3,6 +3,7 @@ import re
 DIR = "/workspace/Oobleck/tmp/simulate_livepipe_logs"
 
 if __name__ == "__main__":
+    res = {}
     for file_dir in os.listdir(DIR):
         prefix = file_dir.split('.')[0].split('-')[-1]
         metadatas = prefix.split('_')
@@ -20,7 +21,13 @@ if __name__ == "__main__":
                         time_taken = match.group(1)  # 716.29 ms
                         send_size = match.group(2)    # 0
                         recv_size = match.group(3)    # 0
-                        print(f"{model} {ori_nodes} -> {curr_nodes}: {time_taken} ms | {send_size} B | {recv_size} B")
+                        res.setdefault(model, []).append((ori_nodes, curr_nodes, time_taken, send_size, recv_size))
                         break
+    for l in res.values():
+        l.sort(key=lambda x: x[0])
+    for model, info in res.items():
+        print(f"{model} {info[0]} -> {info[1]}: {info[2]} ms | {info[3]} B | {info[4]} B")
+
+    
 
                         
