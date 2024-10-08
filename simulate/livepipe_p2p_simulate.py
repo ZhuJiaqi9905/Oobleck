@@ -162,7 +162,7 @@ def run(
     for i in range(len(recv_info[global_rank])):
         if i == global_rank:
             continue
-        if len(recv_info[global_rank][i] == 0):
+        if len(recv_info[global_rank][i]) == 0:
             continue
         sizes = copy.deepcopy(transformer_layer._sizes)
         for s in sizes:
@@ -177,9 +177,13 @@ def run(
             
 
     cpu_layers: list[Layer] = []
-    if send_info[global_rank][global_rank] != 0:
-        for _ in range(send_info[global_rank][global_rank]):
-            cpu_layers.append(Layer(transformer_layer._sizes, transformer_layer._names))
+    if len(send_info[global_rank][global_rank]) != 0:
+        sizes = copy.deepcopy(transformer_layer._sizes)
+        for s in sizes:
+            s = list(s)
+            s[-1] = s[-1] // send_chunk_sizes[global_rank][global_rank]        
+        for _ in send_info[global_rank][global_rank]:
+            cpu_layers.append(Layer(sizes, transformer_layer._names))
             cpu_layers[-1].init_tensors(device="cpu")
  
 
