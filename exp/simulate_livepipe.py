@@ -105,7 +105,17 @@ async def main():
             continue
         if "vanilla" in filename:
             continue
+        
         prefix = filename.split('.')[0]
+        
+        done = False
+        for log_file in os.listdir(LOG_DIR):   
+            if prefix in log_file:
+                done = True
+                break
+        if done:
+            continue
+        
         metadatas = prefix.split('_')
         world_size = int(metadatas[-1])
         
