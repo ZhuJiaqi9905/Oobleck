@@ -37,12 +37,12 @@ class Layer:
             self._optimizer_parameters.append(
                 torch.randn(size, dtype=torch.float32, device=device)
             )
-            self._optimizer_momentums.append(
-                torch.randn(size, dtype=torch.float32, device=device)
-            )
-            self._optimizer_variants.append(
-                torch.randn(size, dtype=torch.float32, device=device)
-            )
+            # self._optimizer_momentums.append(
+            #     torch.randn(size, dtype=torch.float32, device=device)
+            # )
+            # self._optimizer_variants.append(
+            #     torch.randn(size, dtype=torch.float32, device=device)
+            # )
 
     def broadcast(self, pgs):
         src = self._ranks[0]

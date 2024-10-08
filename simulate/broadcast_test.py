@@ -27,29 +27,29 @@ class Layer:
         if global_rank not in self._ranks:
             return
         for size in self._sizes:
-            self._parameters.append(torch.randn(size, dtype=torch.float16).cuda())
             self._optimizer_parameters.append(
                 torch.randn(size, dtype=torch.float32).cuda()
             )
-            self._optimizer_momentums.append(
-                torch.randn(size, dtype=torch.float32).cuda()
-            )
-            self._optimizer_variants.append(
-                torch.randn(size, dtype=torch.float32).cuda()
-            )
+            # self._optimizer_momentums.append(
+            #     torch.randn(size, dtype=torch.float32).cuda()
+            # )
+            # self._optimizer_variants.append(
+            #     torch.randn(size, dtype=torch.float32).cuda()
+            # )
 
     def broadcast(self, pgs):
         src = self._ranks[0]
         pg = pgs[tuple(sorted(self._ranks))]
+        for i in range(3):
+            for op_param in self._optimizer_parameters:
+                dist.broadcast(op_param, src, pg)
 
         # for param in self._parameters:
         #     dist.broadcast(param, src, pg)
-        for op_param in self._optimizer_parameters:
-            dist.broadcast(op_param, src, pg)
-        for op_mom in self._optimizer_momentums:
-            dist.broadcast(op_mom, src, pg)
-        for op_var in self._optimizer_variants:
-            dist.broadcast(op_var, src, pg)
+        # for op_mom in self._optimizer_momentums:
+        #     dist.broadcast(op_mom, src, pg)
+        # for op_var in self._optimizer_variants:
+        #     dist.broadcast(op_var, src, pg)
 
 
 def parse_layer_file(file_path) -> tuple[list[Layer], int] | None:
