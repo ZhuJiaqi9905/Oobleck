@@ -33,7 +33,7 @@
 - `run_exps.py`。在容器中运行，跑实验。
 - `kill.sh`杀死进程。在master节点上kill进程后，child节点的进程也会自动退出。
 - `simulate_broadcast.py`。在容器中运行，根据丢失的layer信息计算传输时间。
-
+- `simulate_livepipe.py`。在容器中运行，根据丢失的layer信息计算livepipe在reconfigure时候的传输时间。
 # 简易流程：
 - 假设基础环境已经搭建好了。
 - 所有脚本都是在工作目录的根目录下运行。并且在运行的shell里面需要先进行`conda activate oobleck`切换到conda环境。
