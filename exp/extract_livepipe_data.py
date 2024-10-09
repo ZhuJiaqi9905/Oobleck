@@ -8,10 +8,14 @@ if __name__ == "__main__":
         prefix = file_dir.split('.')[0].split('-')[-1]
         metadatas = prefix.split('_')
         model = metadatas[0]
-        ori_nodes = metadatas[2]
-        curr_nodes = metadatas[4]
-
-        with open(f"{file_dir}/172.21.0.42-2220.log") as f:
+        if model == "350M":
+            ori_nodes = metadatas[2]
+            curr_nodes = metadatas[4]
+        else:
+            model = metadatas[0] + "_" + metadatas[1]
+            ori_nodes = metadatas[3]
+            curr_nodes = metadatas[5]            
+        with open(f"{DIR}/{file_dir}/172.21.0.42-2220.log") as f:
             for line in f:
                 if '(GPU, Rank 0 | Time(averaged 2 times)' in line:
                     # 使用正则表达式提取所需信息
@@ -25,8 +29,9 @@ if __name__ == "__main__":
                         break
     for l in res.values():
         l.sort(key=lambda x: x[0])
-    for model, info in res.items():
-        print(f"{model} {info[0]} -> {info[1]}: {info[2]} ms | {info[3]} B | {info[4]} B")
+    for model, infos in res.items():
+        for info in infos:
+            print(f"{model} {info[0]} -> {info[1]}: {info[2]} ms | {info[3]} B | {info[4]} B")
 
     
 
