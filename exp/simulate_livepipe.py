@@ -11,7 +11,7 @@ NODE_PORTS = [2220, 2221, 2222, 2223]
 
 
 DIR = "/workspace/Oobleck/simulate/livepipe/reconfig_comm"
-LOG_DIR = "/workspace/Oobleck/tmp/simulate_livepipe_logs/"
+LOG_DIR = "/workspace/Oobleck/tmp/simulate_livepipe_size_logs/"
 COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/livepipe_p2p_simulate.py --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 --warmup-times 1 --repeat-times 2 --node-rank {} --info-file {} "'''
 
 
