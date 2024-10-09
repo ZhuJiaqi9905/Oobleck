@@ -29,7 +29,7 @@ from oobleck.csrc.planning.pipeline_template import StageExecutionResult
 logger = LoggerFactory.create_logger("oobleck_engine", logging.DEBUG)
 CUDA_MEMORY = None
 
-
+args = None
 def create_pipeline_template_from_obj(obj) -> PipelineTemplate:
     stages = []
     num_layers = 0
@@ -352,6 +352,7 @@ def simulate_lost(model: str, microbatch: int, world_size: int, lost_nodes: int,
 
 
 def get_reconfigure_layers(engine: SimulatorEngine, old_rank_grids: Sequence[Mapping[int, Sequence[int]]], new_rank_grids: Sequence[Mapping[int, Sequence[int]]], lost_ranks: list[int]):
+    global pargs
     # layer -> list of ranks contains that layer
     old_layer_map:dict[int, list[list[int]]] = {}
     for pipeline in old_rank_grids:
@@ -414,7 +415,29 @@ def get_reconfigure_layers(engine: SimulatorEngine, old_rank_grids: Sequence[Map
             p += param.numel()
         print(f"parameters: {p}")
         result.append({"sizes": sizes, "ranks": ranks, "names": names})
+
+    #计算传输数据量最大的rank
+
+    # {rank: size}
+    size_map: dict[int, int]= {}
+    for layer_id, ranks in reconfigure_layers.items():
+        layer_size = 0
+        for _, param in engine._model.layers[layer_id].named_parameters():
+            layer_size += param.numel()
+        for rank in ranks:
+            if rank in size_map:
+                size_map[rank] += layer_size * 12
+            else:
+                size_map[rank] = layer_size * 12
+
+
+    max_size = 0
+    for s in size_map.values():
+        max_size = max(max_size, s)
+    with open(f"/workspace/Oobleck/tmp/result.log", "+a") as f:
+        f.write(f"{args.model} {args.worldsize}->{args.worldsize - args.lost_nodes} | size: {max_size / (1024 * 1024 * 1024)} GB\n")
     return {"layers": result}
+
 
 def simulate_pipelines(model: str, microbatch: int, world_size: int):
     if model == "gpt3_2_7B":
@@ -465,6 +488,7 @@ if __name__ == "__main__":
     parser.add_argument('--cuda-memory', type=int)
     # if use config-file, all arguments are read in config-file
     parser.add_argument('--config-file', type=str, help="The path to the JSON file of layer")
+
     args = parser.parse_args()
     args.lost_ranks = None
     if args.config_file is not None:

@@ -10,8 +10,8 @@ NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.91", "172.21.
 NODE_PORTS = [2220, 2221, 2222, 2223]
 
 
-DIR = "/workspace/Oobleck/important_data/nsdi/lost_nodes/oobleck"
-LOG_DIR = "/workspace/Oobleck/tmp/simulate_broadcast_logs/"
+DIR = "/workspace/Oobleck/important_data/nsdi/lost_nodes/bamboo"
+LOG_DIR = "/workspace/Oobleck/tmp/simulate_broadcast_logs/bamboo"
 COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/broadcast_test.py --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 --warmup-times 2 --repeat-times 10 --node-rank {} --layer-file {}"'''
 
 
@@ -101,16 +101,16 @@ async def run_model_tasks(world_size: int, layer_file: str, prefix: str):
 async def main():
     # 遍历DIR文件夹下所有的文件。都是.json文件，并且文件命名方式为${MODEL}-{world_size}-{micro_batch_size}-{lost_nodes}.json
 
-    files = [
-        # "gpt3_1_3B-20-16-5.json", "gpt3_1_3B-16-16-3.json", "gpt3_1_3B-15-16-2.json",
-             "gpt3_2_7B-20-8-5.json", "gpt3_2_7B-16-8-3.json", "gpt3_2_7B-15-8-2.json",
-            #  "gpt3_6_7B-20-2-5.json", "gpt3_6_7B-16-2-3.json", "gpt3_6_7B-15-2-2.json"
-             ]
+    # files = [
+    #     # "gpt3_1_3B-20-16-5.json", "gpt3_1_3B-16-16-3.json", "gpt3_1_3B-15-16-2.json",
+    #          "gpt3_2_7B-20-8-5.json", "gpt3_2_7B-16-8-3.json", "gpt3_2_7B-15-8-2.json",
+    #         #  "gpt3_6_7B-20-2-5.json", "gpt3_6_7B-16-2-3.json", "gpt3_6_7B-15-2-2.json"
+    #          ]
     for filename in os.listdir(DIR):
         if not filename.endswith(".json"):
             continue
-        if not filename in files:
-            continue
+        # if not filename in files:
+        #     continue
         prefix = filename.split('.')[0]
         metadatas = prefix.split('-')
         world_size = int(metadatas[1])

@@ -41,22 +41,22 @@ MODEL_CONFIGS = {
             20: [16, 17, 18, 19],
         },
     },
-    "gpt3_6_7B": {
-        "microbatch": 2,
-        "world_sizes": {
-            10: [8, 9],
-            11: [10],
-            12: [10, 11],
-            13: [11, 12],
-            14: [12, 13],
-            15: [14],
-            16: [14, 15],
-            17: [14, 15, 16],
-            18: [12, 14, 15, 16, 17],
-            19: [16, 17, 18],
-            20: [16, 17, 18, 19],
-        },
-    },
+    # "gpt3_6_7B": {
+    #     "microbatch": 2,
+    #     "world_sizes": {
+    #         10: [8, 9],
+    #         11: [10],
+    #         12: [10, 11],
+    #         13: [11, 12],
+    #         14: [12, 13],
+    #         15: [14],
+    #         16: [14, 15],
+    #         17: [14, 15, 16],
+    #         18: [12, 14, 15, 16, 17],
+    #         19: [16, 17, 18],
+    #         20: [16, 17, 18, 19],
+    #     },
+    # },
     # "gpt3_350M": {
     #     "microbatch": 32,
     #     "world_sizes": {
@@ -74,37 +74,45 @@ MODEL_CONFIGS = {
     #     },
     # },
 }
+# MODEL_CONFIGS = {
+#     "gpt3_1_3B": {
+#         "microbatch": 16,
+#         "world_sizes": {
+#             15: [13],
+#             16: [13],
+#             20: [15],
+#         },
+#     },
+#     "gpt3_2_7B": {
+#         "microbatch": 8,
+#         "world_sizes": {
+#             15: [13],
+#             16: [13],
+#             20: [15],
+#         },
+#     },
+#     "gpt3_6_7B": {
+#         "microbatch": 2,
+#         "world_sizes": {
+#             15: [13],
+#             16: [13],
+#             20: [15],
+#         },
+#     }
+# }
+
 MODEL_CONFIGS = {
-    "gpt3_1_3B": {
-        "microbatch": 16,
-        "world_sizes": {
-            15: [13],
-            16: [13],
-            20: [15],
-        },
-    },
     "gpt3_2_7B": {
         "microbatch": 8,
         "world_sizes": {
-            15: [13],
-            16: [13],
-            20: [15],
+            13: [12]
         },
-    },
-    "gpt3_6_7B": {
-        "microbatch": 2,
-        "world_sizes": {
-            15: [13],
-            16: [13],
-            20: [15],
-        },
-    }
+    },    
 }
-
 # 超时时间（秒）
 TIMEOUT_SECONDS = 600
 CUDA_MEMORY = 16945709056
-OUT_DIR = "/workspace/Oobleck/important_data/nsdi/lost_nodes/oobleck/"
+OUT_DIR = "/workspace/Oobleck/important_data/nsdi/lost_nodes/oobleck_tmp/"
 COMMAND_TEMPLATE = "python /workspace/Oobleck/simulate/oobleck_simulate.py --model {} --microbatch {} --worldsize {}  --lost-nodes {} --out-dir {} --cuda-memory {}"
 
 

@@ -34,7 +34,7 @@ import random
 from argparse import Namespace
 from oobleck.csrc.planning.pipeline_template import StageExecutionResult
 
-logger = LoggerFactory.create_logger("oobleck_engine", logging.DEBUG)
+logger = LoggerFactory.create_logger("bamboo_engine", logging.DEBUG)
 CUDA_MEMORY = None
 
 

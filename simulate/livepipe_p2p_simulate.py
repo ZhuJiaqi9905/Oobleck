@@ -173,7 +173,7 @@ def run(
         
         for layer_idx in send_info[global_rank][i]:
             layer = Layer(sizes, transformer_layer._names, global_rank, i)
-            # layer.init_tensors()
+            layer.init_tensors()
             send_recv_layers.setdefault(layer_idx, []).append(layer)
             total_send_size += reduce(operator.mul, s, 1)
 
@@ -189,7 +189,7 @@ def run(
             s[-1] = s[-1] // recv_chunk_sizes[global_rank][i]
         for layer_idx in recv_info[global_rank][i]:
             layer = Layer(sizes, transformer_layer._names, i, global_rank)
-            # layer.init_tensors()
+            layer.init_tensors()
             send_recv_layers.setdefault(layer_idx, []).append(layer)
             total_recv_size += reduce(operator.mul, s, 1)
 
@@ -203,20 +203,20 @@ def run(
             s[-1] = s[-1] // send_chunk_sizes[global_rank][global_rank]        
         for _ in send_info[global_rank][global_rank]:
             cpu_layers.append(Layer(sizes, transformer_layer._names))
-            # cpu_layers[-1].init_tensors(device="cpu")
+            cpu_layers[-1].init_tensors(device="cpu")
  
 
     print("init tensor success")
 
-    # for _ in range(warmup_times):
-    #     _ = test_p2p(
-    #         global_rank, info, send_recv_layers, cpu_layers
-    #     )
+    for _ in range(warmup_times):
+        _ = test_p2p(
+            global_rank, info, send_recv_layers, cpu_layers
+        )
     total_time = 0
-    # for _ in range(repeat_times):
-    #     total_time += test_p2p(
-    #         global_rank, info, send_recv_layers, cpu_layers
-    #     )
+    for _ in range(repeat_times):
+        total_time += test_p2p(
+            global_rank, info, send_recv_layers, cpu_layers
+        )
     avg_time_result_in_ms = total_time / repeat_times
     total_send_size *= 14
     total_recv_size *= 14
