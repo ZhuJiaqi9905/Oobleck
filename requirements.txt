@@ -20,7 +20,6 @@ conda-pack==0.8.0
 contourpy==1.2.1
 cryptography==41.0.5
 cycler==0.12.1
-cyipopt==1.5.0
 datasets==2.15.0
 debugpy==1.8.1
 decorator==5.1.1
