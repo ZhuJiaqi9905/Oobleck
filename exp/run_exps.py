@@ -6,8 +6,8 @@ import subprocess
 
 
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
-# MODELS = ["gpt3_2_7B", "gpt3_1_3B", "gpt3_6_7B" , "gpt3_350M"]
-MODELS = ["gpt3_1_3B"]
+MODELS = ["gpt3_350M"]
+# MODELS = ["gpt3_1_3B"]
 
 
 
@@ -23,9 +23,9 @@ TIMEOUT_SECONDS = 900
 MASTER_IP = "172.21.0.42"
 
 # aws
-NODE_IPS = ["172.31.44.82"]
+NODE_IPS = ["172.31.35.195"]
 NODE_PORTS = ["2220", "2221", "2222", "2223", "2224", "2225", "2226", "2227"]
-MASTER_IP = "172.31.44.82"
+MASTER_IP = "172.31.35.195"
 
 
 MASTER_PORT  = "60000"
@@ -104,6 +104,7 @@ def monitor_logs():
         runtime_error = False
         for file in files:
             with open(file, 'r') as f:
+                print(f"read {file}")
                 content = f.read()
                 if 'CUDA out of memory' in content:
                     print(f"{file} report CUDA OOM error.")
@@ -114,6 +115,7 @@ def monitor_logs():
                 elif 'Training is done.' in content:
                     return 0
                 elif 'profile finish. exit.' in content:
+                    print("here")
                     return 0
         if cuda_oom:
             return -1

@@ -140,7 +140,7 @@ class OobleckAgent:
         # Test if profile data exists
         # 如果有profile数据就读出来
         try:
-            # raise Exception("force profile")
+            raise Exception("force profile")
             get_profile_results(
                 args.model.model_tag,
                 args.job.microbatch_size,
@@ -164,8 +164,8 @@ class OobleckAgent:
             self._run_profiler(args)
 
         # exit
-        # logger.info("profile finish. exit.")
-        # exit()
+        logger.info("profile finish. exit.")
+        exit()
 
 
 
@@ -398,8 +398,8 @@ if __name__ == "__main__":
     parser.add_argument("--job_id", type=int)
     parser.add_argument("--agent_index", type=int)
     parser.add_argument("--node_id", type=int)
-    os.environ["LD_PRELOAD"] = "/opt/aws-ofi-nccl/lib/libnccl-net.so"
-    os.environ["LD_LIBRARY_PATH"] = "/opt/aws-ofi-nccl/lib/:/opt/nccl/build/lib/:" + os.environ["LD_LIBRARY_PATH"]
+    os.environ["LD_PRELOAD"] = "/usr/local/cuda-11.7/efa/lib/libnccl-net.so"
+    os.environ["LD_LIBRARY_PATH"] = "/usr/local/cuda-11.7/efa/lib/:" + os.environ.get("LD_LIBRARY_PATH", "")
     os.environ["NCCL_DEBUG"] = "INFO"
     # os.environ["NCCL_DEBUG_SUBSYS"] = "ALL"
     os.environ["NCCL_SOCKET_IFNAME"] = "ens5"
