@@ -5,14 +5,14 @@ import subprocess
 
 
 
-# MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
-MODELS = ["gpt3_350M"]
+MODELS = ["gpt3_2_7B", "gpt3_1_3B", "gpt3_350M" ]
+# MODELS = ["gpt3_350M"]
 # MODELS = ["gpt3_1_3B"]
 
 
 
-MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 8
+MIN_WORLD_SIZE = 17
+MAX_WORLD_SIZE = 24
 WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 0
 TIMEOUT_SECONDS = 900
@@ -20,17 +20,17 @@ TIMEOUT_SECONDS = 900
 # NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.47", "172.21.0.90", "172.21.0.91", "172.21.0.92" ]
 # NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.91", "172.21.0.92" ]
 # NODE_IPS = ["172.21.0.42", "172.21.0.46"]
-MASTER_IP = "172.21.0.42"
+# MASTER_IP = "172.21.0.42"
 
 # aws
-NODE_IPS = ["172.31.35.195"]
+NODE_IPS = ["172.31.44.82", "172.31.35.195", "172.31.40.219"]
 NODE_PORTS = ["2220", "2221", "2222", "2223", "2224", "2225", "2226", "2227"]
-MASTER_IP = "172.31.35.195"
+MASTER_IP = "172.31.44.82"
 
 
 MASTER_PORT  = "60000"
 
-MONITOR_INTERVAL = 15
+MONITOR_INTERVAL = 5
 
 
 def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[str]]:
@@ -104,7 +104,6 @@ def monitor_logs():
         runtime_error = False
         for file in files:
             with open(file, 'r') as f:
-                print(f"read {file}")
                 content = f.read()
                 if 'CUDA out of memory' in content:
                     print(f"{file} report CUDA OOM error.")
@@ -115,7 +114,6 @@ def monitor_logs():
                 elif 'Training is done.' in content:
                     return 0
                 elif 'profile finish. exit.' in content:
-                    print("here")
                     return 0
         if cuda_oom:
             return -1
