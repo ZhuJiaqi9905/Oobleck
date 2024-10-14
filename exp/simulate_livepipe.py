@@ -13,7 +13,7 @@ NODE_PORTS = [2220]
 
 DIR = "/workspace/Oobleck/simulate/livepipe/1_layer/"
 LOG_DIR = "/workspace/Oobleck/tmp/"
-COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/livepipe_p2p_simulate.py --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 --warmup-times 1 --repeat-times 2 --node-rank {} --info-file {} "'''
+COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/livepipe_p2p_simulate.py --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 --warmup-times 5 --repeat-times 10 --node-rank {} --info-file {} "'''
 
 
 def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[int]]:
@@ -108,13 +108,13 @@ async def main():
             continue
         prefix = filename.split('.')[0]
         
-        done = False
-        for log_file in os.listdir(LOG_DIR):   
-            if prefix in log_file:
-                done = True
-                break
-        if done:
-            continue
+        # done = False
+        # for log_file in os.listdir(LOG_DIR):   
+        #     if prefix in log_file:
+        #         done = True
+        #         break
+        # if done:
+        #     continue
         
         metadatas = prefix.split('_')
         world_size = int(metadatas[-1])

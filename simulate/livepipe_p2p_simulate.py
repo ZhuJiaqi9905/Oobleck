@@ -274,7 +274,7 @@ def get_model_transformer_layer(model: str) -> Layer:
         config_path = "/workspace/Oobleck/examples/gpt3_6_7B.yaml"
     elif model == "350M":
         config_path = "/workspace/Oobleck/examples/gpt3_350M.yaml"
-    elif model == "3_13B":
+    elif model == "13B":
         config_path = "/workspace/Oobleck/examples/gpt3_13B.yaml"
     elif model == "bert_340M":
         config_path = "/workspace/Oobleck/examples/bert_340M.yaml"
