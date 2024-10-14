@@ -274,7 +274,7 @@ def get_model_transformer_layer(model: str) -> Layer:
         config_path = "/workspace/Oobleck/examples/gpt3_6_7B.yaml"
     elif model == "350M":
         config_path = "/workspace/Oobleck/examples/gpt3_350M.yaml"
-    elif model == "gpt3_13B":
+    elif model == "3_13B":
         config_path = "/workspace/Oobleck/examples/gpt3_13B.yaml"
     elif model == "bert_340M":
         config_path = "/workspace/Oobleck/examples/bert_340M.yaml"
@@ -309,11 +309,13 @@ def get_model_transformer_layer(model: str) -> Layer:
     )
     sizes = []
     names = []
+    total_size = 0
     for name, param in model.layers[1].named_parameters():
         sizes.append(param.size())
         names.append(name)
-    print(f"{names}, {sizes}")
-    return Layer(sizes, names)
+        total_size += param.numel()
+    print(f"{names}, {sizes}. {total_size}")
+    return Layer([total_size], names)
 
 
 if __name__ == "__main__":

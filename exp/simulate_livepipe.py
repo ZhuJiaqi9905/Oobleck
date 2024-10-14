@@ -106,8 +106,6 @@ async def main():
             continue
         if "vanilla" in filename:
             continue
-        if filename != "1_3B_double_3_to_2.json":
-            continue
         prefix = filename.split('.')[0]
         
         done = False
