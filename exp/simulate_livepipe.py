@@ -7,11 +7,12 @@ import time
 import numpy as np
 
 NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.91", "172.21.0.92"]
-NODE_PORTS = [2220, 2221, 2222, 2223]
+# NODE_PORTS = [2220, 2221, 2222, 2223]
+NODE_PORTS = [2220]
 
 
-DIR = "/workspace/Oobleck/simulate/livepipe/reconfig_comm"
-LOG_DIR = "/workspace/Oobleck/tmp/simulate_livepipe_logs/"
+DIR = "/workspace/Oobleck/simulate/livepipe/1_layer/"
+LOG_DIR = "/workspace/Oobleck/tmp/"
 COMMAND_TEMPLATE = '''/bin/bash -ic "conda run --no-capture-output -n oobleck python /workspace/Oobleck/simulate/livepipe_p2p_simulate.py --master-ip 172.21.0.42  --master-port 10078 --gpus-per-node 1 --warmup-times 1 --repeat-times 2 --node-rank {} --info-file {} "'''
 
 
@@ -29,7 +30,7 @@ def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[int]]:
     if world_size % node_nums != 0:
         batch += 1
 
-    batch = 4
+    batch = 1
     port_idx = 0
     i = 0
     for node_idx in range(node_nums):
@@ -105,7 +106,8 @@ async def main():
             continue
         if "vanilla" in filename:
             continue
-        
+        if filename != "1_3B_double_3_to_2.json":
+            continue
         prefix = filename.split('.')[0]
         
         done = False

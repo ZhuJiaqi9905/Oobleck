@@ -46,9 +46,9 @@ class Layer:
                 )
                 self._gradients.append(torch.randn(size, dtype=torch.float16, device=device, pin_memory=True))
             else:
-                self._optimizer_parameters.append(
-                    torch.randn(size, dtype=torch.float32, device=device)
-                )
+                # self._optimizer_parameters.append(
+                #     torch.randn(size, dtype=torch.float32, device=device)
+                # )
                 # self._optimizer_momentums.append(
                 #     torch.randn(size, dtype=torch.float32, device=device)
                 # )
@@ -99,9 +99,9 @@ def test_p2p(
                 #     dist.send(op_mom, dst=layer._recv_rank)
                 # for op_var in layer._optimizer_variants:
                 #     dist.send(op_var, dst=layer._recv_rank)
-                for i in range(3):
-                    for op_param in layer._optimizer_parameters:
-                        dist.send(op_param, dst=layer._recv_rank)                    
+                # for i in range(3):
+                #     for op_param in layer._optimizer_parameters:
+                #         dist.send(op_param, dst=layer._recv_rank)                    
                 for op_grad in layer._gradients:
                     dist.send(op_grad, dst=layer._recv_rank)
             else:
@@ -112,9 +112,9 @@ def test_p2p(
                 #     dist.recv(op_mom, src=layer._send_rank)
                 # for op_var in layer._optimizer_variants:
                 #     dist.recv(op_var, src=layer._send_rank)  
-                for i in range(3):
-                    for op_param in layer._optimizer_parameters:
-                        dist.recv(op_param, src=layer._send_rank)                    
+                # for i in range(3):
+                #     for op_param in layer._optimizer_parameters:
+                #         dist.recv(op_param, src=layer._send_rank)                    
                 for op_grad in layer._gradients:
                     dist.recv(op_grad, src=layer._send_rank)
     # for cpu copy
@@ -312,6 +312,7 @@ def get_model_transformer_layer(model: str) -> Layer:
     for name, param in model.layers[1].named_parameters():
         sizes.append(param.size())
         names.append(name)
+    print(f"{names}, {sizes}")
     return Layer(sizes, names)
 
 
