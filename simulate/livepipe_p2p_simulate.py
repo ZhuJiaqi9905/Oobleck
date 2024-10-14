@@ -315,7 +315,7 @@ def get_model_transformer_layer(model: str) -> Layer:
         names.append(name)
         total_size += param.numel()
     print(f"{names}, {sizes}. {total_size}")
-    return Layer([total_size], names)
+    return Layer([[total_size]], names)
 
 
 if __name__ == "__main__":
