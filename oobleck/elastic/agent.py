@@ -163,7 +163,7 @@ class OobleckAgent:
             )
             self._run_profiler(args)
 
-        # exit
+        # exit after profiling
         # logger.info("profile finish. exit.")
         # exit()
 
@@ -403,9 +403,12 @@ if __name__ == "__main__":
     # os.environ["NCCL_DEBUG_SUBSYS"] = "ENV"
     # os.environ["NCCL_SOCKET_IFNAME"] = "ens5"
     # os.environ["GLOO_SOCKET_IFNAME"] = "ens5"
+    # os.environ["LD_PRELOAD"] = "/usr/local/cuda-11.7/efa/lib/libnccl-net.so"
+    # os.environ["LD_LIBRARY_PATH"] = "/usr/local/cuda-11.7/efa/lib/:" + os.environ.get("LD_LIBRARY_PATH", "")
+    
     os.environ["NCCL_SOCKET_IFNAME"] = "enp"
     os.environ["GLOO_SOCKET_IFNAME"] = "enp"
-
+    
     # os.environ["NCCL_NSOCKS_PERTHREAD"] = "2"
     # os.environ["NCCL_NTHREADS"] = "64"
     # os.environ["NCCL_MAX_NCHANNELS"] = "32"

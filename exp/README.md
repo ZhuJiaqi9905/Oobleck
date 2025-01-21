@@ -41,3 +41,12 @@
 - 如果安装完毕。就运行`python ./exp/run_exps.py`跑实验。在`tmp/logs`里面有实验结果。
 - 如果中途想退出，就Ctrl-C。然后在master节点执行下`./exp/kill.sh`。
 - 还有一种跑实验的方法，可以在调试的时候用。就是先运行`./master.sh`脚本，它会阻塞的启动master。大概等5~10秒后。在再另一个shell窗口运行`./job.sh`来启动任务。这个适合在调试某一个配置的时候用。这样kill master的时候，所有的进程也就都kill了。
+
+# 注意事项
+
+- 目前流程是：profile -> 离线获取pipeline template -> 根据template结果获取时间
+- `agent.py`中调节在profile结束后是否退出
+- `engine.py`中调节是否要从json文件中读取并行方案
+- `agent.py`末尾能调节NCCL配置
+- `data/model/*/config.json`中`n_positions`和`n_ctx`调节sequence length
+- `examples/`中的`.template.yaml`文件调节sequence length和global batch size
