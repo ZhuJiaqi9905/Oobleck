@@ -133,7 +133,7 @@ for model in MODELS:
     elif model == "gpt3_350M":
         MAX_MBS = 32
     elif model == "gpt3_1_3B":
-        MAX_MBS = 32
+        MAX_MBS = 16
     elif model == "gpt3_2_7B":
         MAX_MBS = 16
     mbs = MAX_MBS
