@@ -519,12 +519,15 @@ class DataParallelEngine:
         dp_process_groups: dict[int, dict[int, dist.ProcessGroup]] = defaultdict(dict)
         fsdp_indices: list[list[int]] = defaultdict(list)
         my_rank = dist.get_rank()
+        num_groups = 0
         for layer_index, ranks_per_layer in ranks_grid.items():
             for fsdp_index, ranks in ranks_per_layer.items():
                 dp_process_groups[layer_index][fsdp_index] = dist.new_group(ranks)
-
+                num_groups += 1
                 if my_rank in ranks:
                     fsdp_indices[layer_index].append(fsdp_index)
+        print(f"num_groups: {num_groups}")
+        
         # print(f"ranks_grid: {ranks_grid}")
          # 每个layer中fsdp_index相同的rank属于一个dp_process_group. layer_index -> dict of (fsdp_index -> list of ranks in  a pg)
         self._dp_process_groups = dp_process_groups
