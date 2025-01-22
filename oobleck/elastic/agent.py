@@ -164,8 +164,8 @@ class OobleckAgent:
             self._run_profiler(args)
 
         # exit after profiling
-        logger.info("profile finish. exit.")
-        exit()
+        # logger.info("profile finish. exit.")
+        # exit()
 
 
 
