@@ -522,7 +522,7 @@ class DataParallelEngine:
         num_groups = 0
         for layer_index, ranks_per_layer in ranks_grid.items():
             for fsdp_index, ranks in ranks_per_layer.items():
-                dp_process_groups[layer_index][fsdp_index] = dist.new_group(ranks)
+                dp_process_groups[layer_index][fsdp_index] = dist.new_group(ranks, use_local_synchronization=True)
                 num_groups += 1
                 if my_rank in ranks:
                     fsdp_indices[layer_index].append(fsdp_index)
