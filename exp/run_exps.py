@@ -10,8 +10,8 @@ import subprocess
 MODELS = ["gpt3_350M"]
 
 
-MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 8
+MIN_WORLD_SIZE = 16
+MAX_WORLD_SIZE = 16
 WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 0
 TIMEOUT_SECONDS = 900
@@ -49,7 +49,7 @@ def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[str]]:
     
     # if world_size == 8 or world_size == 10:
     #     batch = 4
-    batch = 4
+    batch = 8
     
     i = 0
     for node_idx in range(node_nums):
@@ -147,7 +147,7 @@ for model in MODELS:
             master_cmd = f"python -m oobleck.elastic.master  --ip {MASTER_IP} --port {MASTER_PORT}  > ./tmp/logs/master.log 2>&1 "
             print(f"run master: {master_cmd}")
             master_proc = subprocess.Popen(master_cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            time.sleep(10)
+            time.sleep(20)
             job_proc = run_job(model, world_size, mbs)
             if job_proc.returncode != 0:
                 print(f"finish exp: {model}-{mbs}-{world_size}. run job error. stdout: {job_proc.stdout}. stderr: {job_proc.stderr}")
