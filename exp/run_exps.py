@@ -7,33 +7,32 @@ import subprocess
 
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
 # MODELS = ["gpt3_2_7B", "gpt3_1_3B", "gpt3_6_7B" , "gpt3_350M"]
-MODELS = ["gpt3_1_3B"]
+MODELS = ["gpt3_350M"]
 
 
-MIN_WORLD_SIZE = 4
-MAX_WORLD_SIZE = 4
+MIN_WORLD_SIZE = 8
+MAX_WORLD_SIZE = 8
 WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 0
 TIMEOUT_SECONDS = 900
 
 # NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.47", "172.21.0.90", "172.21.0.91", "172.21.0.92" ]
-NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.91", "172.21.0.92" ]
+# NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.91", "172.21.0.92" ]
 # NODE_IPS = ["172.21.0.42", "172.21.0.46"]
 
+# NODE_PORTS = ["2220", "2221", "2222", "2223"]
+# MASTER_IP = "172.21.0.42"
 
-NODE_PORTS = ["2220", "2221", "2222", "2223"]
-MASTER_IP = "172.21.0.42"
+NODE_IPS = ["172.31.34.170", "172.31.42.14"]
+NODE_PORTS = ["2220", "2221", "2222", "2223", "2224", "2225", "2226", "2227"]
+MASTER_IP = "172.31.34.170"
 
-# NODE_IPS = ["172.31.10.88", "172.31.8.235"]
-# NODE_PORTS = ["2220", "2221", "2222", "2223", "2224", "2225", "2226", "2227"]
-# MASTER_IP = "172.31.10.88"
-
-# NODE_IPS = ["172.31.11.113", "172.31.9.213"]
+# NODE_IPS = ["172.31.42.121"]
 # NODE_PORTS = ["2220"]
-# MASTER_IP = "172.31.11.113"
+# MASTER_IP = "172.31.42.121"
+
 
 MASTER_PORT  = "60000"
-
 MONITOR_INTERVAL = 15
 
 
@@ -130,13 +129,13 @@ def kill_processes():
 
 for model in MODELS:
     if model == "gpt3_6_7B":
-        MAX_MBS = 2
+        MAX_MBS = 4
     elif model == "gpt3_350M":
-        MAX_MBS = 32
+        MAX_MBS = 64
     elif model == "gpt3_1_3B":
-        MAX_MBS = 16
+        MAX_MBS = 32
     elif model == "gpt3_2_7B":
-        MAX_MBS = 8
+        MAX_MBS = 16
     mbs = MAX_MBS
     for world_size in range(MAX_WORLD_SIZE, MIN_WORLD_SIZE - 1, -WORLD_SIZE_INTERVAL):
         while mbs > 0:
