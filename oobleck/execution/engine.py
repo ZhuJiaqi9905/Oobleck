@@ -520,10 +520,18 @@ class DataParallelEngine:
         fsdp_indices: list[list[int]] = defaultdict(list)
         my_rank = dist.get_rank()
         num_groups = 0
+        self._ranks_to_pg = {}
         for layer_index, ranks_per_layer in ranks_grid.items():
             for fsdp_index, ranks in ranks_per_layer.items():
-                dp_process_groups[layer_index][fsdp_index] = dist.new_group(ranks)
-                dist.barrier(dp_process_groups[layer_index][fsdp_index])
+                ranks = tuple(sorted(ranks))
+                if not ranks in self._ranks_to_pg: 
+                    pg = dist.new_group(ranks)
+                    self._ranks_to_pg[ranks] = pg
+                else:
+                    pg = self._ranks_to_pg[ranks]
+                dp_process_groups[layer_index][fsdp_index] = pg
+                # dp_process_groups[layer_index][fsdp_index] = dist.new_group(ranks)
+                # dist.barrier(dp_process_groups[layer_index][fsdp_index])
                 num_groups += 1
                 if my_rank in ranks:
                     fsdp_indices[layer_index].append(fsdp_index)
