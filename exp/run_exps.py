@@ -10,21 +10,21 @@ import subprocess
 MODELS = ["gpt3_1_3B"]
 
 
-MIN_WORLD_SIZE = 8
-MAX_WORLD_SIZE = 12
+MIN_WORLD_SIZE = 16
+MAX_WORLD_SIZE = 16
 WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 0
 TIMEOUT_SECONDS = 900
 
 # NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.47", "172.21.0.90", "172.21.0.91", "172.21.0.92" ]
 # NODE_IPS = ["172.21.0.42", "172.21.0.46", "172.21.0.90", "172.21.0.91", "172.21.0.92" ]
-NODE_IPS = ["172.21.0.91", "172.21.0.90", "172.21.0.92"]
-NODE_PORTS = ["2220", "2221", "2222", "2223"]
-MASTER_IP = "172.21.0.91"
+# NODE_IPS = ["172.21.0.91", "172.21.0.90", "172.21.0.92"]
+# NODE_PORTS = ["2220", "2221", "2222", "2223"]
+# MASTER_IP = "172.21.0.91"
 
-# NODE_IPS = ["172.31.34.170", "172.31.42.14"]
-# NODE_PORTS = ["2220", "2221", "2222", "2223", "2224", "2225", "2226", "2227"]
-# MASTER_IP = "172.31.34.170"
+NODE_IPS = ["172.31.34.170", "172.31.42.14"]
+NODE_PORTS = ["2220", "2221", "2222", "2223", "2224", "2225", "2226", "2227"]
+MASTER_IP = "172.31.34.170"
 
 # NODE_IPS = ["172.31.42.121"]
 # NODE_PORTS = ["2220"]
@@ -48,7 +48,7 @@ def get_nodes_and_ports(world_size: int) -> tuple[list[str], list[str]]:
     
     # if world_size == 8 or world_size == 10:
     #     batch = 4
-    batch = 4
+    batch = 8
     
     i = 0
     for node_idx in range(node_nums):

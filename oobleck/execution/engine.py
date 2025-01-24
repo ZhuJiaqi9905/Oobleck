@@ -692,7 +692,7 @@ class OobleckEngine:
         print(f"min_nodes: {min_num_nodes}, max_nodes: {max_num_nodes}, gpus: {num_gpus_per_node}, ")
 
         # read pipeline_template for json file
-        self._json_file = f"/workspace/Oobleck/planning/pipeline_templates/{self._args.model.model_tag}-{self._hf_training_args.per_device_train_batch_size}-{num_gpus_per_node * num_nodes}-{num_gpus_per_node}.json"
+        self._json_file = f"/workspace/Oobleck/planning/pipeline_templates/aws-2025-01/{self._args.model.model_tag}-{self._hf_training_args.per_device_train_batch_size}-{num_gpus_per_node * num_nodes}-{num_gpus_per_node}.json"
         pipeline_templates: list[PipelineTemplate] = create_pipeline_templates_from_json_file(self._json_file)
 
         # generate pipeline from scratch
