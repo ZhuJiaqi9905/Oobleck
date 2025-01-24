@@ -50,3 +50,6 @@
 - `agent.py`末尾能调节NCCL配置
 - `data/model/*/config.json`中`n_positions`和`n_ctx`调节sequence length
 - `examples/`中的`.template.yaml`文件调节sequence length和global batch size
+
+# 命名
+- `01-24-2025-08-28-08-gpt3_1_3B-2048-32-16`: 时间-模型-gbs-mbs-gpus

@@ -231,8 +231,8 @@ class PipelineInstantiator:
                     global_num_microbatch, num_instances_set
                 )
                 num_microbatches_set_list.append(num_microbatches_set)
-                if num_instances_set is not None:
-                    break
+                # if num_instances_set is not None:
+                #     break
             except ValueError:
                 num_microbatches_set_list.append(None)
 

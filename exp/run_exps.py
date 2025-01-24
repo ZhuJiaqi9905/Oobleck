@@ -7,7 +7,7 @@ import subprocess
 
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
 # MODELS = ["gpt3_2_7B", "gpt3_1_3B", "gpt3_6_7B" , "gpt3_350M"]
-MODELS = ["gpt3_1_3B"]
+MODELS = ["gpt3_6_7B"]
 
 
 MIN_WORLD_SIZE = 16
@@ -127,14 +127,15 @@ def kill_processes():
     subprocess.run("./exp/kill.sh", shell=True, capture_output=True, text=True)
 
 for model in MODELS:
-    if model == "gpt3_6_7B":
-        MAX_MBS = 4
-    elif model == "gpt3_350M":
-        MAX_MBS = 32
+
+    if model == "gpt3_350M":
+        MAX_MBS = 64
     elif model == "gpt3_1_3B":
         MAX_MBS = 32
     elif model == "gpt3_2_7B":
-        MAX_MBS = 16
+        MAX_MBS = 32
+    elif model == "gpt3_6_7B":
+        MAX_MBS = 4
     mbs = MAX_MBS
     for world_size in range(MAX_WORLD_SIZE, MIN_WORLD_SIZE - 1, -WORLD_SIZE_INTERVAL):
         while mbs > 0:
