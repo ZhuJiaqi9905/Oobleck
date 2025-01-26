@@ -6,12 +6,12 @@ import subprocess
 
 
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
-MODELS = ["gpt3_2_7B", "gpt3_1_3B", "gpt3_6_7B" , "gpt3_13B"]
+MODELS = ["gpt3_1_3B", "gpt3_2_7B", "gpt3_6_7B" , "gpt3_13B"]
 # MODELS = ["gpt3_13B"]
 
 
-MIN_WORLD_SIZE = 16
-MAX_WORLD_SIZE = 16
+MIN_WORLD_SIZE = 17
+MAX_WORLD_SIZE = 24
 WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 0
 TIMEOUT_SECONDS = 900
@@ -22,7 +22,7 @@ TIMEOUT_SECONDS = 900
 # NODE_PORTS = ["2220", "2221", "2222", "2223"]
 # MASTER_IP = "172.21.0.91"
 
-NODE_IPS = ["172.31.34.170", "172.31.42.14"]
+NODE_IPS = ["172.31.34.170", "172.31.42.14", "172.31.33.229"]
 NODE_PORTS = ["2220", "2221", "2222", "2223", "2224", "2225", "2226", "2227"]
 MASTER_IP = "172.31.34.170"
 
@@ -92,6 +92,7 @@ def monitor_logs():
     log_dir = './tmp/logs'
     iters = TIMEOUT_SECONDS // MONITOR_INTERVAL + 1
     for i in range(iters):
+        # print(f"monitor iter: {i}")
         time.sleep(MONITOR_INTERVAL)
         # 找到最新的文件夹
         dirs = [os.path.join(log_dir, d) for d in os.listdir(log_dir) if os.path.isdir(os.path.join(log_dir, d))]
@@ -156,6 +157,7 @@ for model in MODELS:
                 exit()
             print(f"start job. job_stdout: {job_proc.stdout}, job_stderr: {job_proc.stderr}")
             res = monitor_logs()
+            print(f"monitor result: {res}")
             master_proc.kill()
             kill_processes()
             time.sleep(10)
