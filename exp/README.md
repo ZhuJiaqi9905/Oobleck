@@ -53,3 +53,4 @@
 
 # 命名
 - `01-24-2025-08-28-08-gpt3_1_3B-2048-32-16`: 时间-模型-gbs-mbs-gpus
+- profile中`gpt3_350M-64-16-1`: 模型—mbs-gpus-gpus_per_node

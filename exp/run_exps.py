@@ -6,8 +6,8 @@ import subprocess
 
 
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
-# MODELS = ["gpt3_2_7B", "gpt3_1_3B", "gpt3_6_7B" , "gpt3_350M"]
-MODELS = ["gpt3_6_7B"]
+MODELS = ["gpt3_2_7B", "gpt3_1_3B", "gpt3_6_7B" , "gpt3_13B"]
+# MODELS = ["gpt3_13B"]
 
 
 MIN_WORLD_SIZE = 16
@@ -135,7 +135,9 @@ for model in MODELS:
     elif model == "gpt3_2_7B":
         MAX_MBS = 32
     elif model == "gpt3_6_7B":
-        MAX_MBS = 4
+        MAX_MBS =  8
+    elif model == "gpt3_13B":
+        MAX_MBS = 8
     mbs = MAX_MBS
     for world_size in range(MAX_WORLD_SIZE, MIN_WORLD_SIZE - 1, -WORLD_SIZE_INTERVAL):
         while mbs > 0:
