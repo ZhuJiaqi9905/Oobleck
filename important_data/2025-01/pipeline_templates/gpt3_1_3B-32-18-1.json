@@ -1,0 +1,2238 @@
+{
+    "pipeline_template": [
+        {
+            "num_nodes": 1,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        19,
+                        20,
+                        21,
+                        22,
+                        23,
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 41864.823451042175
+        },
+        {
+            "num_nodes": 2,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11,
+                        12,
+                        13
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        19,
+                        20,
+                        21,
+                        22,
+                        23,
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 47512.772628068924
+        },
+        {
+            "num_nodes": 3,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        10,
+                        11,
+                        12,
+                        13,
+                        14,
+                        15,
+                        16,
+                        17
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        18,
+                        19,
+                        20,
+                        21,
+                        22,
+                        23,
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 46736.982296705246
+        },
+        {
+            "num_nodes": 4,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        8,
+                        9,
+                        10,
+                        11,
+                        12,
+                        13
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        14,
+                        15,
+                        16,
+                        17,
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        20,
+                        21,
+                        22,
+                        23,
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 46774.250238657
+        },
+        {
+            "num_nodes": 5,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        6,
+                        7,
+                        8,
+                        9,
+                        10
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        11,
+                        12,
+                        13,
+                        14,
+                        15
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        16,
+                        17,
+                        18,
+                        19,
+                        20
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        21,
+                        22,
+                        23,
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 47323.85796236992
+        },
+        {
+            "num_nodes": 6,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        6,
+                        7,
+                        8,
+                        9
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        10,
+                        11,
+                        12,
+                        13
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        14,
+                        15,
+                        16,
+                        17
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        18,
+                        19,
+                        20,
+                        21
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        22,
+                        23,
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 47607.25127911568
+        },
+        {
+            "num_nodes": 7,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        5,
+                        6,
+                        7,
+                        8
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        9,
+                        10,
+                        11,
+                        12
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        13,
+                        14,
+                        15,
+                        16
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        17,
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        20,
+                        21,
+                        22
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        23,
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 45586.952303647995
+        },
+        {
+            "num_nodes": 8,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        5,
+                        6,
+                        7
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        8,
+                        9,
+                        10
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        11,
+                        12,
+                        13
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        14,
+                        15,
+                        16
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        17,
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        20,
+                        21,
+                        22
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        23,
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 48874.22438073158
+        },
+        {
+            "num_nodes": 9,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        4,
+                        5,
+                        6
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        7,
+                        8,
+                        9
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        10,
+                        11
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        12,
+                        13,
+                        14
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        15,
+                        16,
+                        17
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        18,
+                        19,
+                        20
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        21,
+                        22,
+                        23
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 44528.14223265648
+        },
+        {
+            "num_nodes": 10,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        4,
+                        5,
+                        6
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        7,
+                        8,
+                        9
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        10,
+                        11
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        12,
+                        13,
+                        14
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        15,
+                        16,
+                        17
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        20,
+                        21
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        22,
+                        23
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 47011.90333867073
+        },
+        {
+            "num_nodes": 11,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2,
+                        3
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        4,
+                        5,
+                        6
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        7,
+                        8
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        9,
+                        10
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        11,
+                        12
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        13,
+                        14,
+                        15
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        16,
+                        17
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        20,
+                        21
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        22,
+                        23
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 49495.66444468498
+        },
+        {
+            "num_nodes": 12,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        3,
+                        4,
+                        5
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        6,
+                        7
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        8,
+                        9
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        10,
+                        11
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        12,
+                        13
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        14,
+                        15
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        16,
+                        17
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        20,
+                        21
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        22,
+                        23
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        24,
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 51726.45108675957
+        },
+        {
+            "num_nodes": 13,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1,
+                        2
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        3,
+                        4
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        5,
+                        6
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        7,
+                        8
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        9,
+                        10
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        11,
+                        12
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        13,
+                        14
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        15,
+                        16
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        17,
+                        18
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        19,
+                        20
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        21,
+                        22
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        23,
+                        24
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 43488.05147147179
+        },
+        {
+            "num_nodes": 14,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        2,
+                        3
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        4,
+                        5
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        6,
+                        7
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        8,
+                        9
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        10,
+                        11
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        12,
+                        13
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        14,
+                        15
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        16,
+                        17
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        18,
+                        19
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        20,
+                        21
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        22,
+                        23
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        24
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 45132.13027071953
+        },
+        {
+            "num_nodes": 15,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        2,
+                        3
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        4,
+                        5
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        6,
+                        7
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        8
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        9,
+                        10
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        11,
+                        12
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        13,
+                        14
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        15,
+                        16
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        17,
+                        18
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        19,
+                        20
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        21
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        22,
+                        23
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        24
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 46740.25927615166
+        },
+        {
+            "num_nodes": 16,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        2,
+                        3
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        4,
+                        5
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        6,
+                        7
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        8
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        9,
+                        10
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        11,
+                        12
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        13,
+                        14
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        15,
+                        16
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        17,
+                        18
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        19
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        20
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        21
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        22,
+                        23
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        24
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 48379.06858706474
+        },
+        {
+            "num_nodes": 17,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        2,
+                        3
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        4,
+                        5
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        6,
+                        7
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        8,
+                        9
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        10
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        11
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        12
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        13,
+                        14
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        15,
+                        16
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        17,
+                        18
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        19
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        20
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        21
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        22,
+                        23
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        24
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 50017.87789797783
+        },
+        {
+            "num_nodes": 18,
+            "num_gpus_per_node": 1,
+            "stages": [
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        0,
+                        1
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        2,
+                        3
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        4,
+                        5
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        6,
+                        7
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        8,
+                        9
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        10
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        11
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        12,
+                        13
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        14,
+                        15
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        16
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        17
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        18
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        19
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        20
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        21
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        22
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        23,
+                        24
+                    ]
+                },
+                {
+                    "num_gpus": 1,
+                    "layer_indices": [
+                        25
+                    ]
+                }
+            ],
+            "iteration_time": 51656.687208890915
+        }
+    ],
+    "execution_plan": {
+        "pipeline_templates": [
+            {
+                "num_nodes": 1,
+                "num_gpus_per_node": 1,
+                "stages": [
+                    {
+                        "num_gpus": 1,
+                        "layer_indices": [
+                            0,
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12,
+                            13,
+                            14,
+                            15,
+                            16,
+                            17,
+                            18,
+                            19,
+                            20,
+                            21,
+                            22,
+                            23,
+                            24,
+                            25
+                        ]
+                    }
+                ],
+                "iteration_time": 41864.823451042175
+            },
+            {
+                "num_nodes": 2,
+                "num_gpus_per_node": 1,
+                "stages": [
+                    {
+                        "num_gpus": 1,
+                        "layer_indices": [
+                            0,
+                            1,
+                            2,
+                            3,
+                            4,
+                            5,
+                            6,
+                            7,
+                            8,
+                            9,
+                            10,
+                            11,
+                            12,
+                            13
+                        ]
+                    },
+                    {
+                        "num_gpus": 1,
+                        "layer_indices": [
+                            14,
+                            15,
+                            16,
+                            17,
+                            18,
+                            19,
+                            20,
+                            21,
+                            22,
+                            23,
+                            24,
+                            25
+                        ]
+                    }
+                ],
+                "iteration_time": 47512.772628068924
+            }
+        ],
+        "num_instances_set": [
+            [
+                {
+                    "num_nodes": 1,
+                    "num_gpus_per_node": 1,
+                    "stages": [
+                        {
+                            "num_gpus": 1,
+                            "layer_indices": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19,
+                                20,
+                                21,
+                                22,
+                                23,
+                                24,
+                                25
+                            ]
+                        }
+                    ],
+                    "iteration_time": 41864.823451042175
+                },
+                10
+            ],
+            [
+                {
+                    "num_nodes": 2,
+                    "num_gpus_per_node": 1,
+                    "stages": [
+                        {
+                            "num_gpus": 1,
+                            "layer_indices": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13
+                            ]
+                        },
+                        {
+                            "num_gpus": 1,
+                            "layer_indices": [
+                                14,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19,
+                                20,
+                                21,
+                                22,
+                                23,
+                                24,
+                                25
+                            ]
+                        }
+                    ],
+                    "iteration_time": 47512.772628068924
+                },
+                4
+            ]
+        ],
+        "num_microbatches_set": [
+            [
+                {
+                    "num_nodes": 1,
+                    "num_gpus_per_node": 1,
+                    "stages": [
+                        {
+                            "num_gpus": 1,
+                            "layer_indices": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13,
+                                14,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19,
+                                20,
+                                21,
+                                22,
+                                23,
+                                24,
+                                25
+                            ]
+                        }
+                    ],
+                    "iteration_time": 41864.823451042175
+                },
+                2
+            ],
+            [
+                {
+                    "num_nodes": 2,
+                    "num_gpus_per_node": 1,
+                    "stages": [
+                        {
+                            "num_gpus": 1,
+                            "layer_indices": [
+                                0,
+                                1,
+                                2,
+                                3,
+                                4,
+                                5,
+                                6,
+                                7,
+                                8,
+                                9,
+                                10,
+                                11,
+                                12,
+                                13
+                            ]
+                        },
+                        {
+                            "num_gpus": 1,
+                            "layer_indices": [
+                                14,
+                                15,
+                                16,
+                                17,
+                                18,
+                                19,
+                                20,
+                                21,
+                                22,
+                                23,
+                                24,
+                                25
+                            ]
+                        }
+                    ],
+                    "iteration_time": 47512.772628068924
+                },
+                11
+            ]
+        ],
+        "allreduce_across_nodes": [
+            {
+                "1": 0.2354460060596466,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.09704899787902832,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.09049300104379654,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.09349200129508972,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.09392700344324112,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08821699768304825,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08553200215101242,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.0898279994726181,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08772899955511093,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08582500368356705,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.0831419974565506,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08445999771356583,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08958099782466888,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08387599885463715,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.09039700031280518,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08345799893140793,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08345299959182739,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08288399875164032,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08883900195360184,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08595500141382217,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.10004899650812149,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08404400199651718,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.0838719978928566,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08320499956607819,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08396799862384796,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            },
+            {
+                "1": 0.08859100192785263,
+                "2": 0.0,
+                "3": 0.0,
+                "4": 0.0,
+                "5": 0.0,
+                "6": 0.0,
+                "7": 0.0,
+                "8": 0.0,
+                "9": 0.0,
+                "10": 0.0,
+                "11": 0.0,
+                "12": 0.0,
+                "13": 0.0,
+                "14": 0.0,
+                "15": 0.0,
+                "16": 0.0,
+                "17": 0.0,
+                "18": 0.0
+            }
+        ]
+    }
+}

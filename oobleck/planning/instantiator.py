@@ -226,13 +226,16 @@ class PipelineInstantiator:
 
         num_microbatches_set_list: list[dict[PipelineTemplate, int]] = []
         for num_instances_set in num_instances_set_list:
+            if num_instances_set is None:
+                num_microbatches_set_list.append(None)
+                continue
             try:
                 num_microbatches_set = self._distribute_batch(
                     global_num_microbatch, num_instances_set
                 )
                 num_microbatches_set_list.append(num_microbatches_set)
-                # if num_instances_set is not None:
-                #     break
+                if num_microbatches_set is not None:
+                    break
             except ValueError:
                 num_microbatches_set_list.append(None)
 

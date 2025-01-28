@@ -51,6 +51,7 @@
 - `data/model/*/config.json`中`n_positions`和`n_ctx`调节sequence length
 - `examples/`中的`.template.yaml`文件调节sequence length和global batch size
 - 改跑实验的时候，需要修改`exp/kill.sh`中的服务器的ip地址。
+- `create_pipeline_template.py`运行的时候会去`tmp/profiles`里面读取profile的数据。所以需要把profile的数据放上去
 # 命名
 - `01-24-2025-08-28-08-gpt3_1_3B-2048-32-16`: 时间-模型-gbs-mbs-gpus
 - profile中`gpt3_350M-64-16-1`: 模型—mbs-gpus-gpus_per_node

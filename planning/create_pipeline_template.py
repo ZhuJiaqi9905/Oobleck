@@ -280,12 +280,24 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     file_names = os.listdir(args.profile_path)
-    # file_names = []
-
+    
+    out_files = os.listdir(args.out_path)
+    
+    filtered_files = []
+    for file in file_names:
+        flag = False
+        for out_file in out_files:
+            if file in out_file:
+                flag = True
+                break 
+        if not flag:
+            filtered_files.append(file)
+    # print(filtered_files)
+    # exit()
 
     with concurrent.futures.ThreadPoolExecutor() as executor:
         futures = [
-            executor.submit(process_file, file_name, args) for file_name in file_names
+            executor.submit(process_file, file_name, args) for file_name in filtered_files
         ]
         
         # Wait for all futures to complete
