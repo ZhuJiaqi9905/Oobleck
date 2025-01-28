@@ -6,12 +6,12 @@ import subprocess
 
 
 # MODELS = ["gpt3_350M",  "gpt3_2_7B", "gpt3_13B","gpt3_1_3B", "gpt3_6_7B" ]
-MODELS = ["gpt3_1_3B", "gpt3_2_7B", "gpt3_6_7B" , "gpt3_13B"]
-# MODELS = ["gpt3_13B"]
+# MODELS = ["gpt3_2_7B", "gpt3_6_7B" , "gpt3_13B"]
+MODELS = ["gpt3_13B"]
 
 
-MIN_WORLD_SIZE = 17
-MAX_WORLD_SIZE = 24
+MIN_WORLD_SIZE = 16
+MAX_WORLD_SIZE = 32
 WORLD_SIZE_INTERVAL = 1
 MAX_MBS = 0
 TIMEOUT_SECONDS = 900
@@ -22,7 +22,7 @@ TIMEOUT_SECONDS = 900
 # NODE_PORTS = ["2220", "2221", "2222", "2223"]
 # MASTER_IP = "172.21.0.91"
 
-NODE_IPS = ["172.31.34.170", "172.31.42.14", "172.31.33.229"]
+NODE_IPS = ["172.31.34.170", "172.31.42.14", "172.31.33.229", "172.31.47.119"]
 NODE_PORTS = ["2220", "2221", "2222", "2223", "2224", "2225", "2226", "2227"]
 MASTER_IP = "172.31.34.170"
 
@@ -136,14 +136,14 @@ for model in MODELS:
     elif model == "gpt3_2_7B":
         MAX_MBS = 32
     elif model == "gpt3_6_7B":
-        MAX_MBS =  8
+        MAX_MBS = 8
     elif model == "gpt3_13B":
         MAX_MBS = 8
     mbs = MAX_MBS
     for world_size in range(MAX_WORLD_SIZE, MIN_WORLD_SIZE - 1, -WORLD_SIZE_INTERVAL):
         while mbs > 0:
             # 用pipeline模板
-            if not os.path.exists(f"/workspace/Oobleck/planning/pipeline_templates/{model}-{mbs}-{world_size}-1.json"):
+            if not os.path.exists(f"/workspace/Oobleck/important_data/2025-01/pipeline_templates/{model}-{mbs}-{world_size}-1.json"):
                 break
 
             print(f"start exp: {model}-{mbs}-{world_size}.")

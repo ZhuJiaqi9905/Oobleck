@@ -1,0 +1,471 @@
+[2025-01-28 09:27:01,144] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/workspace/Oobleck/oobleck/__init__.py
+node_index: 10
+mb size: 34, ar across: 34, ar in: 34
+Loading done. creating layer execution results...
+Returning from get_profiler_results
+[2025-01-28 09:27:05,095] [INFO] [agent.py:158:_launch_workers] Job arguments: OobleckArguments(dist=DistributedArguments(master_ip='172.31.34.170', master_port=60000, node_ips=['172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.33.229', '172.31.33.229', '172.31.33.229', '172.31.33.229', '172.31.33.229', '172.31.33.229', '172.31.33.229', '172.31.33.229'], node_ports=[2220, 2221, 2222, 2223, 2224, 2225, 2226, 2227, 2220, 2221, 2222, 2223, 2224, 2225, 2226, 2227, 2220, 2221, 2222, 2223, 2224, 2225, 2226, 2227], num_workers=1, num_agents_per_node=1, world_size=24, username='ubuntu'), job=JobArguments(fault_threshold=1, microbatch_size=32, global_microbatch_size=2048, steps=5), model=ModelArguments(model_name='gpt2', model_tag='gpt3_2_7B', dataset_path='wikitext', dataset_name='wikitext-2-raw-v1', model_args={'n_embd': 2560, 'n_head': 32, 'n_positions': 1024, 'num_hidden_layers': 32}))
+[2025-01-28 09:27:05,095] [INFO] [agent.py:196:_launch_workers] in agent. my_ip_port 172.31.42.14:2222, node_ip_ports ['172.31.34.170:2220', '172.31.34.170:2221', '172.31.34.170:2222', '172.31.34.170:2223', '172.31.34.170:2224', '172.31.34.170:2225', '172.31.34.170:2226', '172.31.34.170:2227', '172.31.42.14:2220', '172.31.42.14:2221', '172.31.42.14:2222', '172.31.42.14:2223', '172.31.42.14:2224', '172.31.42.14:2225', '172.31.42.14:2226', '172.31.42.14:2227', '172.31.33.229:2220', '172.31.33.229:2221', '172.31.33.229:2222', '172.31.33.229:2223', '172.31.33.229:2224', '172.31.33.229:2225', '172.31.33.229:2226', '172.31.33.229:2227']
+gpu_idx: 2
+[2025-01-28 09:27:05,095] [INFO] [agent.py:205:_launch_workers] Launching worker 0...
+[2025-01-28 09:27:07,177] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-28 09:27:10,462] [INFO] [worker.py:23:worker_main] Initializing Oobleck Engine...
+[2025-01-28 09:27:10,463] [INFO] [worker.py:24:worker_main] in worker main: my_ip 172.31.42.14:2222
+/opt/conda/envs/oobleck/lib/python3.10/site-packages/transformers/training_args.py:1281: FutureWarning: using `no_cuda` is deprecated and will be removed in version 5.0 of 🤗 Transformers. Use `use_cpu` instead
+  warnings.warn(
+Dataset: model_name: gpt2, dataset_path: wikitext, dataset_name: wikitext-2-raw-v1, max_seq_length: 1024
+[2025-01-28 09:27:10,731] [INFO] [engine.py:647:_initialize_engine] model arguments: {'n_embd': 2560, 'n_head': 32, 'n_positions': 1024, 'num_hidden_layers': 32}
+model_name: gpt2, model_tag: gpt3_2_7B
+mb size: 34, ar across: 34, ar in: 34
+Loading done. creating layer execution results...
+Returning from get_profiler_results
+[2025-01-28 09:27:13,653] [INFO] [engine.py:689:_initialize_engine] Number of nodes range: (2, 24)
+min_nodes: 2, max_nodes: 24, gpus: 1, 
+StageExecutionResult[0:17] with 1 devices
+StageExecutionResult[18:33] with 1 devices
+StageExecutionResult[0:11] with 1 devices
+StageExecutionResult[12:22] with 1 devices
+StageExecutionResult[23:33] with 1 devices
+StageExecutionResult[0:9] with 1 devices
+StageExecutionResult[10:18] with 1 devices
+StageExecutionResult[19:26] with 1 devices
+StageExecutionResult[27:33] with 1 devices
+StageExecutionResult[0:6] with 1 devices
+StageExecutionResult[7:13] with 1 devices
+StageExecutionResult[14:20] with 1 devices
+StageExecutionResult[21:27] with 1 devices
+StageExecutionResult[28:33] with 1 devices
+StageExecutionResult[0:5] with 1 devices
+StageExecutionResult[6:11] with 1 devices
+StageExecutionResult[12:17] with 1 devices
+StageExecutionResult[18:23] with 1 devices
+StageExecutionResult[24:28] with 1 devices
+StageExecutionResult[29:33] with 1 devices
+StageExecutionResult[0:4] with 1 devices
+StageExecutionResult[5:9] with 1 devices
+StageExecutionResult[10:14] with 1 devices
+StageExecutionResult[15:19] with 1 devices
+StageExecutionResult[20:24] with 1 devices
+StageExecutionResult[25:29] with 1 devices
+StageExecutionResult[30:33] with 1 devices
+StageExecutionResult[0:4] with 1 devices
+StageExecutionResult[5:9] with 1 devices
+StageExecutionResult[10:13] with 1 devices
+StageExecutionResult[14:18] with 1 devices
+StageExecutionResult[19:22] with 1 devices
+StageExecutionResult[23:26] with 1 devices
+StageExecutionResult[27:30] with 1 devices
+StageExecutionResult[31:33] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:7] with 1 devices
+StageExecutionResult[8:11] with 1 devices
+StageExecutionResult[12:15] with 1 devices
+StageExecutionResult[16:19] with 1 devices
+StageExecutionResult[20:23] with 1 devices
+StageExecutionResult[24:27] with 1 devices
+StageExecutionResult[28:30] with 1 devices
+StageExecutionResult[31:33] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:7] with 1 devices
+StageExecutionResult[8:10] with 1 devices
+StageExecutionResult[11:13] with 1 devices
+StageExecutionResult[14:16] with 1 devices
+StageExecutionResult[17:20] with 1 devices
+StageExecutionResult[21:24] with 1 devices
+StageExecutionResult[25:27] with 1 devices
+StageExecutionResult[28:30] with 1 devices
+StageExecutionResult[31:33] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:7] with 1 devices
+StageExecutionResult[8:10] with 1 devices
+StageExecutionResult[11:13] with 1 devices
+StageExecutionResult[14:16] with 1 devices
+StageExecutionResult[17:19] with 1 devices
+StageExecutionResult[20:22] with 1 devices
+StageExecutionResult[23:25] with 1 devices
+StageExecutionResult[26:28] with 1 devices
+StageExecutionResult[29:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:5] with 1 devices
+StageExecutionResult[6:8] with 1 devices
+StageExecutionResult[9:11] with 1 devices
+StageExecutionResult[12:14] with 1 devices
+StageExecutionResult[15:17] with 1 devices
+StageExecutionResult[18:20] with 1 devices
+StageExecutionResult[21:23] with 1 devices
+StageExecutionResult[24:26] with 1 devices
+StageExecutionResult[27:29] with 1 devices
+StageExecutionResult[30:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:5] with 1 devices
+StageExecutionResult[6:8] with 1 devices
+StageExecutionResult[9:11] with 1 devices
+StageExecutionResult[12:14] with 1 devices
+StageExecutionResult[15:17] with 1 devices
+StageExecutionResult[18:20] with 1 devices
+StageExecutionResult[21:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[26:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:5] with 1 devices
+StageExecutionResult[6:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:17] with 1 devices
+StageExecutionResult[18:20] with 1 devices
+StageExecutionResult[21:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[26:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:5] with 1 devices
+StageExecutionResult[6:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[26:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:5] with 1 devices
+StageExecutionResult[6:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:1] with 1 devices
+StageExecutionResult[2:3] with 1 devices
+StageExecutionResult[4:5] with 1 devices
+StageExecutionResult[6:7] with 1 devices
+StageExecutionResult[8:9] with 1 devices
+StageExecutionResult[10:11] with 1 devices
+StageExecutionResult[12:13] with 1 devices
+StageExecutionResult[14:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:1] with 1 devices
+StageExecutionResult[2:3] with 1 devices
+StageExecutionResult[4:5] with 1 devices
+StageExecutionResult[6:7] with 1 devices
+StageExecutionResult[8:9] with 1 devices
+StageExecutionResult[10:11] with 1 devices
+StageExecutionResult[12:13] with 1 devices
+StageExecutionResult[14:15] with 1 devices
+StageExecutionResult[16:17] with 1 devices
+StageExecutionResult[18:19] with 1 devices
+StageExecutionResult[20:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[26:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:31] with 1 devices
+StageExecutionResult[32:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:1] with 1 devices
+StageExecutionResult[2:3] with 1 devices
+StageExecutionResult[4:5] with 1 devices
+StageExecutionResult[6:7] with 1 devices
+StageExecutionResult[8:9] with 1 devices
+StageExecutionResult[10:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:13] with 1 devices
+StageExecutionResult[14:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[26:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:31] with 1 devices
+StageExecutionResult[32:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:1] with 1 devices
+StageExecutionResult[2:3] with 1 devices
+StageExecutionResult[4:5] with 1 devices
+StageExecutionResult[6:7] with 1 devices
+StageExecutionResult[8:9] with 1 devices
+StageExecutionResult[10:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:13] with 1 devices
+StageExecutionResult[14:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[26:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:30] with 1 devices
+StageExecutionResult[31:31] with 1 devices
+StageExecutionResult[32:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:1] with 1 devices
+StageExecutionResult[2:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:9] with 1 devices
+StageExecutionResult[10:10] with 1 devices
+StageExecutionResult[11:11] with 1 devices
+StageExecutionResult[12:12] with 1 devices
+StageExecutionResult[13:13] with 1 devices
+StageExecutionResult[14:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[26:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:31] with 1 devices
+StageExecutionResult[32:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:1] with 1 devices
+StageExecutionResult[2:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:9] with 1 devices
+StageExecutionResult[10:10] with 1 devices
+StageExecutionResult[11:11] with 1 devices
+StageExecutionResult[12:12] with 1 devices
+StageExecutionResult[13:13] with 1 devices
+StageExecutionResult[14:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[26:27] with 1 devices
+StageExecutionResult[28:29] with 1 devices
+StageExecutionResult[30:30] with 1 devices
+StageExecutionResult[31:31] with 1 devices
+StageExecutionResult[32:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:1] with 1 devices
+StageExecutionResult[2:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:9] with 1 devices
+StageExecutionResult[10:10] with 1 devices
+StageExecutionResult[11:11] with 1 devices
+StageExecutionResult[12:12] with 1 devices
+StageExecutionResult[13:13] with 1 devices
+StageExecutionResult[14:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:25] with 1 devices
+StageExecutionResult[26:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:29] with 1 devices
+StageExecutionResult[30:30] with 1 devices
+StageExecutionResult[31:31] with 1 devices
+StageExecutionResult[32:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+[2025-01-28 09:27:13,657] [INFO] [worker.py:27:worker_main] Initializing torch.distributed...
+[2025-01-28 09:27:13,657] [DEBUG] [engine.py:738:initialize_distributed] regenerate rank_map {'172.31.34.170:2220': [0], '172.31.34.170:2221': [1], '172.31.34.170:2222': [2], '172.31.34.170:2223': [3], '172.31.34.170:2224': [4], '172.31.34.170:2225': [5], '172.31.34.170:2226': [6], '172.31.34.170:2227': [7], '172.31.42.14:2220': [8], '172.31.42.14:2221': [9], '172.31.42.14:2222': [10], '172.31.42.14:2223': [11], '172.31.42.14:2224': [12], '172.31.42.14:2225': [13], '172.31.42.14:2226': [14], '172.31.42.14:2227': [15], '172.31.33.229:2220': [16], '172.31.33.229:2221': [17], '172.31.33.229:2222': [18], '172.31.33.229:2223': [19], '172.31.33.229:2224': [20], '172.31.33.229:2225': [21], '172.31.33.229:2226': [22], '172.31.33.229:2227': [23]}
+[2025-01-28 09:27:13,657] [INFO] [engine.py:752:initialize_distributed] init pg: rank 10, world_size: 24, rank_map: {'172.31.34.170:2220': [0], '172.31.34.170:2221': [1], '172.31.34.170:2222': [2], '172.31.34.170:2223': [3], '172.31.34.170:2224': [4], '172.31.34.170:2225': [5], '172.31.34.170:2226': [6], '172.31.34.170:2227': [7], '172.31.42.14:2220': [8], '172.31.42.14:2221': [9], '172.31.42.14:2222': [10], '172.31.42.14:2223': [11], '172.31.42.14:2224': [12], '172.31.42.14:2225': [13], '172.31.42.14:2226': [14], '172.31.42.14:2227': [15], '172.31.33.229:2220': [16], '172.31.33.229:2221': [17], '172.31.33.229:2222': [18], '172.31.33.229:2223': [19], '172.31.33.229:2224': [20], '172.31.33.229:2225': [21], '172.31.33.229:2226': [22], '172.31.33.229:2227': [23]}
+[2025-01-28 09:27:13,657] [INFO] [engine.py:768:initialize_distributed] Waiting for a port information...
+[2025-01-28 09:27:16,499] [DEBUG] [agent.py:342:on_receive_response] Receiving: (<Response.FORWARD_RANK0_PORT: 5>, <RequestType.UNDEFINED: 0>)
+[2025-01-28 09:27:16,499] [DEBUG] [agent.py:287:on_receive_worker_port] agent recv TCP Store port 46533 from master
+[2025-01-28 09:27:16,500] [INFO] [engine.py:771:initialize_distributed] Received torch master: 172.31.34.170:2220.46533
+[2025-01-28 09:27:16,795] [INFO] [comm.py:637:init_distributed] cdb=None
+[2025-01-28 09:27:16,796] [INFO] [engine.py:788:initialize_distributed] [rank: 10] Distributed initialization is done.
+[2025-01-28 09:27:16,796] [INFO] [worker.py:34:worker_main] Instantiating pipelines...
+dataloader: mbs 32
+num_groups: 34
+[2025-01-28 09:27:39,283] [INFO] [engine.py:159:_reconfiguration_listener_fn] ReconfigureEngine: start reconfigure listening
+[2025-01-28 09:27:39,284] [INFO] [worker.py:36:worker_main] Begin training...
+step: 0
+step in try: 0
+ip-172-31-42-14:113569:113569 [0] NCCL INFO Bootstrap : Using ens5:172.31.42.14<0>
+ip-172-31-42-14:113569:113569 [0] NCCL INFO NET/Plugin: Failed to find ncclCollNetPlugin_v6 symbol.
+ip-172-31-42-14:113569:113569 [0] NCCL INFO NET/Plugin: Failed to find ncclCollNetPlugin symbol (v4 or v5).
+ip-172-31-42-14:113569:113569 [0] NCCL INFO cudaDriverVersion 12000
+NCCL version 2.14.3+cuda11.7
+ip-172-31-42-14:113569:115208 [0] NCCL INFO NET/OFI Using aws-ofi-nccl 1.5.0aws
+ip-172-31-42-14:113569:115208 [0] NCCL INFO NET/OFI Configuring AWS-specific options
+ip-172-31-42-14:113569:115208 [0] NCCL INFO NET/OFI Setting provider_filter to efa
+ip-172-31-42-14:113569:115208 [0] NCCL INFO NET/OFI Setting NCCL_PROTO to "simple"
+ip-172-31-42-14:113569:115208 [0] NCCL INFO NET/OFI Setting FI_EFA_FORK_SAFE environment variable to 1
+ip-172-31-42-14:113569:115208 [0] NCCL INFO NET/OFI DUP_CONNS of 4 changing device count to 4
+ip-172-31-42-14:113569:115208 [0] NCCL INFO NET/OFI Selected Provider is efa (found 4 nics)
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Using network AWS Libfabric
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Channel 00/04 :    0   1
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Channel 01/04 :    0   1
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Channel 02/04 :    0   1
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Channel 03/04 :    0   1
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Trees [0] 1/-1/-1->0->-1 [1] 1/-1/-1->0->-1 [2] 1/-1/-1->0->-1 [3] 1/-1/-1->0->-1
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Channel 00/0 : 0[180] -> 1[190] via P2P/IPC
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Channel 01/0 : 0[180] -> 1[190] via P2P/IPC
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Channel 02/0 : 0[180] -> 1[190] via P2P/IPC
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Channel 03/0 : 0[180] -> 1[190] via P2P/IPC
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Connected all rings
+ip-172-31-42-14:113569:115208 [0] NCCL INFO Connected all trees
+ip-172-31-42-14:113569:115208 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+ip-172-31-42-14:113569:115208 [0] NCCL INFO 4 coll channels, 4 p2p channels, 4 p2p channels per peer
+ip-172-31-42-14:113569:115208 [0] NCCL INFO comm 0x55781f705260 rank 0 nranks 2 cudaDev 0 busId 180 - Init COMPLETE
+ip-172-31-42-14:113569:115224 [0] NCCL INFO Channel 00/1 : 0[180] -> 1[190] via P2P/IPC
+ip-172-31-42-14:113569:115224 [0] NCCL INFO Channel 01/1 : 0[180] -> 1[190] via P2P/IPC
+ip-172-31-42-14:113569:115224 [0] NCCL INFO Channel 02/1 : 0[180] -> 1[190] via P2P/IPC
+ip-172-31-42-14:113569:115224 [0] NCCL INFO Channel 03/1 : 0[180] -> 1[190] via P2P/IPC
+forward_backward: 51.278112173080444s
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Using network AWS Libfabric
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Trees [0] 4/-1/-1->5->9 [1] 4/0/-1->5->-1
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Channel 00/0 : 1[180] -> 5[180] [receive] via NET/AWS Libfabric/0
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Channel 01/0 : 1[180] -> 5[180] [receive] via NET/AWS Libfabric/0
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Channel 00/0 : 5[180] -> 4[160] via P2P/IPC
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Channel 01/0 : 5[180] -> 4[160] via P2P/IPC
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Connected all rings
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Channel 00/0 : 5[180] -> 9[1b0] [send] via NET/AWS Libfabric/1
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Channel 01/0 : 0[160] -> 5[180] [receive] via NET/AWS Libfabric/1
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Channel 01/0 : 5[180] -> 0[160] [send] via NET/AWS Libfabric/1
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Channel 00/0 : 9[1b0] -> 5[180] [receive] via NET/AWS Libfabric/1
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Connected all trees
+ip-172-31-42-14:113569:115256 [0] NCCL INFO threadThresholds 8/8/64 | 80/8/64 | 512 | 512
+ip-172-31-42-14:113569:115256 [0] NCCL INFO 2 coll channels, 2 p2p channels, 2 p2p channels per peer
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Channel 00/1 : 5[180] -> 6[1a0] via P2P/indirect/4[160]
+ip-172-31-42-14:113569:115256 [0] NCCL INFO Channel 01/1 : 5[180] -> 6[1a0] via P2P/indirect/4[160]
+ip-172-31-42-14:113569:115256 [0] NCCL INFO comm 0x55781b34a510 rank 5 nranks 10 cudaDev 0 busId 180 - Init COMPLETE
+ip-172-31-42-14:113569:115268 [0] NCCL INFO Using network AWS Libfabric
+ip-172-31-42-14:113569:115268 [0] NCCL INFO Trees [0] 6/-1/-1->5->4 [1] 6/-1/-1->5->4
+ip-172-31-42-14:113569:115268 [0] NCCL INFO Channel 00 : 5[180] -> 6[1b0] via SHM/direct/direct
+ip-172-31-42-14:113569:115268 [0] NCCL INFO Channel 01 : 5[180] -> 6[1b0] via SHM/direct/direct
+ip-172-31-42-14:113569:115268 [0] NCCL INFO Connected all rings
+ip-172-31-42-14:113569:115268 [0] NCCL INFO Channel 00/0 : 5[180] -> 4[160] via P2P/IPC
+ip-172-31-42-14:113569:115268 [0] NCCL INFO Channel 01/0 : 5[180] -> 4[160] via P2P/IPC
+ip-172-31-42-14:113569:115268 [0] NCCL INFO Connected all trees
+ip-172-31-42-14:113569:115268 [0] NCCL INFO threadThresholds 8/8/64 | 80/8/64 | 512 | 512
+ip-172-31-42-14:113569:115268 [0] NCCL INFO 2 coll channels, 2 p2p channels, 2 p2p channels per peer
+ip-172-31-42-14:113569:115268 [0] NCCL INFO comm 0x55781bf02d00 rank 5 nranks 10 cudaDev 0 busId 180 - Init COMPLETE
+dp allreduce: 3.203831434249878s
+optimizer time: 0.07090067863464355s
+train step time: 54.552844285964966s
+training step: 0 done
+/opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/cuda/memory.py:416: FutureWarning: torch.cuda.memory_cached has been renamed to torch.cuda.memory_reserved
+  warnings.warn(
+/opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/cuda/memory.py:424: FutureWarning: torch.cuda.max_memory_cached has been renamed to torch.cuda.max_memory_reserved
+  warnings.warn(
+step: 1
+step in try: 1
+forward_backward: 49.064536333084106s
+dp allreduce: 2.3914084434509277s
+optimizer time: 0.0703577995300293s
+train step time: 51.52630257606506s
+training step: 1 done
+step: 2
+step in try: 2
+forward_backward: 48.89700794219971s
+dp allreduce: 2.2330822944641113s
+optimizer time: 0.06291723251342773s
+train step time: 51.193007469177246s
+training step: 2 done
+step: 3
+step in try: 3
+forward_backward: 48.94321799278259s
+dp allreduce: 2.2130022048950195s
+optimizer time: 0.06294918060302734s
+train step time: 51.21916937828064s
+training step: 3 done
+step: 4
+step in try: 4
+forward_backward: 48.968278646469116s
+dp allreduce: 2.2032527923583984s
+optimizer time: 0.06289362907409668s
+train step time: 51.23442506790161s
+training step: 4 done
+[2025-01-28 09:31:59,016] [INFO] [engine.py:948:train] Training is done. Waiting for synchronization...
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Using network AWS Libfabric
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Trees [0] 9/-1/-1->10->11 [1] 11/-1/-1->10->9 [2] 11/-1/-1->10->9 [3] 9/-1/-1->10->11 [4] 9/-1/-1->10->11 [5] 11/-1/-1->10->9 [6] 11/-1/-1->10->9 [7] 9/-1/-1->10->11
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 01/0 : 10[180] -> 11[190] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 02/0 : 10[180] -> 11[190] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 05/0 : 10[180] -> 11[190] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 06/0 : 10[180] -> 11[190] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 02/0 : 6[1c0] -> 10[180] [receive] via NET/AWS Libfabric/2
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 06/0 : 6[1c0] -> 10[180] [receive] via NET/AWS Libfabric/2
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 03/0 : 10[180] -> 14[1c0] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 07/0 : 10[180] -> 14[1c0] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 00/0 : 10[180] -> 9[170] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 04/0 : 10[180] -> 9[170] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Connected all rings
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 00/0 : 10[180] -> 11[190] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 03/0 : 10[180] -> 11[190] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 04/0 : 10[180] -> 11[190] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 07/0 : 10[180] -> 11[190] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 01/0 : 10[180] -> 9[170] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 02/0 : 10[180] -> 9[170] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 03/0 : 10[180] -> 9[170] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 05/0 : 10[180] -> 9[170] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 06/0 : 10[180] -> 9[170] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 07/0 : 10[180] -> 9[170] via P2P/IPC
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Connected all trees
+ip-172-31-42-14:113569:115299 [0] NCCL INFO threadThresholds 8/8/64 | 192/8/64 | 512 | 512
+ip-172-31-42-14:113569:115299 [0] NCCL INFO 8 coll channels, 8 p2p channels, 2 p2p channels per peer
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 00/1 : 10[180] -> 12[1a0] via P2P/indirect/8[160]
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 01/1 : 10[180] -> 12[1a0] via P2P/indirect/8[160]
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 00/1 : 10[180] -> 13[1b0] via P2P/indirect/9[170]
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 01/1 : 10[180] -> 13[1b0] via P2P/indirect/9[170]
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 00/1 : 10[180] -> 15[1d0] via P2P/indirect/14[1c0]
+ip-172-31-42-14:113569:115299 [0] NCCL INFO Channel 01/1 : 10[180] -> 15[1d0] via P2P/indirect/14[1c0]
+ip-172-31-42-14:113569:115299 [0] NCCL INFO comm 0x55781f707cf0 rank 10 nranks 24 cudaDev 0 busId 180 - Init COMPLETE
+[2025-01-28 09:32:01,231] [INFO] [engine.py:951:train] Training done.
+ip-172-31-42-14:113569:115314 [0] NCCL INFO [Service thread] Connection closed by localRank 2
+ip-172-31-42-14:113569:113569 [0] NCCL INFO comm 0x55781f707cf0 rank 10 nranks 24 cudaDev 0 busId 180 - Abort COMPLETE

@@ -1,0 +1,316 @@
+[2025-01-28 10:06:45,322] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+/workspace/Oobleck/oobleck/__init__.py
+node_index: 17
+mb size: 34, ar across: 34, ar in: 34
+Loading done. creating layer execution results...
+Returning from get_profiler_results
+[2025-01-28 10:06:48,870] [INFO] [agent.py:158:_launch_workers] Job arguments: OobleckArguments(dist=DistributedArguments(master_ip='172.31.34.170', master_port=60000, node_ips=['172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.34.170', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.42.14', '172.31.33.229', '172.31.33.229'], node_ports=[2220, 2221, 2222, 2223, 2224, 2225, 2226, 2227, 2220, 2221, 2222, 2223, 2224, 2225, 2226, 2227, 2220, 2221], num_workers=1, num_agents_per_node=1, world_size=18, username='ubuntu'), job=JobArguments(fault_threshold=1, microbatch_size=32, global_microbatch_size=2048, steps=5), model=ModelArguments(model_name='gpt2', model_tag='gpt3_2_7B', dataset_path='wikitext', dataset_name='wikitext-2-raw-v1', model_args={'n_embd': 2560, 'n_head': 32, 'n_positions': 1024, 'num_hidden_layers': 32}))
+[2025-01-28 10:06:48,870] [INFO] [agent.py:196:_launch_workers] in agent. my_ip_port 172.31.33.229:2221, node_ip_ports ['172.31.34.170:2220', '172.31.34.170:2221', '172.31.34.170:2222', '172.31.34.170:2223', '172.31.34.170:2224', '172.31.34.170:2225', '172.31.34.170:2226', '172.31.34.170:2227', '172.31.42.14:2220', '172.31.42.14:2221', '172.31.42.14:2222', '172.31.42.14:2223', '172.31.42.14:2224', '172.31.42.14:2225', '172.31.42.14:2226', '172.31.42.14:2227', '172.31.33.229:2220', '172.31.33.229:2221']
+gpu_idx: 1
+[2025-01-28 10:06:48,870] [INFO] [agent.py:205:_launch_workers] Launching worker 0...
+[2025-01-28 10:06:50,848] [INFO] [real_accelerator.py:158:get_accelerator] Setting ds_accelerator to cuda (auto detect)
+[2025-01-28 10:06:54,001] [INFO] [worker.py:23:worker_main] Initializing Oobleck Engine...
+[2025-01-28 10:06:54,001] [INFO] [worker.py:24:worker_main] in worker main: my_ip 172.31.33.229:2221
+/opt/conda/envs/oobleck/lib/python3.10/site-packages/transformers/training_args.py:1281: FutureWarning: using `no_cuda` is deprecated and will be removed in version 5.0 of 🤗 Transformers. Use `use_cpu` instead
+  warnings.warn(
+Dataset: model_name: gpt2, dataset_path: wikitext, dataset_name: wikitext-2-raw-v1, max_seq_length: 1024
+[2025-01-28 10:06:54,314] [INFO] [engine.py:647:_initialize_engine] model arguments: {'n_embd': 2560, 'n_head': 32, 'n_positions': 1024, 'num_hidden_layers': 32}
+model_name: gpt2, model_tag: gpt3_2_7B
+mb size: 34, ar across: 34, ar in: 34
+Loading done. creating layer execution results...
+Returning from get_profiler_results
+[2025-01-28 10:06:55,421] [INFO] [engine.py:689:_initialize_engine] Number of nodes range: (2, 18)
+min_nodes: 2, max_nodes: 18, gpus: 1, 
+StageExecutionResult[0:17] with 1 devices
+StageExecutionResult[18:33] with 1 devices
+StageExecutionResult[0:11] with 1 devices
+StageExecutionResult[12:22] with 1 devices
+StageExecutionResult[23:33] with 1 devices
+StageExecutionResult[0:8] with 1 devices
+StageExecutionResult[9:17] with 1 devices
+StageExecutionResult[18:25] with 1 devices
+StageExecutionResult[26:33] with 1 devices
+StageExecutionResult[0:6] with 1 devices
+StageExecutionResult[7:13] with 1 devices
+StageExecutionResult[14:20] with 1 devices
+StageExecutionResult[21:27] with 1 devices
+StageExecutionResult[28:33] with 1 devices
+StageExecutionResult[0:5] with 1 devices
+StageExecutionResult[6:11] with 1 devices
+StageExecutionResult[12:17] with 1 devices
+StageExecutionResult[18:23] with 1 devices
+StageExecutionResult[24:28] with 1 devices
+StageExecutionResult[29:33] with 1 devices
+StageExecutionResult[0:4] with 1 devices
+StageExecutionResult[5:9] with 1 devices
+StageExecutionResult[10:14] with 1 devices
+StageExecutionResult[15:19] with 1 devices
+StageExecutionResult[20:24] with 1 devices
+StageExecutionResult[25:29] with 1 devices
+StageExecutionResult[30:33] with 1 devices
+StageExecutionResult[0:4] with 1 devices
+StageExecutionResult[5:9] with 1 devices
+StageExecutionResult[10:13] with 1 devices
+StageExecutionResult[14:18] with 1 devices
+StageExecutionResult[19:22] with 1 devices
+StageExecutionResult[23:26] with 1 devices
+StageExecutionResult[27:30] with 1 devices
+StageExecutionResult[31:33] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:7] with 1 devices
+StageExecutionResult[8:11] with 1 devices
+StageExecutionResult[12:15] with 1 devices
+StageExecutionResult[16:19] with 1 devices
+StageExecutionResult[20:23] with 1 devices
+StageExecutionResult[24:27] with 1 devices
+StageExecutionResult[28:30] with 1 devices
+StageExecutionResult[31:33] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:7] with 1 devices
+StageExecutionResult[8:11] with 1 devices
+StageExecutionResult[12:15] with 1 devices
+StageExecutionResult[16:19] with 1 devices
+StageExecutionResult[20:22] with 1 devices
+StageExecutionResult[23:25] with 1 devices
+StageExecutionResult[26:28] with 1 devices
+StageExecutionResult[29:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:3] with 1 devices
+StageExecutionResult[4:7] with 1 devices
+StageExecutionResult[8:10] with 1 devices
+StageExecutionResult[11:13] with 1 devices
+StageExecutionResult[14:16] with 1 devices
+StageExecutionResult[17:19] with 1 devices
+StageExecutionResult[20:22] with 1 devices
+StageExecutionResult[23:25] with 1 devices
+StageExecutionResult[26:28] with 1 devices
+StageExecutionResult[29:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:5] with 1 devices
+StageExecutionResult[6:8] with 1 devices
+StageExecutionResult[9:11] with 1 devices
+StageExecutionResult[12:14] with 1 devices
+StageExecutionResult[15:17] with 1 devices
+StageExecutionResult[18:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:25] with 1 devices
+StageExecutionResult[26:28] with 1 devices
+StageExecutionResult[29:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:5] with 1 devices
+StageExecutionResult[6:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:15] with 1 devices
+StageExecutionResult[16:18] with 1 devices
+StageExecutionResult[19:21] with 1 devices
+StageExecutionResult[22:23] with 1 devices
+StageExecutionResult[24:25] with 1 devices
+StageExecutionResult[26:28] with 1 devices
+StageExecutionResult[29:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:5] with 1 devices
+StageExecutionResult[6:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:15] with 1 devices
+StageExecutionResult[16:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:29] with 1 devices
+StageExecutionResult[30:31] with 1 devices
+StageExecutionResult[32:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:5] with 1 devices
+StageExecutionResult[6:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:15] with 1 devices
+StageExecutionResult[16:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:5] with 1 devices
+StageExecutionResult[6:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+StageExecutionResult[0:1] with 1 devices
+StageExecutionResult[2:2] with 1 devices
+StageExecutionResult[3:4] with 1 devices
+StageExecutionResult[5:6] with 1 devices
+StageExecutionResult[7:8] with 1 devices
+StageExecutionResult[9:10] with 1 devices
+StageExecutionResult[11:12] with 1 devices
+StageExecutionResult[13:14] with 1 devices
+StageExecutionResult[15:16] with 1 devices
+StageExecutionResult[17:18] with 1 devices
+StageExecutionResult[19:20] with 1 devices
+StageExecutionResult[21:22] with 1 devices
+StageExecutionResult[23:24] with 1 devices
+StageExecutionResult[25:26] with 1 devices
+StageExecutionResult[27:28] with 1 devices
+StageExecutionResult[29:30] with 1 devices
+StageExecutionResult[31:32] with 1 devices
+StageExecutionResult[33:33] with 1 devices
+[2025-01-28 10:06:55,422] [INFO] [worker.py:27:worker_main] Initializing torch.distributed...
+[2025-01-28 10:06:55,423] [DEBUG] [engine.py:738:initialize_distributed] regenerate rank_map {'172.31.34.170:2220': [0], '172.31.34.170:2221': [1], '172.31.34.170:2222': [2], '172.31.34.170:2223': [3], '172.31.34.170:2224': [4], '172.31.34.170:2225': [5], '172.31.34.170:2226': [6], '172.31.34.170:2227': [7], '172.31.42.14:2220': [8], '172.31.42.14:2221': [9], '172.31.42.14:2222': [10], '172.31.42.14:2223': [11], '172.31.42.14:2224': [12], '172.31.42.14:2225': [13], '172.31.42.14:2226': [14], '172.31.42.14:2227': [15], '172.31.33.229:2220': [16], '172.31.33.229:2221': [17]}
+[2025-01-28 10:06:55,423] [INFO] [engine.py:752:initialize_distributed] init pg: rank 17, world_size: 18, rank_map: {'172.31.34.170:2220': [0], '172.31.34.170:2221': [1], '172.31.34.170:2222': [2], '172.31.34.170:2223': [3], '172.31.34.170:2224': [4], '172.31.34.170:2225': [5], '172.31.34.170:2226': [6], '172.31.34.170:2227': [7], '172.31.42.14:2220': [8], '172.31.42.14:2221': [9], '172.31.42.14:2222': [10], '172.31.42.14:2223': [11], '172.31.42.14:2224': [12], '172.31.42.14:2225': [13], '172.31.42.14:2226': [14], '172.31.42.14:2227': [15], '172.31.33.229:2220': [16], '172.31.33.229:2221': [17]}
+[2025-01-28 10:06:55,423] [INFO] [engine.py:768:initialize_distributed] Waiting for a port information...
+[2025-01-28 10:06:56,465] [DEBUG] [agent.py:342:on_receive_response] Receiving: (<Response.FORWARD_RANK0_PORT: 5>, <RequestType.UNDEFINED: 0>)
+[2025-01-28 10:06:56,465] [DEBUG] [agent.py:287:on_receive_worker_port] agent recv TCP Store port 34769 from master
+[2025-01-28 10:06:56,465] [INFO] [engine.py:771:initialize_distributed] Received torch master: 172.31.34.170:2220.34769
+[2025-01-28 10:06:57,119] [INFO] [comm.py:637:init_distributed] cdb=None
+[2025-01-28 10:06:57,119] [INFO] [engine.py:788:initialize_distributed] [rank: 17] Distributed initialization is done.
+[2025-01-28 10:06:57,119] [INFO] [worker.py:34:worker_main] Instantiating pipelines...
+dataloader: mbs 32
+num_groups: 34
+[2025-01-28 10:07:18,347] [INFO] [engine.py:159:_reconfiguration_listener_fn] ReconfigureEngine: start reconfigure listening
+[2025-01-28 10:07:18,347] [INFO] [worker.py:36:worker_main] Begin training...
+step: 0
+step in try: 0
+ip-172-31-33-229:113386:113386 [0] NCCL INFO cudaDriverVersion 12000
+ip-172-31-33-229:113386:113386 [0] NCCL INFO Bootstrap : Using ens5:172.31.33.229<0>
+ip-172-31-33-229:113386:113386 [0] NCCL INFO NET/Plugin: Failed to find ncclCollNetPlugin_v6 symbol.
+ip-172-31-33-229:113386:113386 [0] NCCL INFO NET/Plugin: Failed to find ncclCollNetPlugin symbol (v4 or v5).
+ip-172-31-33-229:113386:113727 [0] NCCL INFO NET/OFI Using aws-ofi-nccl 1.5.0aws
+ip-172-31-33-229:113386:113727 [0] NCCL INFO NET/OFI Configuring AWS-specific options
+ip-172-31-33-229:113386:113727 [0] NCCL INFO NET/OFI Setting provider_filter to efa
+ip-172-31-33-229:113386:113727 [0] NCCL INFO NET/OFI Setting NCCL_PROTO to "simple"
+ip-172-31-33-229:113386:113727 [0] NCCL INFO NET/OFI Setting FI_EFA_FORK_SAFE environment variable to 1
+ip-172-31-33-229:113386:113727 [0] NCCL INFO NET/OFI DUP_CONNS of 4 changing device count to 4
+ip-172-31-33-229:113386:113727 [0] NCCL INFO NET/OFI Selected Provider is efa (found 4 nics)
+ip-172-31-33-229:113386:113727 [0] NCCL INFO Using network AWS Libfabric
+ip-172-31-33-229:113386:113727 [0] NCCL INFO Trees [0] -1/-1/-1->1->0 [1] -1/-1/-1->1->0
+ip-172-31-33-229:113386:113727 [0] NCCL INFO Channel 00/0 : 1[170] -> 0[160] via P2P/IPC
+ip-172-31-33-229:113386:113727 [0] NCCL INFO Channel 01/0 : 1[170] -> 0[160] via P2P/IPC
+ip-172-31-33-229:113386:113727 [0] NCCL INFO Connected all rings
+ip-172-31-33-229:113386:113727 [0] NCCL INFO Connected all trees
+ip-172-31-33-229:113386:113727 [0] NCCL INFO threadThresholds 8/8/64 | 16/8/64 | 512 | 512
+ip-172-31-33-229:113386:113727 [0] NCCL INFO 2 coll channels, 2 p2p channels, 2 p2p channels per peer
+ip-172-31-33-229:113386:113727 [0] NCCL INFO comm 0x559ba7f18b50 rank 1 nranks 2 cudaDev 0 busId 170 - Init COMPLETE
+ip-172-31-33-229:113386:113736 [0] NCCL INFO Channel 00/1 : 1[170] -> 0[160] via P2P/IPC
+ip-172-31-33-229:113386:113736 [0] NCCL INFO Channel 01/1 : 1[170] -> 0[160] via P2P/IPC
+forward_backward: 43.714524269104004s
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/opt/conda/envs/oobleck/lib/python3.10/multiprocessing/process.py", line 315, in _bootstrap
+    self.run()
+  File "/opt/conda/envs/oobleck/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/workspace/Oobleck/oobleck/elastic/worker.py", line 37, in worker_main
+    engine.train()
+  File "/workspace/Oobleck/oobleck/execution/engine.py", line 911, in train
+    self._train_step()
+  File "/workspace/Oobleck/oobleck/utils/timer.py", line 15, in wrapper
+    result = func(s, *args, **kwargs)
+  File "/workspace/Oobleck/oobleck/execution/engine.py", line 856, in _train_step
+    self._dp_engine.do_allreduce()
+  File "/workspace/Oobleck/oobleck/execution/engine.py", line 562, in do_allreduce
+    layer.reduce_gradients(process_groups)
+  File "/workspace/Oobleck/oobleck/execution/layer.py", line 305, in reduce_gradients
+    torch.distributed.all_reduce(tensor=grad, group=process_group)
+  File "/opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py", line 1436, in wrapper
+    return func(*args, **kwargs)
+  File "/opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/distributed/distributed_c10d.py", line 1687, in all_reduce
+    work = group.allreduce([tensor], opts)
+RuntimeError: [7] is setting up NCCL communicator and retrieving ncclUniqueId from [0] via c10d key-value store by key '0', but store->get('0') got error: Socket Timeout
+Exception raised from recvBytes at ../torch/csrc/distributed/c10d/Utils.hpp:604 (most recent call first):
+frame #0: c10::Error::Error(c10::SourceLocation, std::string) + 0x57 (0x7fafba9cf4d7 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libc10.so)
+frame #1: c10::detail::torchCheckFail(char const*, char const*, unsigned int, char const*) + 0x68 (0x7fafba999434 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libc10.so)
+frame #2: c10d::TCPStore::doWait(c10::ArrayRef<std::string>, std::chrono::duration<long, std::ratio<1l, 1000l> >) + 0xd8 (0x7fafe5f3a5c8 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #3: c10d::TCPStore::doGet(std::string const&) + 0x22 (0x7fafe5f3b272 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #4: c10d::TCPStore::get(std::string const&) + 0x59 (0x7fafe5f3b2f9 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #5: c10d::PrefixStore::get(std::string const&) + 0x31 (0x7fafe5efa7c1 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #6: c10d::PrefixStore::get(std::string const&) + 0x31 (0x7fafe5efa7c1 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #7: c10d::PrefixStore::get(std::string const&) + 0x31 (0x7fafe5efa7c1 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #8: c10d::ProcessGroupNCCL::broadcastUniqueNCCLID(ncclUniqueId*, bool, std::string const&, int) + 0xaf (0x7fafbb95eacf in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cuda.so)
+frame #9: c10d::ProcessGroupNCCL::getNCCLComm(std::string const&, std::vector<c10::Device, std::allocator<c10::Device> > const&, c10d::OpType, int, bool) + 0x201 (0x7fafbb962781 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cuda.so)
+frame #10: <unknown function> + 0xeca8ad (0x7fafbb9698ad in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cuda.so)
+frame #11: c10d::ProcessGroupNCCL::allreduce_impl(std::vector<at::Tensor, std::allocator<at::Tensor> >&, c10d::AllreduceOptions const&) + 0x21 (0x7fafbb96acb1 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cuda.so)
+frame #12: c10d::ProcessGroupNCCL::allreduce(std::vector<at::Tensor, std::allocator<at::Tensor> >&, c10d::AllreduceOptions const&) + 0x39d (0x7fafbb96d96d in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cuda.so)
+frame #13: <unknown function> + 0x538e8b4 (0x7fafe5eef8b4 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #14: <unknown function> + 0x539141f (0x7fafe5ef241f in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #15: <unknown function> + 0x53aad33 (0x7fafe5f0bd33 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_cpu.so)
+frame #16: <unknown function> + 0xb6d581 (0x7faffa5a7581 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_python.so)
+frame #17: <unknown function> + 0x3b7265 (0x7faff9df1265 in /opt/conda/envs/oobleck/lib/python3.10/site-packages/torch/lib/libtorch_python.so)
+frame #18: <unknown function> + 0x14bb15 (0x559b6695db15 in /opt/conda/envs/oobleck/bin/python)
+frame #19: _PyObject_MakeTpCall + 0x152 (0x559b66954a62 in /opt/conda/envs/oobleck/bin/python)
+frame #20: <unknown function> + 0xe446c (0x559b668f646c in /opt/conda/envs/oobleck/bin/python)
+frame #21: _PyEval_EvalFrameDefault + 0x49c9 (0x559b669fa439 in /opt/conda/envs/oobleck/bin/python)
+frame #22: _PyFunction_Vectorcall + 0x25d (0x559b669d81bd in /opt/conda/envs/oobleck/bin/python)
+frame #23: PyObject_Call + 0xb8 (0x559b6695b028 in /opt/conda/envs/oobleck/bin/python)
+frame #24: _PyEval_EvalFrameDefault + 0x2c0b (0x559b669f867b in /opt/conda/envs/oobleck/bin/python)
+frame #25: _PyFunction_Vectorcall + 0x798 (0x559b669d86f8 in /opt/conda/envs/oobleck/bin/python)
+frame #26: _PyEval_EvalFrameDefault + 0x125a (0x559b669f6cca in /opt/conda/envs/oobleck/bin/python)
+frame #27: <unknown function> + 0x1c73a5 (0x559b669d93a5 in /opt/conda/envs/oobleck/bin/python)
+frame #28: _PyEval_EvalFrameDefault + 0x49c9 (0x559b669fa439 in /opt/conda/envs/oobleck/bin/python)
+frame #29: _PyFunction_Vectorcall + 0x25d (0x559b669d81bd in /opt/conda/envs/oobleck/bin/python)
+frame #30: _PyEval_EvalFrameDefault + 0x60b (0x559b669f607b in /opt/conda/envs/oobleck/bin/python)
+frame #31: _PyFunction_Vectorcall + 0x25d (0x559b669d81bd in /opt/conda/envs/oobleck/bin/python)
+frame #32: PyObject_Call + 0x1aa (0x559b6695b11a in /opt/conda/envs/oobleck/bin/python)
+frame #33: _PyEval_EvalFrameDefault + 0x2c0b (0x559b669f867b in /opt/conda/envs/oobleck/bin/python)
+frame #34: _PyFunction_Vectorcall + 0x9eb (0x559b669d894b in /opt/conda/envs/oobleck/bin/python)
+frame #35: _PyEval_EvalFrameDefault + 0x60b (0x559b669f607b in /opt/conda/envs/oobleck/bin/python)
+frame #36: _PyFunction_Vectorcall + 0x25d (0x559b669d81bd in /opt/conda/envs/oobleck/bin/python)
+frame #37: _PyEval_EvalFrameDefault + 0x60b (0x559b669f607b in /opt/conda/envs/oobleck/bin/python)
+frame #38: _PyFunction_Vectorcall + 0x25d (0x559b669d81bd in /opt/conda/envs/oobleck/bin/python)
+frame #39: PyObject_Call + 0x1aa (0x559b6695b11a in /opt/conda/envs/oobleck/bin/python)
+frame #40: _PyEval_EvalFrameDefault + 0x2c0b (0x559b669f867b in /opt/conda/envs/oobleck/bin/python)
+frame #41: _PyFunction_Vectorcall + 0x25d (0x559b669d81bd in /opt/conda/envs/oobleck/bin/python)
+frame #42: _PyEval_EvalFrameDefault + 0x60b (0x559b669f607b in /opt/conda/envs/oobleck/bin/python)
+frame #43: _PyFunction_Vectorcall + 0x25d (0x559b669d81bd in /opt/conda/envs/oobleck/bin/python)
+frame #44: _PyEval_EvalFrameDefault + 0x60b (0x559b669f607b in /opt/conda/envs/oobleck/bin/python)
+frame #45: _PyFunction_Vectorcall + 0x25d (0x559b669d81bd in /opt/conda/envs/oobleck/bin/python)
+frame #46: _PyEval_EvalFrameDefault + 0x304 (0x559b669f5d74 in /opt/conda/envs/oobleck/bin/python)
+frame #47: _PyFunction_Vectorcall + 0x25d (0x559b669d81bd in /opt/conda/envs/oobleck/bin/python)
+frame #48: _PyEval_EvalFrameDefault + 0x125a (0x559b669f6cca in /opt/conda/envs/oobleck/bin/python)
+frame #49: <unknown function> + 0x1c51b9 (0x559b669d71b9 in /opt/conda/envs/oobleck/bin/python)
+frame #50: PyEval_EvalCode + 0x87 (0x559b66a8af67 in /opt/conda/envs/oobleck/bin/python)
+frame #51: <unknown function> + 0x279029 (0x559b66a8b029 in /opt/conda/envs/oobleck/bin/python)
+frame #52: <unknown function> + 0x29ec94 (0x559b66ab0c94 in /opt/conda/envs/oobleck/bin/python)
+frame #53: PyRun_StringFlags + 0x7d (0x559b66ab7eed in /opt/conda/envs/oobleck/bin/python)
+frame #54: PyRun_SimpleStringFlags + 0x3d (0x559b66ab7f4d in /opt/conda/envs/oobleck/bin/python)
+frame #55: Py_RunMain + 0x26c (0x559b66ab81ec in /opt/conda/envs/oobleck/bin/python)
+frame #56: Py_BytesMain + 0x39 (0x559b66ab8469 in /opt/conda/envs/oobleck/bin/python)
+frame #57: __libc_start_main + 0xf3 (0x7fb0d32a0083 in /lib/x86_64-linux-gnu/libc.so.6)
+frame #58: <unknown function> + 0x2112d1 (0x559b66a232d1 in /opt/conda/envs/oobleck/bin/python)
+. This may indicate a possible application crash on rank 0 or a network set up issue.
