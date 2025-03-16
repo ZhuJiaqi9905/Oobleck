@@ -56,7 +56,7 @@ with open('res.csv', 'w', newline='') as csvfile:
     writer = csv.writer(csvfile)
     writer.writerow(fieldnames)
     dirs = os.listdir(data_dir)
-    dirs = sorted(dirs)
+    dirs = sorted(dirs, key = lambda x: ''.join(x.split('-')[-4:]))
     for dir in dirs:
         model = dir.split('-')[-4]
         node_num = dir.split('-')[-1]
